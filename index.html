@@ -41,12 +41,11 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 4vh 7vw;
+      padding: 6vh 10vw;
       opacity: 0;
       transform: translateX(40px);
       transition: opacity 0.4s ease, transform 0.4s ease;
       pointer-events: none;
-      overflow-y: auto;
     }
 
     .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
@@ -58,33 +57,33 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 0.75rem;
+      margin-bottom: 1rem;
     }
 
-    h1 { font-size: clamp(2rem, 4.5vw, 3.5rem); font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem; }
-    h2 { font-size: clamp(1.4rem, 2.8vw, 2.2rem); font-weight: 600; line-height: 1.2; margin-bottom: 0.75rem; }
+    h1 { font-size: clamp(2.2rem, 4.5vw, 3.5rem); font-weight: 700; line-height: 1.15; margin-bottom: 1rem; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 600; line-height: 1.2; margin-bottom: 1rem; }
 
     .subtitle {
-      font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
       color: var(--text-dim);
-      line-height: 1.6;
-      max-width: 65ch;
+      line-height: 1.7;
+      max-width: 55ch;
     }
 
-    .body-text {
-      font-size: 0.875rem;
-      color: var(--text-dim);
-      line-height: 1.65;
-      max-width: 70ch;
+    .big-text {
+      font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+      color: var(--text);
+      line-height: 1.7;
+      max-width: 50ch;
       margin-top: 0.5rem;
     }
 
     /* Cards */
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
-      margin-top: 1.25rem;
+      margin-top: 1.5rem;
     }
 
     .card {
@@ -96,9 +95,8 @@
     }
 
     .card:hover { border-color: var(--accent); }
-    .card-icon { font-size: 1.3rem; margin-bottom: 0.5rem; }
-    .card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
-    .card p { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+    .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .card p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.55; }
 
     /* Status badges */
     .status {
@@ -124,51 +122,63 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 1rem 1.25rem;
+      padding: 1.25rem 1.5rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      line-height: 1.7;
+      font-size: 0.82rem;
+      line-height: 1.8;
       overflow-x: auto;
-      margin-top: 1rem;
+      margin-top: 1.25rem;
     }
 
     .code-block .comment { color: #5a5a7a; }
     .code-block .key { color: var(--accent); }
-    .code-block .val { color: var(--green); }
     .code-block .old { color: var(--red); text-decoration: line-through; opacity: 0.6; }
     .code-block .new { color: var(--green); }
-    .code-block .highlight-line { color: var(--text); }
 
     /* Table */
-    .topic-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.82rem; }
+    .topic-table { width: 100%; border-collapse: collapse; margin-top: 1.25rem; font-size: 0.88rem; }
     .topic-table th {
-      text-align: left; font-weight: 600; font-size: 0.72rem;
+      text-align: left; font-weight: 600; font-size: 0.75rem;
       text-transform: uppercase; letter-spacing: 0.08em;
-      color: var(--text-dim); padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--border);
+      color: var(--text-dim); padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
     }
     .topic-table td {
-      padding: 0.55rem 0.85rem; border-bottom: 1px solid var(--border);
-      font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+      padding: 0.65rem 1rem; border-bottom: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
     }
     .topic-table tr:last-child td { border-bottom: none; }
     .topic-table .from { color: var(--red); }
     .topic-table .to { color: var(--green); }
 
-    /* Two-column */
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem; margin-top: 1.25rem; }
-    @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+    /* Bullet list */
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
 
-    .col h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
-    .col ul { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
-    .col li {
-      font-size: 0.82rem; color: var(--text-dim); line-height: 1.55;
-      padding-left: 1.1rem; position: relative;
+    .bullet-list li {
+      font-size: 1rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      padding-left: 1.3rem;
+      position: relative;
     }
-    .col li::before {
-      content: ''; position: absolute; left: 0; top: 0.5rem;
-      width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+
+    .bullet-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.6rem;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
     }
-    .col li strong { color: var(--text); }
+
+    .bullet-list li strong { color: var(--text); }
 
     /* Callout box */
     .callout {
@@ -176,8 +186,8 @@
       border-left: 3px solid var(--accent);
       border-radius: 0 8px 8px 0;
       padding: 1rem 1.25rem;
-      margin-top: 1rem;
-      font-size: 0.82rem;
+      margin-top: 1.25rem;
+      font-size: 0.9rem;
       color: var(--text-dim);
       line-height: 1.6;
     }
@@ -185,22 +195,39 @@
     .callout.warn { border-left-color: var(--yellow); }
     .callout.error { border-left-color: var(--red); }
 
-    /* Numbered list */
-    .step-list { list-style: none; counter-reset: step; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
-    .step-list li {
-      counter-increment: step;
-      font-size: 0.85rem; color: var(--text-dim); line-height: 1.6;
-      padding-left: 2.2rem; position: relative;
+    /* Comparison row */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1.5rem;
+      align-items: center;
+      margin-top: 1.5rem;
     }
-    .step-list li::before {
-      content: counter(step);
-      position: absolute; left: 0; top: 0;
-      width: 1.6rem; height: 1.6rem; border-radius: 50%;
-      background: var(--accent-glow); border: 1px solid var(--accent);
-      color: var(--accent); font-size: 0.72rem; font-weight: 600;
-      display: flex; align-items: center; justify-content: center;
+
+    .compare-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
     }
-    .step-list li strong { color: var(--text); }
+
+    .compare-box .num {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .compare-box .label {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .compare-vs {
+      font-size: 1rem;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
 
     /* Navigation */
     .nav {
@@ -233,7 +260,7 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
-    .meta { display: flex; gap: 2rem; margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-dim); }
+    .meta { display: flex; gap: 2rem; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-dim); }
     .meta span { display: flex; align-items: center; gap: 0.4rem; }
 
     .slide.active .animate-in { animation: fadeUp 0.45s ease forwards; opacity: 0; }
@@ -244,7 +271,6 @@
     .animate-in:nth-child(4) { animation-delay: 0.32s; }
     .animate-in:nth-child(5) { animation-delay: 0.40s; }
     .animate-in:nth-child(6) { animation-delay: 0.48s; }
-    .animate-in:nth-child(7) { animation-delay: 0.56s; }
   </style>
 </head>
 <body>
@@ -255,277 +281,245 @@
       <div class="slide-label animate-in">Weekly Update &mdash; April 16, 2026</div>
       <h1 class="animate-in">VLA-Flight</h1>
       <p class="subtitle animate-in">Instruction-Grounded Drone Navigation with Vision-Language-Action and Onboard IMU</p>
-      <p class="body-text animate-in">A lightweight ~80M parameter VLA architecture that jointly encodes RGB images, onboard IMU data, drone position, and natural language instructions to predict low-level flight control commands &mdash; running entirely onboard a Jetson Orin NX 16GB at &gt;30Hz. Target application: autonomous agricultural drone navigation.</p>
       <div class="meta animate-in">
         <span>Yashas Shashidhara</span>
         <span>Week of Apr 7 &ndash; 16</span>
       </div>
     </div>
 
-    <!-- SLIDE 2: Project Overview -->
+    <!-- SLIDE 2: The Problem -->
     <div class="slide" data-slide="1">
-      <div class="slide-label animate-in">Project Background</div>
-      <h2 class="animate-in">What is VLA-Flight?</h2>
-      <p class="subtitle animate-in">Existing drone VLA models (OpenVLA, RaceVLA, AerialVLA) rely on massive 7B+ parameter LLMs, require server-grade GPUs, and cannot run onboard. VLA-Flight replaces the LLM with lightweight cross-attention fusion to enable real-time onboard inference for agricultural drone navigation.</p>
+      <div class="slide-label animate-in">Motivation</div>
+      <h2 class="animate-in">The Problem</h2>
+      <p class="big-text animate-in">We want drones that can follow natural language instructions like <em>"fly along the crop row and avoid the obstacle."</em></p>
+      <p class="subtitle animate-in" style="margin-top: 1rem;">Current approaches (OpenVLA, AerialVLA) use massive 7B+ parameter language models. They need server-grade GPUs and can't run on the drone itself.</p>
+      <div class="callout animate-in">
+        <strong>The goal:</strong> A model small enough to run onboard a drone in real time, while still understanding language instructions.
+      </div>
+    </div>
 
-      <div class="two-col animate-in">
-        <div class="col">
-          <h3>Key Contributions</h3>
-          <ul>
-            <li><strong>C1: Dual IMU Usage</strong> &mdash; First drone VLA to fuse raw IMU at two levels: direct temporal fusion (fine dynamics like wind/drift) and fuzzy directional prompting (coarse intent like "forward-right" prepended to instruction text). AerialVLA only uses the second.</li>
-            <li><strong>C2: LSAC + VAE Action Chunking</strong> &mdash; Predicts H=10 step action chunks for smooth trajectories, executes only h=5 before replanning. VAE bottleneck prevents mode-averaging when multiple valid paths exist (e.g., go left or right around obstacle).</li>
-            <li><strong>C3: Edge-Deployable (~80M params)</strong> &mdash; Replaces 7B LLM with frozen MiniLM (22M) for instruction encoding + cross-attention fusion decoder (~5M). Continuous action regression instead of 256-bin discretization. 100x smaller, 10x faster than OpenVLA.</li>
-            <li><strong>C4: Geometric Safety Correction</strong> &mdash; Zero-parameter post-processing: velocity clamping, altitude bounds, acceleration smoothing, depth-based repulsion, IMU vibration proximity detection. Adds zero inference latency.</li>
-            <li><strong>C5: Progressive 3-Stage Training</strong> &mdash; Stage 1: perception pretraining (vision + IMU). Stage 2: navigation SFT (full end-to-end). Stage 3: agricultural domain refinement.</li>
-          </ul>
+    <!-- SLIDE 3: Our Approach -->
+    <div class="slide" data-slide="2">
+      <div class="slide-label animate-in">Approach</div>
+      <h2 class="animate-in">VLA-Flight: What Makes It Different</h2>
+      <p class="subtitle animate-in">Replace the giant language model with a tiny, purpose-built architecture.</p>
+      <div class="compare animate-in">
+        <div class="compare-box">
+          <div class="num" style="color: var(--red);">7.5B</div>
+          <div class="label">OpenVLA / AerialVLA<br>Server GPU required</div>
         </div>
-        <div class="col">
-          <h3>Architecture Overview</h3>
-          <div class="code-block" style="font-size: 0.68rem; line-height: 1.55;">
-<span class="comment">RGB [3,224,224]    IMU [Tx12]     Instruction</span>
-      |                |               |
-<span class="key">EfficientViT</span>    <span class="key">IMU Encoder</span>    <span class="key">Fuzzy Prompting</span>
-   (~15M)        (Temporal XFMR     (bearing &rarr; text)
-      |            ~2M)               |
- [B,49,256]     [B,4,256]      <span class="key">MiniLM</span> (22M, frozen)
-      |              |                |
-      +-------+------+----------------+
-              |
-       <span class="key">Fusion Decoder</span> (cross-attn, ~5M)
-              |
-        <span class="key">VAE Bottleneck</span> (z ~ N(0,I))
-              |
-       <span class="key">Chunk Decoder</span> (XFMR)
-              |
-     [vx, vy, vz, yaw] x H steps
-              |
-       <span class="key">Safety Module</span> (0 params)
-              |
-      Safe action chunk
-          </div>
-          <div class="callout" style="margin-top: 0.75rem;">
-            <strong>vs. Prior Work:</strong> OpenVLA/AerialVLA = 7.5B params, server GPU, 256-bin discretized actions. VLA-Flight = ~80M params, Jetson Orin NX, continuous actions, &gt;30Hz.
-          </div>
+        <div class="compare-vs">vs.</div>
+        <div class="compare-box" style="border-color: var(--accent);">
+          <div class="num" style="color: var(--green);">~80M</div>
+          <div class="label">VLA-Flight<br>Runs on Jetson Orin NX at &gt;30Hz</div>
+        </div>
+      </div>
+      <div class="callout animate-in">
+        <strong>How?</strong> Swap the 7B LLM for a frozen MiniLM sentence encoder (22M) + a small cross-attention fusion decoder (5M). Use continuous action output instead of binned tokens. Result: 100x smaller, 10x faster.
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Key Ideas -->
+    <div class="slide" data-slide="3">
+      <div class="slide-label animate-in">Key Ideas</div>
+      <h2 class="animate-in">Five Core Contributions</h2>
+      <div class="cards animate-in">
+        <div class="card">
+          <h3>Dual IMU Fusion</h3>
+          <p>Use IMU data two ways: raw sensor fusion for fine dynamics (wind, drift) + convert bearing to text hints ("forward-right") for coarse navigation intent.</p>
+        </div>
+        <div class="card">
+          <h3>Action Chunking + VAE</h3>
+          <p>Predict 10 future actions at once for smooth flight, but only execute 5 before replanning. A VAE prevents averaging when multiple good paths exist.</p>
+        </div>
+        <div class="card">
+          <h3>Edge Deployment</h3>
+          <p>~80M params total. Runs entirely onboard a Jetson Orin NX 16GB at &gt;30Hz. No server needed.</p>
+        </div>
+        <div class="card">
+          <h3>Safety Module</h3>
+          <p>Zero-parameter geometric correction: velocity clamping, altitude bounds, obstacle repulsion. Adds zero latency.</p>
+        </div>
+        <div class="card">
+          <h3>3-Stage Training</h3>
+          <p>Stage 1: learn to see (vision + IMU). Stage 2: learn to navigate (full model). Stage 3: specialize for agriculture.</p>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 3: This Week Overview -->
-    <div class="slide" data-slide="2">
-      <div class="slide-label animate-in">Overview</div>
-      <h2 class="animate-in">This Week: Data Pipeline + Training</h2>
-      <p class="subtitle animate-in">Focus was on getting real drone datasets preprocessed into VLA-Flight's unified training format and starting model training on the progressive 3-stage pipeline.</p>
+    <!-- SLIDE 5: Architecture -->
+    <div class="slide" data-slide="4">
+      <div class="slide-label animate-in">Architecture</div>
+      <h2 class="animate-in">How the Model Works</h2>
+      <p class="subtitle animate-in">Three inputs go in, safe flight commands come out.</p>
+      <div class="code-block animate-in" style="font-size: 0.78rem; line-height: 1.65; max-width: 600px;">
+<span class="comment">  Camera Image       IMU Sensors       "Fly along the crop row"</span>
+       |                 |                       |
+  <span class="key">EfficientViT</span>     <span class="key">IMU Encoder</span>         <span class="key">MiniLM</span> (frozen)
+    (15M)            (2M)                  (22M)
+       |                 |                       |
+       +---------+-------+-----------------------+
+                 |
+          <span class="key">Fusion Decoder</span> &mdash; cross-attention (5M)
+                 |
+           <span class="key">VAE Bottleneck</span>
+                 |
+          <span class="key">Action Chunking</span> &rarr; [vx, vy, vz, yaw] x 10 steps
+                 |
+          <span class="key">Safety Module</span> (0 params) &rarr; execute 5 safe steps
+      </div>
+    </div>
+
+    <!-- SLIDE 6: This Week Overview -->
+    <div class="slide" data-slide="5">
+      <div class="slide-label animate-in">This Week</div>
+      <h2 class="animate-in">What I Worked On</h2>
       <div class="cards animate-in">
         <div class="card">
-          <div class="card-icon">1</div>
           <h3>UZH-FPV Dataset</h3>
-          <p>Downloaded the full dataset (~30-50GB). Preprocessed ROS bags into unified numpy format (images, IMU, actions, states). Ran full progressive 3-stage training end-to-end.</p>
+          <p>Downloaded (~30-50GB), preprocessed, and ran training end-to-end.</p>
           <span class="status done">Complete</span>
         </div>
         <div class="card">
-          <div class="card-icon">2</div>
           <h3>MUN-FRL Dataset</h3>
-          <p>Had to manually download every file &mdash; the batch download script was only pulling HTTP headers, not actual file content (empty .bag files). Then hit major preprocessing issues with hardcoded ROS topics (next slide).</p>
+          <p>Manually downloaded (batch script was broken). Fixed preprocessing pipeline.</p>
           <span class="status done">Preprocessed</span>
         </div>
         <div class="card">
-          <div class="card-icon">3</div>
           <h3>NaN Training Bug</h3>
-          <p>Training crashes with NaN loss every time Stage 2 (fusion decoder) begins. Diagnosed as exploding gradients compounded by fp16 overflow. Initial fix applied, still tuning.</p>
-          <span class="status progress">Tuning LR</span>
+          <p>Training kept crashing in Stage 2. Diagnosed and applied initial fix.</p>
+          <span class="status progress">Tuning</span>
         </div>
         <div class="card">
-          <div class="card-icon">4</div>
           <h3>Blackbird Dataset</h3>
-          <p>MIT's hosting site is currently down &mdash; cannot access the dataset at all. Started with MUN-FRL as an alternative outdoor generalization dataset in the meantime.</p>
-          <span class="status blocked">Site Down</span>
+          <p>MIT hosting is down. Can't download yet.</p>
+          <span class="status blocked">Blocked</span>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 4: MUN-FRL Download Problem -->
-    <div class="slide" data-slide="3">
-      <div class="slide-label animate-in">Data Pipeline</div>
-      <h2 class="animate-in">Problem 1: MUN-FRL Batch Download Broken</h2>
-      <p class="subtitle animate-in">The download script (<code>scripts/download_datasets.sh</code>) was failing silently for MUN-FRL. Every downloaded .bag file was empty &mdash; the script was saving the HTTP response header instead of the actual file content.</p>
-
-      <div class="two-col animate-in">
-        <div class="col">
-          <h3 style="color: var(--red);">What Happened</h3>
-          <ul>
-            <li>The batch download script pulled files from the MUN-FRL server</li>
-            <li>Files appeared to download successfully (no errors)</li>
-            <li>But every .bag file was <strong>essentially empty</strong> &mdash; just a few bytes containing the HTTP header, not the actual ROS bag data</li>
-            <li>Preprocessing would then fail or produce garbage because there was no real sensor data in the files</li>
-          </ul>
-        </div>
-        <div class="col">
-          <h3 style="color: var(--green);">The Fix</h3>
-          <ul>
-            <li><strong>Manually downloaded each ROS bag file</strong> directly from mun-frl-vil-dataset.readthedocs.io</li>
-            <li>Verified file sizes matched expected values (~GB per bag, not KB)</li>
-            <li>Confirmed bags contained valid ROS topics with <code>rosbag info</code> before preprocessing</li>
-            <li>Tedious but necessary &mdash; automated script needs a proper fix for redirect handling</li>
-          </ul>
-        </div>
+    <!-- SLIDE 7: Download Issue -->
+    <div class="slide" data-slide="6">
+      <div class="slide-label animate-in">Issue #1</div>
+      <h2 class="animate-in">MUN-FRL: Download Script Was Broken</h2>
+      <ul class="bullet-list animate-in">
+        <li>The batch download script (<strong>download_datasets.sh</strong>) ran without errors</li>
+        <li>But every downloaded .bag file was <strong>empty</strong> &mdash; it saved the HTTP header instead of the actual file</li>
+        <li>Files were KB instead of GB &mdash; no real sensor data inside</li>
+      </ul>
+      <div class="callout animate-in">
+        <strong>Fix:</strong> Manually downloaded each ROS bag file from the MUN-FRL docs site. Verified each file with <code>rosbag info</code> before processing.
       </div>
     </div>
 
-    <!-- SLIDE 5: Topic Mapping -->
-    <div class="slide" data-slide="4">
-      <div class="slide-label animate-in">Data Pipeline</div>
-      <h2 class="animate-in">Problem 2: Hardcoded ROS Topics in Preprocessing</h2>
-      <p class="subtitle animate-in">The preprocessing script (<code>scripts/preprocess_dataset.py</code>) was written for UZH-FPV and had all ROS topic names hardcoded. MUN-FRL uses completely different topic names, message types, and data formats. The script would silently find zero messages and produce empty output.</p>
+    <!-- SLIDE 8: Topic Mismatch -->
+    <div class="slide" data-slide="7">
+      <div class="slide-label animate-in">Issue #2</div>
+      <h2 class="animate-in">Preprocessing Script: Wrong ROS Topics</h2>
+      <p class="subtitle animate-in">The script had UZH-FPV topic names hardcoded. MUN-FRL uses completely different names, so the script silently found nothing.</p>
 
       <table class="topic-table animate-in">
         <thead>
           <tr>
-            <th>Component</th>
-            <th>Hardcoded (UZH-FPV)</th>
-            <th>Actual (MUN-FRL)</th>
-            <th>Issue</th>
+            <th>Data</th>
+            <th>Script Expected</th>
+            <th>MUN-FRL Actual</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td style="color: var(--text);">Image Topic</td>
+            <td style="color: var(--text); font-family: Inter, sans-serif;">Camera</td>
             <td class="from">/cam0/image_raw</td>
             <td class="to">/camera_forward/image_raw</td>
-            <td style="color: var(--text-dim); font-family: Inter, sans-serif;">No images found</td>
           </tr>
           <tr>
-            <td style="color: var(--text);">Image Msg Type</td>
-            <td class="from">CompressedImage</td>
-            <td class="to">sensor_msgs/Image</td>
-            <td style="color: var(--text-dim); font-family: Inter, sans-serif;">Script hangs waiting for wrong type</td>
-          </tr>
-          <tr>
-            <td style="color: var(--text);">Image Encoding</td>
-            <td class="from">BGR8</td>
-            <td class="to">Mono8</td>
-            <td style="color: var(--text-dim); font-family: Inter, sans-serif;">Garbled images if not converted</td>
-          </tr>
-          <tr>
-            <td style="color: var(--text);">IMU Topic</td>
+            <td style="color: var(--text); font-family: Inter, sans-serif;">IMU</td>
             <td class="from">/imu</td>
             <td class="to">/xsens/imu/data</td>
-            <td style="color: var(--text-dim); font-family: Inter, sans-serif;">No IMU data found</td>
           </tr>
           <tr>
-            <td style="color: var(--text);">Action Source</td>
+            <td style="color: var(--text); font-family: Inter, sans-serif;">Actions</td>
             <td class="from">/control/command</td>
-            <td class="to">Derived from PPK/GNSS poses</td>
-            <td style="color: var(--text-dim); font-family: Inter, sans-serif;">No direct control topic exists</td>
+            <td class="to">Derived from PPK/GNSS</td>
           </tr>
         </tbody>
       </table>
+    </div>
 
+    <!-- SLIDE 9: More Topic Issues -->
+    <div class="slide" data-slide="8">
+      <div class="slide-label animate-in">Issue #2 (continued)</div>
+      <h2 class="animate-in">Also Fixed: Message Types + Sync</h2>
+      <ul class="bullet-list animate-in">
+        <li><strong>Wrong message type:</strong> Script expected <code>CompressedImage</code>, but MUN-FRL uses raw <code>sensor_msgs/Image</code>. The script would hang forever waiting for messages that were flying right past it.</li>
+        <li><strong>Wrong image format:</strong> Script assumed BGR8 color, but MUN-FRL is Mono8 (grayscale). Had to add manual conversion.</li>
+        <li><strong>IMU-to-Image sync:</strong> Images come at 20Hz, IMU at 400Hz. Added <code>ApproximateTimeSynchronizer</code> to align them.</li>
+        <li><strong>No action labels:</strong> MUN-FRL doesn't have control commands in the bag. Derived velocity actions from ground truth positions: <strong>v = (pos[t+1] - pos[t]) / dt</strong></li>
+      </ul>
+    </div>
+
+    <!-- SLIDE 10: NaN Problem -->
+    <div class="slide" data-slide="9">
+      <div class="slide-label animate-in">Issue #3</div>
+      <h2 class="animate-in">Training Crashes with NaN in Stage 2</h2>
+      <p class="subtitle animate-in">Stage 1 (perception pretraining) works fine. But ~10 epochs into Stage 2, the loss becomes NaN and training dies.</p>
+      <ul class="bullet-list animate-in">
+        <li><strong>Stage 2 unfreezes the Fusion Decoder</strong> &mdash; this is where vision and IMU signals get combined via cross-attention</li>
+        <li>The learning rate (1&times;10<sup>-3</sup>) was <strong>too high</strong> for this sensitive layer. Attention scores exploded.</li>
+        <li>We train in <strong>fp16</strong> (half-precision) because the Jetson needs it for speed. But fp16 maxes out at ~65,000 &mdash; the exploding values overflow to infinity, then NaN.</li>
+      </ul>
+    </div>
+
+    <!-- SLIDE 11: NaN Fix -->
+    <div class="slide" data-slide="10">
+      <div class="slide-label animate-in">Issue #3 (Fix)</div>
+      <h2 class="animate-in">Fix: Lower the Learning Rate</h2>
+      <p class="subtitle animate-in">Smaller learning rate = smaller weight updates = numbers stay within fp16 range.</p>
+      <div class="code-block animate-in">
+<span class="comment"># Stage 2: Fusion decoder unfrozen</span>
+<span class="key">stage2_lr:</span> <span class="old">1.0e-3</span>  <span class="new">&rarr; 2.0e-4</span>
+
+<span class="comment"># Stage 3: Agricultural domain refinement</span>
+<span class="key">stage3_lr:</span> <span class="old">1.0e-3</span>  <span class="new">&rarr; 3.0e-4</span>
+      </div>
       <div class="callout animate-in">
-        <strong>Additional fix: IMU-to-Image synchronization.</strong> MUN-FRL records images at 20Hz and IMU at 400Hz. Had to implement <code>ApproximateTimeSynchronizer</code> to pair the two streams and interpolate IMU readings to align with image timestamps. For actions, computed velocity labels as position deltas from PPK ground truth: <strong>v = (pos[t+1] - pos[t]) / dt</strong>.
+        <strong>Result:</strong> Training no longer crashes. Loss decreases smoothly through Stage 2. But the optimal LR is still unknown &mdash; need to sweep to find the sweet spot.
       </div>
     </div>
 
-    <!-- SLIDE 6: NaN Problem Deep Dive -->
-    <div class="slide" data-slide="5">
-      <div class="slide-label animate-in">Training</div>
-      <h2 class="animate-in">Problem 3: NaN Loss in Stage 2 Training</h2>
-      <p class="subtitle animate-in">Training consistently crashes with NaN loss approximately 10 epochs into Stage 2 of the progressive training pipeline. Stage 1 (perception pretraining) completes fine. The crash happens the moment the Fusion Decoder is unfrozen.</p>
-
-      <div class="two-col animate-in">
-        <div class="col">
-          <h3 style="color: var(--red);">Root Cause Analysis</h3>
-          <ul>
-            <li><strong>Stage 1</strong> trains vision + IMU encoders separately &mdash; simple, stable math. Works fine.</li>
-            <li><strong>Stage 2</strong> unfreezes the <strong>Fusion Decoder</strong> &mdash; this is the cross-attention layer where vision and IMU embeddings are multiplied together. Very sensitive to weight magnitudes.</li>
-            <li>The initial learning rate of <strong>1&times;10<sup>-3</sup></strong> caused the cross-attention scores to explode. Large attention weights &rarr; large softmax inputs &rarr; extreme gradients &rarr; weights spiral out of control.</li>
-            <li><strong>fp16 precision</strong> has a max value of ~65,504. Much smaller than fp32's ~3.4&times;10<sup>38</sup>. The exploding values overflow to <code>Inf</code>, and <code>Inf - Inf = NaN</code>, which poisons every subsequent computation.</li>
-            <li>Required for deployment &mdash; Jetson Orin NX needs fp16 to hit &gt;30Hz, so switching to fp32 is not an option.</li>
-          </ul>
-        </div>
-        <div class="col">
-          <h3 style="color: var(--green);">Initial Fix</h3>
-          <ul>
-            <li>Reduced learning rates to give the fusion decoder time to slowly align the vision and IMU signal spaces without oscillating:</li>
-          </ul>
-          <div class="code-block">
-            <span class="comment"># config: progressive training LRs</span><br><br>
-            <span class="comment"># Stage 2: Navigation SFT (fusion decoder unfrozen)</span><br>
-            <span class="key">stage2_lr:</span> <span class="old">1.0e-3</span> <span class="new">&rarr; 2.0e-4</span><br><br>
-            <span class="comment"># Stage 3: Domain refinement (agricultural)</span><br>
-            <span class="key">stage3_lr:</span> <span class="old">1.0e-3</span> <span class="new">&rarr; 3.0e-4</span>
-          </div>
-          <div class="callout" style="margin-top: 0.75rem;">
-            <strong>Result:</strong> Training no longer crashes at epoch 10. Loss decreases smoothly through Stage 2. But the optimal LR is still unknown &mdash; 2&times;10<sup>-4</sup> might be too conservative (slow convergence) or still too aggressive for some dataset combinations.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 7: How I'll Fix It -->
-    <div class="slide" data-slide="6">
-      <div class="slide-label animate-in">Action Plan</div>
-      <h2 class="animate-in">How I'm Addressing the Open Issues</h2>
-
-      <div class="two-col animate-in">
-        <div class="col">
-          <h3>NaN / Learning Rate Tuning</h3>
-          <ol class="step-list">
-            <li><strong>Learning rate sweep:</strong> Run a grid of LRs around the current fix &mdash; both higher (5&times;10<sup>-4</sup>) and lower (1&times;10<sup>-4</sup>) &mdash; to find the stability boundary for fp16 training with the fusion decoder.</li>
-            <li><strong>Monitor gradient norms:</strong> Add gradient norm logging per-layer to detect when cross-attention starts diverging, before it hits NaN. This will tell us the exact tipping point.</li>
-            <li><strong>Consider gradient clipping:</strong> If the sweep shows a narrow stable window, add max-norm gradient clipping as a safety net so we can use a higher (faster) LR without overflow risk.</li>
-          </ol>
-        </div>
-        <div class="col">
-          <h3>Instruction Diversity</h3>
-          <ol class="step-list">
-            <li><strong>Problem:</strong> Every episode currently uses the same generic <code>instruction.txt</code> (e.g., "Fly through the racing track"). The model can't learn to ground actions on language if every instruction is identical &mdash; it just ignores the text encoder.</li>
-            <li><strong>Fix:</strong> Generate per-trajectory instructions that describe the actual content of each episode &mdash; direction changes, obstacle types, terrain features. Will vary vocabulary and sentence structure.</li>
-            <li><strong>Why it matters:</strong> The instruction encoder (MiniLM) is frozen. If every instruction embeds to the same vector, the cross-attention fusion learns to ignore it entirely. Diverse instructions force the model to actually attend to language.</li>
-          </ol>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 8: Next Steps -->
-    <div class="slide" data-slide="7">
+    <!-- SLIDE 12: Next Steps -->
+    <div class="slide" data-slide="11">
       <div class="slide-label animate-in">Next Week</div>
       <h2 class="animate-in">Next Steps</h2>
-
       <div class="cards animate-in">
         <div class="card">
-          <div class="card-icon" style="color: var(--accent);">1</div>
-          <h3>LR Sweep on UZH-FPV</h3>
-          <p>Run progressive training with LRs from 1&times;10<sup>-4</sup> to 5&times;10<sup>-4</sup> on UZH-FPV. Log gradient norms per stage. Identify the optimal LR that converges fastest without fp16 overflow.</p>
+          <h3>Learning Rate Sweep</h3>
+          <p>Try LRs from 1&times;10<sup>-4</sup> to 5&times;10<sup>-4</sup> to find the best value that trains fast without crashing.</p>
         </div>
         <div class="card">
-          <div class="card-icon" style="color: var(--accent);">2</div>
-          <h3>Per-Episode Instructions</h3>
-          <p>Replace the static instruction.txt with diverse, trajectory-specific natural language instructions. Ensure each episode has a unique description so the instruction encoder provides meaningful signal to the fusion decoder.</p>
+          <h3>Diversify Instructions</h3>
+          <p>Right now every episode has the same instruction text. The model ignores language if it's always identical. Need unique descriptions per trajectory.</p>
         </div>
         <div class="card">
-          <div class="card-icon" style="color: var(--accent);">3</div>
-          <h3>MUN-FRL Training Run</h3>
-          <p>Now that preprocessing is fixed, start a training run on MUN-FRL data. This is the outdoor agricultural-adjacent dataset &mdash; important for domain generalization to the target application.</p>
+          <h3>Train on MUN-FRL</h3>
+          <p>Now that preprocessing works, run training on this outdoor dataset for agricultural domain generalization.</p>
         </div>
         <div class="card">
-          <div class="card-icon" style="color: var(--accent);">4</div>
           <h3>Blackbird Dataset</h3>
-          <p>Continue monitoring MIT hosting availability. Once accessible, download and preprocess using the now-generalized preprocessing pipeline (topic mapping is no longer hardcoded).</p>
+          <p>Monitor MIT hosting. Download and preprocess once the site is back up.</p>
         </div>
         <div class="card">
-          <div class="card-icon" style="color: var(--accent);">5</div>
           <h3>Evaluate Checkpoints</h3>
-          <p>Run evaluate.py on UZH-FPV trained checkpoints. Collect trajectory error metrics and compare against baseline numbers from the paper's comparison table.</p>
+          <p>Run evaluation on UZH-FPV trained models. Compare trajectory metrics against baselines.</p>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 9: Questions -->
-    <div class="slide title-slide" data-slide="8">
+    <!-- SLIDE 13: Questions -->
+    <div class="slide title-slide" data-slide="12">
       <div class="slide-label animate-in">End</div>
       <h1 class="animate-in">Questions?</h1>
       <p class="subtitle animate-in">VLA-Flight &mdash; ~80M params, &gt;30Hz on Jetson Orin NX 16GB</p>
-      <p class="body-text animate-in">Dual IMU fusion (direct + fuzzy prompting) &bull; LSAC + VAE action chunking &bull; Progressive 3-stage training &bull; Zero-parameter geometric safety correction</p>
       <div class="meta animate-in">
         <span>Yashas Shashidhara</span>
         <span>github.com/Yashas1600</span>
@@ -537,7 +531,7 @@
   <!-- Navigation -->
   <div class="progress-dots" id="dots"></div>
   <div class="nav">
-    <span class="slide-count" id="counter">1 / 9</span>
+    <span class="slide-count" id="counter">1 / 13</span>
     <button class="nav-btn" id="prev" disabled>&larr;</button>
     <button class="nav-btn" id="next">&rarr;</button>
   </div>
