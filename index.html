@@ -262,8 +262,56 @@
       </div>
     </div>
 
-    <!-- SLIDE 2: Overview -->
+    <!-- SLIDE 2: Project Overview -->
     <div class="slide" data-slide="1">
+      <div class="slide-label animate-in">Project Background</div>
+      <h2 class="animate-in">What is VLA-Flight?</h2>
+      <p class="subtitle animate-in">Existing drone VLA models (OpenVLA, RaceVLA, AerialVLA) rely on massive 7B+ parameter LLMs, require server-grade GPUs, and cannot run onboard. VLA-Flight replaces the LLM with lightweight cross-attention fusion to enable real-time onboard inference for agricultural drone navigation.</p>
+
+      <div class="two-col animate-in">
+        <div class="col">
+          <h3>Key Contributions</h3>
+          <ul>
+            <li><strong>C1: Dual IMU Usage</strong> &mdash; First drone VLA to fuse raw IMU at two levels: direct temporal fusion (fine dynamics like wind/drift) and fuzzy directional prompting (coarse intent like "forward-right" prepended to instruction text). AerialVLA only uses the second.</li>
+            <li><strong>C2: LSAC + VAE Action Chunking</strong> &mdash; Predicts H=10 step action chunks for smooth trajectories, executes only h=5 before replanning. VAE bottleneck prevents mode-averaging when multiple valid paths exist (e.g., go left or right around obstacle).</li>
+            <li><strong>C3: Edge-Deployable (~80M params)</strong> &mdash; Replaces 7B LLM with frozen MiniLM (22M) for instruction encoding + cross-attention fusion decoder (~5M). Continuous action regression instead of 256-bin discretization. 100x smaller, 10x faster than OpenVLA.</li>
+            <li><strong>C4: Geometric Safety Correction</strong> &mdash; Zero-parameter post-processing: velocity clamping, altitude bounds, acceleration smoothing, depth-based repulsion, IMU vibration proximity detection. Adds zero inference latency.</li>
+            <li><strong>C5: Progressive 3-Stage Training</strong> &mdash; Stage 1: perception pretraining (vision + IMU). Stage 2: navigation SFT (full end-to-end). Stage 3: agricultural domain refinement.</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h3>Architecture Overview</h3>
+          <div class="code-block" style="font-size: 0.68rem; line-height: 1.55;">
+<span class="comment">RGB [3,224,224]    IMU [Tx12]     Instruction</span>
+      |                |               |
+<span class="key">EfficientViT</span>    <span class="key">IMU Encoder</span>    <span class="key">Fuzzy Prompting</span>
+   (~15M)        (Temporal XFMR     (bearing &rarr; text)
+      |            ~2M)               |
+ [B,49,256]     [B,4,256]      <span class="key">MiniLM</span> (22M, frozen)
+      |              |                |
+      +-------+------+----------------+
+              |
+       <span class="key">Fusion Decoder</span> (cross-attn, ~5M)
+              |
+        <span class="key">VAE Bottleneck</span> (z ~ N(0,I))
+              |
+       <span class="key">Chunk Decoder</span> (XFMR)
+              |
+     [vx, vy, vz, yaw] x H steps
+              |
+       <span class="key">Safety Module</span> (0 params)
+              |
+      Safe action chunk
+          </div>
+          <div class="callout" style="margin-top: 0.75rem;">
+            <strong>vs. Prior Work:</strong> OpenVLA/AerialVLA = 7.5B params, server GPU, 256-bin discretized actions. VLA-Flight = ~80M params, Jetson Orin NX, continuous actions, &gt;30Hz.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: This Week Overview -->
+    <div class="slide" data-slide="2">
       <div class="slide-label animate-in">Overview</div>
       <h2 class="animate-in">This Week: Data Pipeline + Training</h2>
       <p class="subtitle animate-in">Focus was on getting real drone datasets preprocessed into VLA-Flight's unified training format and starting model training on the progressive 3-stage pipeline.</p>
@@ -295,8 +343,8 @@
       </div>
     </div>
 
-    <!-- SLIDE 3: MUN-FRL Download Problem -->
-    <div class="slide" data-slide="2">
+    <!-- SLIDE 4: MUN-FRL Download Problem -->
+    <div class="slide" data-slide="3">
       <div class="slide-label animate-in">Data Pipeline</div>
       <h2 class="animate-in">Problem 1: MUN-FRL Batch Download Broken</h2>
       <p class="subtitle animate-in">The download script (<code>scripts/download_datasets.sh</code>) was failing silently for MUN-FRL. Every downloaded .bag file was empty &mdash; the script was saving the HTTP response header instead of the actual file content.</p>
@@ -323,8 +371,8 @@
       </div>
     </div>
 
-    <!-- SLIDE 4: Topic Mapping -->
-    <div class="slide" data-slide="3">
+    <!-- SLIDE 5: Topic Mapping -->
+    <div class="slide" data-slide="4">
       <div class="slide-label animate-in">Data Pipeline</div>
       <h2 class="animate-in">Problem 2: Hardcoded ROS Topics in Preprocessing</h2>
       <p class="subtitle animate-in">The preprocessing script (<code>scripts/preprocess_dataset.py</code>) was written for UZH-FPV and had all ROS topic names hardcoded. MUN-FRL uses completely different topic names, message types, and data formats. The script would silently find zero messages and produce empty output.</p>
@@ -377,8 +425,8 @@
       </div>
     </div>
 
-    <!-- SLIDE 5: NaN Problem Deep Dive -->
-    <div class="slide" data-slide="4">
+    <!-- SLIDE 6: NaN Problem Deep Dive -->
+    <div class="slide" data-slide="5">
       <div class="slide-label animate-in">Training</div>
       <h2 class="animate-in">Problem 3: NaN Loss in Stage 2 Training</h2>
       <p class="subtitle animate-in">Training consistently crashes with NaN loss approximately 10 epochs into Stage 2 of the progressive training pipeline. Stage 1 (perception pretraining) completes fine. The crash happens the moment the Fusion Decoder is unfrozen.</p>
@@ -413,8 +461,8 @@
       </div>
     </div>
 
-    <!-- SLIDE 6: How I'll Fix It -->
-    <div class="slide" data-slide="5">
+    <!-- SLIDE 7: How I'll Fix It -->
+    <div class="slide" data-slide="6">
       <div class="slide-label animate-in">Action Plan</div>
       <h2 class="animate-in">How I'm Addressing the Open Issues</h2>
 
@@ -438,8 +486,8 @@
       </div>
     </div>
 
-    <!-- SLIDE 7: Next Steps -->
-    <div class="slide" data-slide="6">
+    <!-- SLIDE 8: Next Steps -->
+    <div class="slide" data-slide="7">
       <div class="slide-label animate-in">Next Week</div>
       <h2 class="animate-in">Next Steps</h2>
 
@@ -472,8 +520,8 @@
       </div>
     </div>
 
-    <!-- SLIDE 8: Questions -->
-    <div class="slide title-slide" data-slide="7">
+    <!-- SLIDE 9: Questions -->
+    <div class="slide title-slide" data-slide="8">
       <div class="slide-label animate-in">End</div>
       <h1 class="animate-in">Questions?</h1>
       <p class="subtitle animate-in">VLA-Flight &mdash; ~80M params, &gt;30Hz on Jetson Orin NX 16GB</p>
@@ -489,7 +537,7 @@
   <!-- Navigation -->
   <div class="progress-dots" id="dots"></div>
   <div class="nav">
-    <span class="slide-count" id="counter">1 / 8</span>
+    <span class="slide-count" id="counter">1 / 9</span>
     <button class="nav-btn" id="prev" disabled>&larr;</button>
     <button class="nav-btn" id="next">&rarr;</button>
   </div>
