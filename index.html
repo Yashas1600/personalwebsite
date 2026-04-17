@@ -33,12 +33,7 @@
       width: 100vw;
     }
 
-    /* Slide container */
-    .deck {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-    }
+    .deck { width: 100vw; height: 100vh; position: relative; }
 
     .slide {
       position: absolute;
@@ -46,111 +41,77 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 5vh 8vw;
+      padding: 4vh 7vw;
       opacity: 0;
       transform: translateX(40px);
       transition: opacity 0.4s ease, transform 0.4s ease;
       pointer-events: none;
+      overflow-y: auto;
     }
 
-    .slide.active {
-      opacity: 1;
-      transform: translateX(0);
-      pointer-events: auto;
-    }
+    .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+    .slide.exiting { opacity: 0; transform: translateX(-40px); }
 
-    .slide.exiting {
-      opacity: 0;
-      transform: translateX(-40px);
-    }
-
-    /* Typography */
     .slide-label {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
 
-    h1 {
-      font-size: clamp(2rem, 4.5vw, 3.5rem);
-      font-weight: 700;
-      line-height: 1.15;
-      margin-bottom: 1rem;
-    }
-
-    h2 {
-      font-size: clamp(1.5rem, 3vw, 2.5rem);
-      font-weight: 600;
-      line-height: 1.2;
-      margin-bottom: 1.5rem;
-    }
+    h1 { font-size: clamp(2rem, 4.5vw, 3.5rem); font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem; }
+    h2 { font-size: clamp(1.4rem, 2.8vw, 2.2rem); font-weight: 600; line-height: 1.2; margin-bottom: 0.75rem; }
 
     .subtitle {
-      font-size: clamp(1rem, 1.8vw, 1.3rem);
+      font-size: clamp(0.9rem, 1.5vw, 1.1rem);
       color: var(--text-dim);
       line-height: 1.6;
-      max-width: 50ch;
+      max-width: 65ch;
     }
 
-    /* Cards grid */
+    .body-text {
+      font-size: 0.875rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+      max-width: 70ch;
+      margin-top: 0.5rem;
+    }
+
+    /* Cards */
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.25rem;
-      margin-top: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
     }
 
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: 1.25rem;
       transition: border-color 0.2s;
     }
 
-    .card:hover {
-      border-color: var(--accent);
-    }
-
-    .card-icon {
-      font-size: 1.5rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .card h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .card p {
-      font-size: 0.875rem;
-      color: var(--text-dim);
-      line-height: 1.5;
-    }
+    .card:hover { border-color: var(--accent); }
+    .card-icon { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .card p { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
 
     /* Status badges */
     .status {
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 500;
-      padding: 0.25rem 0.7rem;
+      padding: 0.2rem 0.65rem;
       border-radius: 100px;
-      margin-top: 0.75rem;
+      margin-top: 0.6rem;
     }
-
-    .status::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-    }
-
+    .status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
     .status.done { background: rgba(74, 222, 128, 0.1); color: var(--green); }
     .status.done::before { background: var(--green); }
     .status.progress { background: rgba(250, 204, 21, 0.1); color: var(--yellow); }
@@ -163,13 +124,12 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 1.25rem 1.5rem;
+      padding: 1rem 1.25rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       line-height: 1.7;
       overflow-x: auto;
-      margin-top: 1.25rem;
-      max-width: 100%;
+      margin-top: 1rem;
     }
 
     .code-block .comment { color: #5a5a7a; }
@@ -177,247 +137,114 @@
     .code-block .val { color: var(--green); }
     .code-block .old { color: var(--red); text-decoration: line-through; opacity: 0.6; }
     .code-block .new { color: var(--green); }
+    .code-block .highlight-line { color: var(--text); }
 
     /* Table */
-    .topic-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1.25rem;
-      font-size: 0.85rem;
-    }
-
+    .topic-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.82rem; }
     .topic-table th {
-      text-align: left;
-      font-weight: 600;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-dim);
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid var(--border);
+      text-align: left; font-weight: 600; font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--text-dim); padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--border);
     }
-
     .topic-table td {
-      padding: 0.65rem 1rem;
-      border-bottom: 1px solid var(--border);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
+      padding: 0.55rem 0.85rem; border-bottom: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
     }
-
     .topic-table tr:last-child td { border-bottom: none; }
-
     .topic-table .from { color: var(--red); }
     .topic-table .to { color: var(--green); }
 
-    /* Architecture diagram */
-    .arch-flow {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-top: 1.25rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-    }
+    /* Two-column */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem; margin-top: 1.25rem; }
+    @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
 
-    .arch-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .arch-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.5rem 1rem;
-      white-space: nowrap;
-    }
-
-    .arch-box.highlight {
-      border-color: var(--accent);
-      background: var(--accent-glow);
-    }
-
-    .arch-box.problem {
-      border-color: var(--red);
-      background: rgba(248, 113, 113, 0.08);
-    }
-
-    .arch-arrow {
-      color: var(--text-dim);
-      font-size: 1.2rem;
-    }
-
-    /* Two-column layout */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin-top: 1.5rem;
-    }
-
-    @media (max-width: 768px) {
-      .two-col { grid-template-columns: 1fr; }
-    }
-
-    .col h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .col ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
+    .col h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
+    .col ul { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
     .col li {
-      font-size: 0.875rem;
-      color: var(--text-dim);
-      line-height: 1.5;
-      padding-left: 1.2rem;
-      position: relative;
+      font-size: 0.82rem; color: var(--text-dim); line-height: 1.55;
+      padding-left: 1.1rem; position: relative;
     }
-
     .col li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0.55rem;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--accent);
+      content: ''; position: absolute; left: 0; top: 0.5rem;
+      width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
     }
+    .col li strong { color: var(--text); }
 
-    /* Progress bar */
-    .progress-track {
-      width: 100%;
-      height: 6px;
-      background: var(--surface-2);
-      border-radius: 100px;
-      margin-top: 0.75rem;
-      overflow: hidden;
+    /* Callout box */
+    .callout {
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.25rem;
+      margin-top: 1rem;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.6;
     }
+    .callout strong { color: var(--text); }
+    .callout.warn { border-left-color: var(--yellow); }
+    .callout.error { border-left-color: var(--red); }
 
-    .progress-fill {
-      height: 100%;
-      border-radius: 100px;
-      transition: width 0.6s ease;
+    /* Numbered list */
+    .step-list { list-style: none; counter-reset: step; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .step-list li {
+      counter-increment: step;
+      font-size: 0.85rem; color: var(--text-dim); line-height: 1.6;
+      padding-left: 2.2rem; position: relative;
     }
+    .step-list li::before {
+      content: counter(step);
+      position: absolute; left: 0; top: 0;
+      width: 1.6rem; height: 1.6rem; border-radius: 50%;
+      background: var(--accent-glow); border: 1px solid var(--accent);
+      color: var(--accent); font-size: 0.72rem; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-list li strong { color: var(--text); }
 
     /* Navigation */
     .nav {
-      position: fixed;
-      bottom: 2rem;
-      right: 3rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      z-index: 100;
+      position: fixed; bottom: 1.5rem; right: 2.5rem;
+      display: flex; align-items: center; gap: 0.75rem; z-index: 100;
     }
-
     .nav-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1.1rem;
-      transition: all 0.2s;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--surface);
+      color: var(--text); display: flex; align-items: center;
+      justify-content: center; cursor: pointer; font-size: 1rem; transition: all 0.2s;
     }
+    .nav-btn:hover { border-color: var(--accent); background: var(--accent-glow); }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .slide-count { font-size: 0.75rem; color: var(--text-dim); font-variant-numeric: tabular-nums; }
 
-    .nav-btn:hover {
-      border-color: var(--accent);
-      background: var(--accent-glow);
-    }
-
-    .nav-btn:disabled {
-      opacity: 0.3;
-      cursor: default;
-    }
-
-    .slide-count {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* Progress dots */
     .progress-dots {
-      position: fixed;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 0.5rem;
-      z-index: 100;
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 0.45rem; z-index: 100;
     }
-
     .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--border);
-      transition: all 0.3s;
-      cursor: pointer;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--border); transition: all 0.3s; cursor: pointer;
     }
+    .dot.active { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
 
-    .dot.active {
-      background: var(--accent);
-      box-shadow: 0 0 10px var(--accent);
-    }
-
-    /* Title slide special */
     .title-slide h1 {
       font-size: clamp(2.5rem, 5vw, 4rem);
       background: linear-gradient(135deg, #e4e4ed 0%, #6c8cff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
-    .meta {
-      display: flex;
-      gap: 2rem;
-      margin-top: 1.5rem;
-      font-size: 0.875rem;
-      color: var(--text-dim);
-    }
+    .meta { display: flex; gap: 2rem; margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-dim); }
+    .meta span { display: flex; align-items: center; gap: 0.4rem; }
 
-    .meta span {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    /* Animate items in */
-    .slide.active .animate-in {
-      animation: fadeUp 0.5s ease forwards;
-      opacity: 0;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .animate-in:nth-child(1) { animation-delay: 0.1s; }
-    .animate-in:nth-child(2) { animation-delay: 0.2s; }
-    .animate-in:nth-child(3) { animation-delay: 0.3s; }
-    .animate-in:nth-child(4) { animation-delay: 0.4s; }
-    .animate-in:nth-child(5) { animation-delay: 0.5s; }
-    .animate-in:nth-child(6) { animation-delay: 0.6s; }
+    .slide.active .animate-in { animation: fadeUp 0.45s ease forwards; opacity: 0; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-in:nth-child(1) { animation-delay: 0.08s; }
+    .animate-in:nth-child(2) { animation-delay: 0.16s; }
+    .animate-in:nth-child(3) { animation-delay: 0.24s; }
+    .animate-in:nth-child(4) { animation-delay: 0.32s; }
+    .animate-in:nth-child(5) { animation-delay: 0.40s; }
+    .animate-in:nth-child(6) { animation-delay: 0.48s; }
+    .animate-in:nth-child(7) { animation-delay: 0.56s; }
   </style>
 </head>
 <body>
@@ -428,56 +255,87 @@
       <div class="slide-label animate-in">Weekly Update &mdash; April 16, 2026</div>
       <h1 class="animate-in">VLA-Flight</h1>
       <p class="subtitle animate-in">Instruction-Grounded Drone Navigation with Vision-Language-Action and Onboard IMU</p>
+      <p class="body-text animate-in">A lightweight ~80M parameter VLA architecture that jointly encodes RGB images, onboard IMU data, drone position, and natural language instructions to predict low-level flight control commands &mdash; running entirely onboard a Jetson Orin NX 16GB at &gt;30Hz. Target application: autonomous agricultural drone navigation.</p>
       <div class="meta animate-in">
         <span>Yashas Shashidhara</span>
         <span>Week of Apr 7 &ndash; 16</span>
       </div>
     </div>
 
-    <!-- SLIDE 2: What I Did -->
+    <!-- SLIDE 2: Overview -->
     <div class="slide" data-slide="1">
       <div class="slide-label animate-in">Overview</div>
-      <h2 class="animate-in">This Week's Work</h2>
+      <h2 class="animate-in">This Week: Data Pipeline + Training</h2>
+      <p class="subtitle animate-in">Focus was on getting real drone datasets preprocessed into VLA-Flight's unified training format and starting model training on the progressive 3-stage pipeline.</p>
       <div class="cards animate-in">
         <div class="card">
           <div class="card-icon">1</div>
           <h3>UZH-FPV Dataset</h3>
-          <p>Downloaded, preprocessed, and ran initial training. Pipeline working end-to-end.</p>
+          <p>Downloaded the full dataset (~30-50GB). Preprocessed ROS bags into unified numpy format (images, IMU, actions, states). Ran full progressive 3-stage training end-to-end.</p>
           <span class="status done">Complete</span>
         </div>
         <div class="card">
           <div class="card-icon">2</div>
           <h3>MUN-FRL Dataset</h3>
-          <p>Manual download (batch script was broken). Fixed topic mapping in preprocessing. Data ready.</p>
-          <span class="status done">Complete</span>
+          <p>Had to manually download every file &mdash; the batch download script was only pulling HTTP headers, not actual file content (empty .bag files). Then hit major preprocessing issues with hardcoded ROS topics (next slide).</p>
+          <span class="status done">Preprocessed</span>
         </div>
         <div class="card">
           <div class="card-icon">3</div>
           <h3>NaN Training Bug</h3>
-          <p>Exploding gradients in Stage 2 fusion decoder + fp16 overflow. Diagnosed and patched.</p>
-          <span class="status progress">Tuning</span>
+          <p>Training crashes with NaN loss every time Stage 2 (fusion decoder) begins. Diagnosed as exploding gradients compounded by fp16 overflow. Initial fix applied, still tuning.</p>
+          <span class="status progress">Tuning LR</span>
         </div>
         <div class="card">
           <div class="card-icon">4</div>
           <h3>Blackbird Dataset</h3>
-          <p>MIT hosting site currently down. Blocked on external availability.</p>
-          <span class="status blocked">Blocked</span>
+          <p>MIT's hosting site is currently down &mdash; cannot access the dataset at all. Started with MUN-FRL as an alternative outdoor generalization dataset in the meantime.</p>
+          <span class="status blocked">Site Down</span>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 3: MUN-FRL Topic Fixes -->
+    <!-- SLIDE 3: MUN-FRL Download Problem -->
     <div class="slide" data-slide="2">
       <div class="slide-label animate-in">Data Pipeline</div>
-      <h2 class="animate-in">MUN-FRL Preprocessing Fixes</h2>
-      <p class="subtitle animate-in">The preprocessing script was hardcoded for UZH-FPV racing topics. MUN-FRL uses completely different ROS topic names and formats.</p>
+      <h2 class="animate-in">Problem 1: MUN-FRL Batch Download Broken</h2>
+      <p class="subtitle animate-in">The download script (<code>scripts/download_datasets.sh</code>) was failing silently for MUN-FRL. Every downloaded .bag file was empty &mdash; the script was saving the HTTP response header instead of the actual file content.</p>
+
+      <div class="two-col animate-in">
+        <div class="col">
+          <h3 style="color: var(--red);">What Happened</h3>
+          <ul>
+            <li>The batch download script pulled files from the MUN-FRL server</li>
+            <li>Files appeared to download successfully (no errors)</li>
+            <li>But every .bag file was <strong>essentially empty</strong> &mdash; just a few bytes containing the HTTP header, not the actual ROS bag data</li>
+            <li>Preprocessing would then fail or produce garbage because there was no real sensor data in the files</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h3 style="color: var(--green);">The Fix</h3>
+          <ul>
+            <li><strong>Manually downloaded each ROS bag file</strong> directly from mun-frl-vil-dataset.readthedocs.io</li>
+            <li>Verified file sizes matched expected values (~GB per bag, not KB)</li>
+            <li>Confirmed bags contained valid ROS topics with <code>rosbag info</code> before preprocessing</li>
+            <li>Tedious but necessary &mdash; automated script needs a proper fix for redirect handling</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Topic Mapping -->
+    <div class="slide" data-slide="3">
+      <div class="slide-label animate-in">Data Pipeline</div>
+      <h2 class="animate-in">Problem 2: Hardcoded ROS Topics in Preprocessing</h2>
+      <p class="subtitle animate-in">The preprocessing script (<code>scripts/preprocess_dataset.py</code>) was written for UZH-FPV and had all ROS topic names hardcoded. MUN-FRL uses completely different topic names, message types, and data formats. The script would silently find zero messages and produce empty output.</p>
 
       <table class="topic-table animate-in">
         <thead>
           <tr>
-            <th>Feature</th>
-            <th>Before (UZH-FPV)</th>
-            <th>After (MUN-FRL)</th>
+            <th>Component</th>
+            <th>Hardcoded (UZH-FPV)</th>
+            <th>Actual (MUN-FRL)</th>
+            <th>Issue</th>
           </tr>
         </thead>
         <tbody>
@@ -485,101 +343,141 @@
             <td style="color: var(--text);">Image Topic</td>
             <td class="from">/cam0/image_raw</td>
             <td class="to">/camera_forward/image_raw</td>
+            <td style="color: var(--text-dim); font-family: Inter, sans-serif;">No images found</td>
+          </tr>
+          <tr>
+            <td style="color: var(--text);">Image Msg Type</td>
+            <td class="from">CompressedImage</td>
+            <td class="to">sensor_msgs/Image</td>
+            <td style="color: var(--text-dim); font-family: Inter, sans-serif;">Script hangs waiting for wrong type</td>
+          </tr>
+          <tr>
+            <td style="color: var(--text);">Image Encoding</td>
+            <td class="from">BGR8</td>
+            <td class="to">Mono8</td>
+            <td style="color: var(--text-dim); font-family: Inter, sans-serif;">Garbled images if not converted</td>
           </tr>
           <tr>
             <td style="color: var(--text);">IMU Topic</td>
             <td class="from">/imu</td>
             <td class="to">/xsens/imu/data</td>
+            <td style="color: var(--text-dim); font-family: Inter, sans-serif;">No IMU data found</td>
           </tr>
           <tr>
             <td style="color: var(--text);">Action Source</td>
             <td class="from">/control/command</td>
-            <td class="to">Derived from PPK/GNSS</td>
-          </tr>
-          <tr>
-            <td style="color: var(--text);">Image Format</td>
-            <td class="from">BGR8</td>
-            <td class="to">Mono8 (+ conversion)</td>
-          </tr>
-          <tr>
-            <td style="color: var(--text);">Msg Type</td>
-            <td class="from">CompressedImage</td>
-            <td class="to">sensor_msgs/Image</td>
+            <td class="to">Derived from PPK/GNSS poses</td>
+            <td style="color: var(--text-dim); font-family: Inter, sans-serif;">No direct control topic exists</td>
           </tr>
         </tbody>
       </table>
 
-      <p class="subtitle animate-in" style="margin-top: 1rem; font-size: 0.85rem;">Also fixed IMU-to-Image sync: paired 20Hz images with 400Hz IMU using ApproximateTimeSynchronizer.</p>
+      <div class="callout animate-in">
+        <strong>Additional fix: IMU-to-Image synchronization.</strong> MUN-FRL records images at 20Hz and IMU at 400Hz. Had to implement <code>ApproximateTimeSynchronizer</code> to pair the two streams and interpolate IMU readings to align with image timestamps. For actions, computed velocity labels as position deltas from PPK ground truth: <strong>v = (pos[t+1] - pos[t]) / dt</strong>.
+      </div>
     </div>
 
-    <!-- SLIDE 4: NaN Issue -->
-    <div class="slide" data-slide="3">
+    <!-- SLIDE 5: NaN Problem Deep Dive -->
+    <div class="slide" data-slide="4">
       <div class="slide-label animate-in">Training</div>
-      <h2 class="animate-in">NaN Explosion in Stage 2</h2>
+      <h2 class="animate-in">Problem 3: NaN Loss in Stage 2 Training</h2>
+      <p class="subtitle animate-in">Training consistently crashes with NaN loss approximately 10 epochs into Stage 2 of the progressive training pipeline. Stage 1 (perception pretraining) completes fine. The crash happens the moment the Fusion Decoder is unfrozen.</p>
 
       <div class="two-col animate-in">
         <div class="col">
-          <h3 style="color: var(--red);">The Problem</h3>
+          <h3 style="color: var(--red);">Root Cause Analysis</h3>
           <ul>
-            <li>Stage 2 unfreezes the <strong>Fusion Decoder</strong> &mdash; vision + IMU cross-attention</li>
-            <li>Learning rate 1&times;10<sup>-3</sup> caused exploding gradients in cross-attention matrix multiplications</li>
-            <li><strong>fp16 precision</strong> overflows at much smaller values than fp32 &mdash; numbers hit infinity, then NaN</li>
-            <li>Training would crash ~10 epochs into Stage 2, every time</li>
+            <li><strong>Stage 1</strong> trains vision + IMU encoders separately &mdash; simple, stable math. Works fine.</li>
+            <li><strong>Stage 2</strong> unfreezes the <strong>Fusion Decoder</strong> &mdash; this is the cross-attention layer where vision and IMU embeddings are multiplied together. Very sensitive to weight magnitudes.</li>
+            <li>The initial learning rate of <strong>1&times;10<sup>-3</sup></strong> caused the cross-attention scores to explode. Large attention weights &rarr; large softmax inputs &rarr; extreme gradients &rarr; weights spiral out of control.</li>
+            <li><strong>fp16 precision</strong> has a max value of ~65,504. Much smaller than fp32's ~3.4&times;10<sup>38</sup>. The exploding values overflow to <code>Inf</code>, and <code>Inf - Inf = NaN</code>, which poisons every subsequent computation.</li>
+            <li>Required for deployment &mdash; Jetson Orin NX needs fp16 to hit &gt;30Hz, so switching to fp32 is not an option.</li>
           </ul>
         </div>
         <div class="col">
-          <h3 style="color: var(--green);">The Fix</h3>
+          <h3 style="color: var(--green);">Initial Fix</h3>
           <ul>
-            <li>Reduced learning rates:
-              <div class="code-block" style="margin-top: 0.5rem; padding: 0.75rem 1rem;">
-                <span class="comment"># Stage 2 LR</span><br>
-                <span class="old">lr: 1.0e-3</span><br>
-                <span class="new">lr: 2.0e-4</span><br><br>
-                <span class="comment"># Stage 3 LR</span><br>
-                <span class="old">lr: 1.0e-3</span><br>
-                <span class="new">lr: 3.0e-4</span>
-              </div>
-            </li>
-            <li>Smaller steps let the fusion decoder align vision &amp; IMU signals without oscillating</li>
+            <li>Reduced learning rates to give the fusion decoder time to slowly align the vision and IMU signal spaces without oscillating:</li>
           </ul>
+          <div class="code-block">
+            <span class="comment"># config: progressive training LRs</span><br><br>
+            <span class="comment"># Stage 2: Navigation SFT (fusion decoder unfrozen)</span><br>
+            <span class="key">stage2_lr:</span> <span class="old">1.0e-3</span> <span class="new">&rarr; 2.0e-4</span><br><br>
+            <span class="comment"># Stage 3: Domain refinement (agricultural)</span><br>
+            <span class="key">stage3_lr:</span> <span class="old">1.0e-3</span> <span class="new">&rarr; 3.0e-4</span>
+          </div>
+          <div class="callout" style="margin-top: 0.75rem;">
+            <strong>Result:</strong> Training no longer crashes at epoch 10. Loss decreases smoothly through Stage 2. But the optimal LR is still unknown &mdash; 2&times;10<sup>-4</sup> might be too conservative (slow convergence) or still too aggressive for some dataset combinations.
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 5: Next Steps -->
-    <div class="slide" data-slide="4">
-      <div class="slide-label animate-in">Next Steps</div>
-      <h2 class="animate-in">Plan for Next Week</h2>
+    <!-- SLIDE 6: How I'll Fix It -->
+    <div class="slide" data-slide="5">
+      <div class="slide-label animate-in">Action Plan</div>
+      <h2 class="animate-in">How I'm Addressing the Open Issues</h2>
+
+      <div class="two-col animate-in">
+        <div class="col">
+          <h3>NaN / Learning Rate Tuning</h3>
+          <ol class="step-list">
+            <li><strong>Learning rate sweep:</strong> Run a grid of LRs around the current fix &mdash; both higher (5&times;10<sup>-4</sup>) and lower (1&times;10<sup>-4</sup>) &mdash; to find the stability boundary for fp16 training with the fusion decoder.</li>
+            <li><strong>Monitor gradient norms:</strong> Add gradient norm logging per-layer to detect when cross-attention starts diverging, before it hits NaN. This will tell us the exact tipping point.</li>
+            <li><strong>Consider gradient clipping:</strong> If the sweep shows a narrow stable window, add max-norm gradient clipping as a safety net so we can use a higher (faster) LR without overflow risk.</li>
+          </ol>
+        </div>
+        <div class="col">
+          <h3>Instruction Diversity</h3>
+          <ol class="step-list">
+            <li><strong>Problem:</strong> Every episode currently uses the same generic <code>instruction.txt</code> (e.g., "Fly through the racing track"). The model can't learn to ground actions on language if every instruction is identical &mdash; it just ignores the text encoder.</li>
+            <li><strong>Fix:</strong> Generate per-trajectory instructions that describe the actual content of each episode &mdash; direction changes, obstacle types, terrain features. Will vary vocabulary and sentence structure.</li>
+            <li><strong>Why it matters:</strong> The instruction encoder (MiniLM) is frozen. If every instruction embeds to the same vector, the cross-attention fusion learns to ignore it entirely. Diverse instructions force the model to actually attend to language.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Next Steps -->
+    <div class="slide" data-slide="6">
+      <div class="slide-label animate-in">Next Week</div>
+      <h2 class="animate-in">Next Steps</h2>
 
       <div class="cards animate-in">
         <div class="card">
-          <div class="card-icon" style="color: var(--accent);">A</div>
-          <h3>Learning Rate Sweep</h3>
-          <p>Test both higher and lower LRs around the 2&times;10<sup>-4</sup> fix to find the optimal training stability window for fp16.</p>
+          <div class="card-icon" style="color: var(--accent);">1</div>
+          <h3>LR Sweep on UZH-FPV</h3>
+          <p>Run progressive training with LRs from 1&times;10<sup>-4</sup> to 5&times;10<sup>-4</sup> on UZH-FPV. Log gradient norms per stage. Identify the optimal LR that converges fastest without fp16 overflow.</p>
         </div>
         <div class="card">
-          <div class="card-icon" style="color: var(--accent);">B</div>
-          <h3>Diversify Instructions</h3>
-          <p>Current <code>instruction.txt</code> uses identical prompts for all episodes. Generate varied natural language instructions per trajectory.</p>
+          <div class="card-icon" style="color: var(--accent);">2</div>
+          <h3>Per-Episode Instructions</h3>
+          <p>Replace the static instruction.txt with diverse, trajectory-specific natural language instructions. Ensure each episode has a unique description so the instruction encoder provides meaningful signal to the fusion decoder.</p>
         </div>
         <div class="card">
-          <div class="card-icon" style="color: var(--accent);">C</div>
+          <div class="card-icon" style="color: var(--accent);">3</div>
+          <h3>MUN-FRL Training Run</h3>
+          <p>Now that preprocessing is fixed, start a training run on MUN-FRL data. This is the outdoor agricultural-adjacent dataset &mdash; important for domain generalization to the target application.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="color: var(--accent);">4</div>
           <h3>Blackbird Dataset</h3>
-          <p>Monitor MIT hosting. Once available, download and preprocess using the now-generalized pipeline.</p>
+          <p>Continue monitoring MIT hosting availability. Once accessible, download and preprocess using the now-generalized preprocessing pipeline (topic mapping is no longer hardcoded).</p>
         </div>
         <div class="card">
-          <div class="card-icon" style="color: var(--accent);">D</div>
-          <h3>Evaluate UZH-FPV Training</h3>
-          <p>Run evaluation on trained checkpoints. Collect trajectory metrics and compare against baselines.</p>
+          <div class="card-icon" style="color: var(--accent);">5</div>
+          <h3>Evaluate Checkpoints</h3>
+          <p>Run evaluate.py on UZH-FPV trained checkpoints. Collect trajectory error metrics and compare against baseline numbers from the paper's comparison table.</p>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 6: Thank you -->
-    <div class="slide title-slide" data-slide="5">
+    <!-- SLIDE 8: Questions -->
+    <div class="slide title-slide" data-slide="7">
       <div class="slide-label animate-in">End</div>
       <h1 class="animate-in">Questions?</h1>
-      <p class="subtitle animate-in">VLA-Flight &mdash; ~80M params, &gt;30Hz on Jetson Orin NX</p>
+      <p class="subtitle animate-in">VLA-Flight &mdash; ~80M params, &gt;30Hz on Jetson Orin NX 16GB</p>
+      <p class="body-text animate-in">Dual IMU fusion (direct + fuzzy prompting) &bull; LSAC + VAE action chunking &bull; Progressive 3-stage training &bull; Zero-parameter geometric safety correction</p>
       <div class="meta animate-in">
         <span>Yashas Shashidhara</span>
         <span>github.com/Yashas1600</span>
@@ -591,7 +489,7 @@
   <!-- Navigation -->
   <div class="progress-dots" id="dots"></div>
   <div class="nav">
-    <span class="slide-count" id="counter">1 / 6</span>
+    <span class="slide-count" id="counter">1 / 8</span>
     <button class="nav-btn" id="prev" disabled>&larr;</button>
     <button class="nav-btn" id="next">&rarr;</button>
   </div>
@@ -601,7 +499,6 @@
     const total = slides.length;
     let current = 0;
 
-    // Build dots
     const dotsContainer = document.getElementById('dots');
     for (let i = 0; i < total; i++) {
       const dot = document.createElement('div');
@@ -612,26 +509,17 @@
 
     function goTo(n) {
       if (n < 0 || n >= total || n === current) return;
+      const prev = current;
       slides[current].classList.remove('active');
       slides[current].classList.add('exiting');
-      setTimeout(() => slides[current === n ? current : current].classList.remove('exiting'), 400);
-
-      const prev = current;
       current = n;
       slides[current].classList.add('active');
-
-      // Remove exiting from old slide after transition
       setTimeout(() => slides[prev].classList.remove('exiting'), 400);
 
-      // Update UI
       document.getElementById('counter').textContent = `${current + 1} / ${total}`;
       document.getElementById('prev').disabled = current === 0;
       document.getElementById('next').disabled = current === total - 1;
-
-      // Update dots
-      document.querySelectorAll('.dot').forEach((d, i) => {
-        d.classList.toggle('active', i === current);
-      });
+      document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
     }
 
     document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
