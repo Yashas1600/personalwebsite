@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VLA-Flight | Weekly Update</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface-2: #1a1a26;
+      --border: #2a2a3a;
+      --text: #e4e4ed;
+      --text-dim: #8888a0;
+      --accent: #6c8cff;
+      --accent-glow: rgba(108, 140, 255, 0.15);
+      --green: #4ade80;
+      --yellow: #facc15;
+      --red: #f87171;
+      --orange: #fb923c;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Slide container */
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5vh 8vw;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .slide.exiting {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+
+    /* Typography */
+    .slide-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .subtitle {
+      font-size: clamp(1rem, 1.8vw, 1.3rem);
+      color: var(--text-dim);
+      line-height: 1.6;
+      max-width: 50ch;
+    }
+
+    /* Cards grid */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.875rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    /* Status badges */
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+      margin-top: 0.75rem;
+    }
+
+    .status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .status.done { background: rgba(74, 222, 128, 0.1); color: var(--green); }
+    .status.done::before { background: var(--green); }
+    .status.progress { background: rgba(250, 204, 21, 0.1); color: var(--yellow); }
+    .status.progress::before { background: var(--yellow); }
+    .status.blocked { background: rgba(248, 113, 113, 0.1); color: var(--red); }
+    .status.blocked::before { background: var(--red); }
+
+    /* Code block */
+    .code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 1.7;
+      overflow-x: auto;
+      margin-top: 1.25rem;
+      max-width: 100%;
+    }
+
+    .code-block .comment { color: #5a5a7a; }
+    .code-block .key { color: var(--accent); }
+    .code-block .val { color: var(--green); }
+    .code-block .old { color: var(--red); text-decoration: line-through; opacity: 0.6; }
+    .code-block .new { color: var(--green); }
+
+    /* Table */
+    .topic-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.25rem;
+      font-size: 0.85rem;
+    }
+
+    .topic-table th {
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topic-table td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+    }
+
+    .topic-table tr:last-child td { border-bottom: none; }
+
+    .topic-table .from { color: var(--red); }
+    .topic-table .to { color: var(--green); }
+
+    /* Architecture diagram */
+    .arch-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+    }
+
+    .arch-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .arch-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      white-space: nowrap;
+    }
+
+    .arch-box.highlight {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .arch-box.problem {
+      border-color: var(--red);
+      background: rgba(248, 113, 113, 0.08);
+    }
+
+    .arch-arrow {
+      color: var(--text-dim);
+      font-size: 1.2rem;
+    }
+
+    /* Two-column layout */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    .col h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .col li {
+      font-size: 0.875rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .col li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55rem;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* Progress bar */
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--surface-2);
+      border-radius: 100px;
+      margin-top: 0.75rem;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 100px;
+      transition: width 0.6s ease;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      bottom: 2rem;
+      right: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 100;
+    }
+
+    .nav-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+
+    .slide-count {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Progress dots */
+    .progress-dots {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.5rem;
+      z-index: 100;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    /* Title slide special */
+    .title-slide h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      background: linear-gradient(135deg, #e4e4ed 0%, #6c8cff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      font-size: 0.875rem;
+      color: var(--text-dim);
+    }
+
+    .meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Animate items in */
+    .slide.active .animate-in {
+      animation: fadeUp 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in:nth-child(1) { animation-delay: 0.1s; }
+    .animate-in:nth-child(2) { animation-delay: 0.2s; }
+    .animate-in:nth-child(3) { animation-delay: 0.3s; }
+    .animate-in:nth-child(4) { animation-delay: 0.4s; }
+    .animate-in:nth-child(5) { animation-delay: 0.5s; }
+    .animate-in:nth-child(6) { animation-delay: 0.6s; }
+  </style>
+</head>
+<body>
+  <div class="deck">
+
+    <!-- SLIDE 1: Title -->
+    <div class="slide title-slide active" data-slide="0">
+      <div class="slide-label animate-in">Weekly Update &mdash; April 16, 2026</div>
+      <h1 class="animate-in">VLA-Flight</h1>
+      <p class="subtitle animate-in">Instruction-Grounded Drone Navigation with Vision-Language-Action and Onboard IMU</p>
+      <div class="meta animate-in">
+        <span>Yashas Shashidhara</span>
+        <span>Week of Apr 7 &ndash; 16</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: What I Did -->
+    <div class="slide" data-slide="1">
+      <div class="slide-label animate-in">Overview</div>
+      <h2 class="animate-in">This Week's Work</h2>
+      <div class="cards animate-in">
+        <div class="card">
+          <div class="card-icon">1</div>
+          <h3>UZH-FPV Dataset</h3>
+          <p>Downloaded, preprocessed, and ran initial training. Pipeline working end-to-end.</p>
+          <span class="status done">Complete</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">2</div>
+          <h3>MUN-FRL Dataset</h3>
+          <p>Manual download (batch script was broken). Fixed topic mapping in preprocessing. Data ready.</p>
+          <span class="status done">Complete</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">3</div>
+          <h3>NaN Training Bug</h3>
+          <p>Exploding gradients in Stage 2 fusion decoder + fp16 overflow. Diagnosed and patched.</p>
+          <span class="status progress">Tuning</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">4</div>
+          <h3>Blackbird Dataset</h3>
+          <p>MIT hosting site currently down. Blocked on external availability.</p>
+          <span class="status blocked">Blocked</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: MUN-FRL Topic Fixes -->
+    <div class="slide" data-slide="2">
+      <div class="slide-label animate-in">Data Pipeline</div>
+      <h2 class="animate-in">MUN-FRL Preprocessing Fixes</h2>
+      <p class="subtitle animate-in">The preprocessing script was hardcoded for UZH-FPV racing topics. MUN-FRL uses completely different ROS topic names and formats.</p>
+
+      <table class="topic-table animate-in">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Before (UZH-FPV)</th>
+            <th>After (MUN-FRL)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color: var(--text);">Image Topic</td>
+            <td class="from">/cam0/image_raw</td>
+            <td class="to">/camera_forward/image_raw</td>
+          </tr>
+          <tr>
+            <td style="color: var(--text);">IMU Topic</td>
+            <td class="from">/imu</td>
+            <td class="to">/xsens/imu/data</td>
+          </tr>
+          <tr>
+            <td style="color: var(--text);">Action Source</td>
+            <td class="from">/control/command</td>
+            <td class="to">Derived from PPK/GNSS</td>
+          </tr>
+          <tr>
+            <td style="color: var(--text);">Image Format</td>
+            <td class="from">BGR8</td>
+            <td class="to">Mono8 (+ conversion)</td>
+          </tr>
+          <tr>
+            <td style="color: var(--text);">Msg Type</td>
+            <td class="from">CompressedImage</td>
+            <td class="to">sensor_msgs/Image</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="subtitle animate-in" style="margin-top: 1rem; font-size: 0.85rem;">Also fixed IMU-to-Image sync: paired 20Hz images with 400Hz IMU using ApproximateTimeSynchronizer.</p>
+    </div>
+
+    <!-- SLIDE 4: NaN Issue -->
+    <div class="slide" data-slide="3">
+      <div class="slide-label animate-in">Training</div>
+      <h2 class="animate-in">NaN Explosion in Stage 2</h2>
+
+      <div class="two-col animate-in">
+        <div class="col">
+          <h3 style="color: var(--red);">The Problem</h3>
+          <ul>
+            <li>Stage 2 unfreezes the <strong>Fusion Decoder</strong> &mdash; vision + IMU cross-attention</li>
+            <li>Learning rate 1&times;10<sup>-3</sup> caused exploding gradients in cross-attention matrix multiplications</li>
+            <li><strong>fp16 precision</strong> overflows at much smaller values than fp32 &mdash; numbers hit infinity, then NaN</li>
+            <li>Training would crash ~10 epochs into Stage 2, every time</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h3 style="color: var(--green);">The Fix</h3>
+          <ul>
+            <li>Reduced learning rates:
+              <div class="code-block" style="margin-top: 0.5rem; padding: 0.75rem 1rem;">
+                <span class="comment"># Stage 2 LR</span><br>
+                <span class="old">lr: 1.0e-3</span><br>
+                <span class="new">lr: 2.0e-4</span><br><br>
+                <span class="comment"># Stage 3 LR</span><br>
+                <span class="old">lr: 1.0e-3</span><br>
+                <span class="new">lr: 3.0e-4</span>
+              </div>
+            </li>
+            <li>Smaller steps let the fusion decoder align vision &amp; IMU signals without oscillating</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Next Steps -->
+    <div class="slide" data-slide="4">
+      <div class="slide-label animate-in">Next Steps</div>
+      <h2 class="animate-in">Plan for Next Week</h2>
+
+      <div class="cards animate-in">
+        <div class="card">
+          <div class="card-icon" style="color: var(--accent);">A</div>
+          <h3>Learning Rate Sweep</h3>
+          <p>Test both higher and lower LRs around the 2&times;10<sup>-4</sup> fix to find the optimal training stability window for fp16.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="color: var(--accent);">B</div>
+          <h3>Diversify Instructions</h3>
+          <p>Current <code>instruction.txt</code> uses identical prompts for all episodes. Generate varied natural language instructions per trajectory.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="color: var(--accent);">C</div>
+          <h3>Blackbird Dataset</h3>
+          <p>Monitor MIT hosting. Once available, download and preprocess using the now-generalized pipeline.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="color: var(--accent);">D</div>
+          <h3>Evaluate UZH-FPV Training</h3>
+          <p>Run evaluation on trained checkpoints. Collect trajectory metrics and compare against baselines.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Thank you -->
+    <div class="slide title-slide" data-slide="5">
+      <div class="slide-label animate-in">End</div>
+      <h1 class="animate-in">Questions?</h1>
+      <p class="subtitle animate-in">VLA-Flight &mdash; ~80M params, &gt;30Hz on Jetson Orin NX</p>
+      <div class="meta animate-in">
+        <span>Yashas Shashidhara</span>
+        <span>github.com/Yashas1600</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Navigation -->
+  <div class="progress-dots" id="dots"></div>
+  <div class="nav">
+    <span class="slide-count" id="counter">1 / 6</span>
+    <button class="nav-btn" id="prev" disabled>&larr;</button>
+    <button class="nav-btn" id="next">&rarr;</button>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    let current = 0;
+
+    // Build dots
+    const dotsContainer = document.getElementById('dots');
+    for (let i = 0; i < total; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(dot);
+    }
+
+    function goTo(n) {
+      if (n < 0 || n >= total || n === current) return;
+      slides[current].classList.remove('active');
+      slides[current].classList.add('exiting');
+      setTimeout(() => slides[current === n ? current : current].classList.remove('exiting'), 400);
+
+      const prev = current;
+      current = n;
+      slides[current].classList.add('active');
+
+      // Remove exiting from old slide after transition
+      setTimeout(() => slides[prev].classList.remove('exiting'), 400);
+
+      // Update UI
+      document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+      document.getElementById('prev').disabled = current === 0;
+      document.getElementById('next').disabled = current === total - 1;
+
+      // Update dots
+      document.querySelectorAll('.dot').forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
+    }
+
+    document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
+    document.getElementById('next').addEventListener('click', () => goTo(current + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+    });
+  </script>
+</body>
+</html>
