@@ -11,7 +11,7 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: #0a0a0a;
+      background: #0b1a12;
       color: #f0f0f0;
       overflow: hidden;
       height: 100vh;
@@ -28,95 +28,85 @@
       justify-content: center;
       padding: 6vh 8vw;
       opacity: 0;
-      transform: scale(0.97);
-      transition: opacity 0.35s ease, transform 0.35s ease;
+      transform: translateY(8px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
       pointer-events: none;
       overflow: hidden;
+      /* SEP gradient base */
+      background: linear-gradient(135deg, #6ab04c 0%, #4a8b6e 35%, #2d7d7d 65%, #1a5c5c 100%);
     }
 
-    .slide.active { opacity: 1; transform: scale(1); pointer-events: auto; }
+    .slide.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
-    /* ===== CHAOTIC BASE STYLES ===== */
-    .chaos { background: #0d0d0d; }
-
-    .chaos .noise {
+    /* Grain overlay for texture */
+    .grain {
       position: absolute; inset: 0;
-      background: repeating-linear-gradient(
-        0deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px
-      );
+      opacity: 0.04;
       pointer-events: none;
-    }
-
-    .chaos .accent-blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.15;
-      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
     }
 
     /* Dictionary entry styles */
     .dict-word {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      font-weight: 900;
-      font-style: italic;
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
       color: #fff;
-      margin-bottom: 0.1rem;
+      margin-bottom: 0.15rem;
+      line-height: 1;
     }
 
     .dict-phonetic {
       font-family: 'JetBrains Mono', monospace;
-      font-size: clamp(0.9rem, 1.5vw, 1.15rem);
-      color: #888;
-      margin-bottom: 0.15rem;
+      font-size: clamp(0.8rem, 1.2vw, 1rem);
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 0.1rem;
     }
 
     .dict-pos {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.85rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
       font-style: italic;
-      color: #666;
+      color: rgba(255,255,255,0.45);
       margin-bottom: 0.75rem;
-      letter-spacing: 0.05em;
     }
 
     .dict-def {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(1rem, 1.8vw, 1.35rem);
-      color: #ccc;
+      font-size: clamp(0.95rem, 1.6vw, 1.25rem);
+      color: rgba(255,255,255,0.8);
       font-style: italic;
-      margin-bottom: 1.5rem;
-      max-width: 55ch;
+      margin-bottom: 1.25rem;
+      max-width: 50ch;
       line-height: 1.5;
-      border-left: 3px solid #a855f7;
       padding-left: 1rem;
+      border-left: 2px solid rgba(255,255,255,0.3);
     }
 
     .dict-section {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.15em;
-      color: #a855f7;
-      margin-bottom: 0.5rem;
-      margin-top: 1rem;
+      color: #c5f08a;
+      margin-bottom: 0.4rem;
+      margin-top: 0.9rem;
     }
 
     .dict-bullets {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0.55rem;
+      gap: 0.45rem;
     }
 
     .dict-bullets li {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(0.85rem, 1.3vw, 1rem);
-      color: #bbb;
+      font-size: clamp(0.82rem, 1.2vw, 0.95rem);
+      color: rgba(255,255,255,0.75);
       line-height: 1.5;
-      padding-left: 1.5rem;
+      padding-left: 1.2rem;
       position: relative;
     }
 
@@ -124,248 +114,236 @@
       content: '>';
       position: absolute;
       left: 0;
-      color: #a855f7;
+      color: #c5f08a;
       font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em;
     }
 
-    .dict-bullets li strong { color: #f0f0f0; }
+    .dict-bullets li strong { color: #fff; }
 
-    /* Chaotic bullets for non-dict slides */
+    /* Chaotic bullets */
     .chaos-bullets {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 0.6rem;
       margin-top: 1rem;
     }
 
     .chaos-bullets li {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1rem, 1.6vw, 1.2rem);
-      color: #ddd;
+      font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+      color: rgba(255,255,255,0.85);
       line-height: 1.5;
       padding: 0.6rem 1rem;
-      background: rgba(255,255,255,0.04);
-      border-radius: 8px;
-      border-left: 3px solid;
+      background: rgba(0,0,0,0.15);
+      border-radius: 6px;
+      border-left: 3px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(4px);
     }
 
-    .chaos-bullets li:nth-child(1) { border-color: #4ade80; }
-    .chaos-bullets li:nth-child(2) { border-color: #a855f7; }
-    .chaos-bullets li:nth-child(3) { border-color: #38bdf8; }
-    .chaos-bullets li:nth-child(4) { border-color: #facc15; }
-    .chaos-bullets li:nth-child(5) { border-color: #f472b6; }
+    .chaos-bullets li strong { color: #fff; }
 
     /* Tweet card */
     .tweet {
-      background: #16181c;
-      border: 1px solid #2f3336;
-      border-radius: 16px;
-      padding: 1rem 1.25rem;
-      max-width: 380px;
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 0.9rem 1.1rem;
+      max-width: 360px;
     }
 
     .tweet-header {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
     }
 
     .tweet-avatar {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: #333; display: flex; align-items: center;
-      justify-content: center; font-size: 0.75rem;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex; align-items: center;
+      justify-content: center; font-size: 0.7rem;
     }
 
-    .tweet-name { font-weight: 700; font-size: 0.85rem; color: #e7e9ea; }
-    .tweet-handle { font-size: 0.8rem; color: #71767b; }
-    .tweet-body { font-size: 0.95rem; color: #e7e9ea; line-height: 1.45; }
-    .tweet-footer { margin-top: 0.5rem; font-size: 0.75rem; color: #71767b; }
+    .tweet-name { font-weight: 700; font-size: 0.8rem; color: #fff; }
+    .tweet-handle { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+    .tweet-body { font-size: 0.9rem; color: rgba(255,255,255,0.9); line-height: 1.4; }
+    .tweet-footer { margin-top: 0.4rem; font-size: 0.7rem; color: rgba(255,255,255,0.3); }
 
     .tweets-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 1.25rem;
+      gap: 0.75rem;
+      margin-top: 1rem;
     }
 
     @media (max-width: 768px) { .tweets-grid { grid-template-columns: 1fr; } }
 
-    /* ===== BONG SLIDE (green weed theme) ===== */
+    /* ===== BONG SLIDE ===== */
     .bong-slide {
-      background: #001a00;
+      background: linear-gradient(135deg, #0d2b0d 0%, #0a1f0a 50%, #071507 100%);
       text-align: center;
       align-items: center;
     }
 
-    .bong-slide .bong-glow {
+    .bong-glow {
       position: absolute;
       width: 500px; height: 500px;
       border-radius: 50%;
       background: #22c55e;
-      filter: blur(120px);
-      opacity: 0.08;
+      filter: blur(140px);
+      opacity: 0.07;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
     }
 
-    .bong-letters {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(4rem, 10vw, 9rem);
-      font-weight: 900;
-      color: #22c55e;
-      letter-spacing: 0.08em;
-      text-shadow: 0 0 40px rgba(34,197,94,0.4), 0 0 80px rgba(34,197,94,0.15);
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-
-    .bong-subtitle {
+    .bong-title {
       font-family: 'Permanent Marker', cursive;
-      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-size: clamp(2rem, 4vw, 3.5rem);
       color: #fff;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
 
     .bong-text {
-      font-family: 'Inter', sans-serif;
-      font-weight: 300;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 400;
       color: #4ade80;
-      font-size: clamp(1rem, 1.6vw, 1.2rem);
-      margin-bottom: 0.5rem;
+      font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+      margin-bottom: 0.4rem;
     }
 
-    .bong-text-sm {
+    .bong-small {
       font-family: 'JetBrains Mono', monospace;
       color: #166534;
-      font-size: clamp(0.75rem, 1.1vw, 0.9rem);
-      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
     }
 
-    .bong-emoji-row {
-      font-size: 2.5rem;
-      letter-spacing: 0.3em;
-      margin-bottom: 1rem;
-      opacity: 0.7;
+    .weed-row {
+      font-size: 2rem;
+      letter-spacing: 0.25em;
+      opacity: 0.6;
+      margin: 0.5rem 0;
     }
 
-    /* SEP Bong SVG */
-    .sep-bong {
-      margin: 1.5rem auto;
-      position: relative;
+    /* Title slide image */
+    .title-img {
+      position: absolute;
+      right: 6vw;
+      top: 50%;
+      transform: translateY(-50%) rotate(2deg);
+      width: clamp(200px, 22vw, 320px);
+      border-radius: 10px;
+      box-shadow: 8px 12px 40px rgba(0,0,0,0.5);
+      z-index: 2;
     }
 
     /* Navigation */
     .nav {
-      position: fixed; bottom: 1.5rem; right: 2.5rem;
-      display: flex; align-items: center; gap: 0.75rem; z-index: 100;
+      position: fixed; bottom: 1.25rem; right: 2rem;
+      display: flex; align-items: center; gap: 0.6rem; z-index: 100;
     }
     .nav-btn {
-      width: 40px; height: 40px; border-radius: 50%;
-      border: 1px solid #333; background: #111;
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3);
       color: #fff; display: flex; align-items: center;
-      justify-content: center; cursor: pointer; font-size: 1rem; transition: all 0.2s;
+      justify-content: center; cursor: pointer; font-size: 0.9rem;
+      transition: all 0.2s; backdrop-filter: blur(8px);
     }
-    .nav-btn:hover { border-color: #a855f7; background: rgba(168,85,247,0.1); }
+    .nav-btn:hover { border-color: rgba(255,255,255,0.5); background: rgba(0,0,0,0.5); }
     .nav-btn:disabled { opacity: 0.2; cursor: default; }
-    .slide-count { font-size: 0.75rem; color: #555; font-variant-numeric: tabular-nums; }
+    .slide-count {
+      font-size: 0.7rem; color: rgba(255,255,255,0.35);
+      font-variant-numeric: tabular-nums;
+      font-family: 'JetBrains Mono', monospace;
+    }
 
     .progress-dots {
-      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 0.45rem; z-index: 100;
+      position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 0.4rem; z-index: 100;
     }
     .dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #333; transition: all 0.3s; cursor: pointer;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.2); transition: all 0.3s; cursor: pointer;
     }
-    .dot.active { background: #a855f7; box-shadow: 0 0 8px #a855f7; }
+    .dot.active { background: #fff; box-shadow: 0 0 6px rgba(255,255,255,0.5); }
 
-    /* Animations */
-    .slide.active .anim { animation: chaosIn 0.5s ease forwards; opacity: 0; }
-    @keyframes chaosIn {
-      from { opacity: 0; transform: translateY(20px) rotate(-1deg); }
-      to { opacity: 1; transform: translateY(0) rotate(0); }
-    }
-    .anim:nth-child(1) { animation-delay: 0.05s; }
-    .anim:nth-child(2) { animation-delay: 0.12s; }
-    .anim:nth-child(3) { animation-delay: 0.19s; }
-    .anim:nth-child(4) { animation-delay: 0.26s; }
-    .anim:nth-child(5) { animation-delay: 0.33s; }
-    .anim:nth-child(6) { animation-delay: 0.40s; }
-    .anim:nth-child(7) { animation-delay: 0.47s; }
-    .anim:nth-child(8) { animation-delay: 0.54s; }
-    .anim:nth-child(9) { animation-delay: 0.61s; }
-
-    /* Bong slide animation */
-    .bong-slide.active .anim {
-      animation: weedFade 0.6s ease forwards;
-    }
-    @keyframes weedFade {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    /* Stickers / emoji floats */
+    /* Stickers */
     .sticker {
       position: absolute;
-      font-size: 2rem;
-      opacity: 0.5;
+      font-size: 1.8rem;
+      opacity: 0.3;
       pointer-events: none;
       user-select: none;
     }
 
-    .rotate-neg { transform: rotate(-8deg); }
-    .rotate-pos { transform: rotate(6deg); }
+    /* Animations */
+    .slide.active .anim { animation: slideIn 0.4s ease forwards; opacity: 0; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .anim:nth-child(1) { animation-delay: 0.05s; }
+    .anim:nth-child(2) { animation-delay: 0.1s; }
+    .anim:nth-child(3) { animation-delay: 0.17s; }
+    .anim:nth-child(4) { animation-delay: 0.24s; }
+    .anim:nth-child(5) { animation-delay: 0.31s; }
+    .anim:nth-child(6) { animation-delay: 0.38s; }
+    .anim:nth-child(7) { animation-delay: 0.45s; }
+    .anim:nth-child(8) { animation-delay: 0.52s; }
+    .anim:nth-child(9) { animation-delay: 0.59s; }
+
+    .bong-slide.active .anim { animation: fadeScale 0.5s ease forwards; opacity: 0; }
+    @keyframes fadeScale {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Alternate slide tints */
+    .slide.tint-dark {
+      background: linear-gradient(135deg, #3d7a52 0%, #2d6b6b 40%, #1a4a4a 100%);
+    }
+    .slide.tint-deep {
+      background: linear-gradient(135deg, #4a8b5e 0%, #2a6a6a 50%, #1c4f4f 100%);
+    }
   </style>
 </head>
 <body>
   <div class="deck">
 
     <!-- SLIDE 1: TITLE -->
-    <div class="slide chaos active" data-slide="0">
-      <div class="noise"></div>
-      <div class="accent-blob" style="width:400px;height:400px;background:#a855f7;top:-100px;right:-50px;"></div>
-      <div class="accent-blob" style="width:300px;height:300px;background:#4ade80;bottom:-80px;left:-60px;"></div>
-      <div class="sticker" style="top:8%;right:12%;">&#x1F525;</div>
-      <div class="sticker" style="top:15%;left:5%;">&#x1F3B6;</div>
-      <div class="sticker" style="bottom:20%;right:8%;">&#x1F3B0;</div>
-      <div class="sticker" style="bottom:12%;left:15%;">&#x26A1;</div>
-      <div class="sticker" style="top:40%;right:5%;font-size:3rem;">&#x1F680;</div>
-
-      <div style="position:relative;z-index:1;">
-        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#a855f7;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:1rem;">&#x03A3;&#x0397;&#x03A0; ELECTIONS 2026</p>
-        <h1 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(3rem,8vw,7rem);line-height:0.95;color:#fff;text-shadow:4px 4px 0 #a855f7, 8px 8px 0 rgba(168,85,247,0.3);">CULTURE<br>IS A VERB</h1>
-        <p class="anim" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(1.3rem,2.5vw,2rem);color:#4ade80;letter-spacing:0.15em;margin-top:1rem;">YASHAS FOR VPSA</p>
-        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#555;margin-top:2rem;">&#x1F4AC; 3 minutes &bull; 10 slides &bull; no cap</p>
+    <div class="slide active" data-slide="0">
+      <div class="grain"></div>
+      <img class="title-img" src="sep-cover.png" alt="SEP" onerror="this.style.display='none'">
+      <div style="position:relative;z-index:1;max-width:55%;">
+        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:rgba(255,255,255,0.5);letter-spacing:0.25em;text-transform:uppercase;margin-bottom:1.5rem;">&#x03A3;&#x0397;&#x03A0; &bull; ELECTIONS 2026</p>
+        <h1 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(3.5rem,8vw,7.5rem);line-height:0.9;color:#fff;">CULTURE<br>IS A VERB</h1>
+        <p class="anim" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(1.2rem,2.2vw,1.8rem);color:#c5f08a;letter-spacing:0.12em;margin-top:1.25rem;">YASHAS FOR VPSA</p>
+        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.3);margin-top:2.5rem;">3 min &bull; 10 slides &bull; no cap</p>
       </div>
     </div>
 
     <!-- SLIDE 2: THESIS -->
-    <div class="slide chaos" data-slide="1">
-      <div class="noise"></div>
-      <div class="accent-blob" style="width:500px;height:500px;background:#a855f7;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
-      <div class="sticker" style="top:10%;right:10%;">&#x1F4AF;</div>
-      <div class="sticker rotate-neg" style="bottom:15%;left:8%;">&#x1F91D;</div>
-
+    <div class="slide tint-dark" data-slide="1">
+      <div class="grain"></div>
       <div style="position:relative;z-index:1;">
-        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#a855f7;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:1.5rem;">THE THESIS</p>
-        <h2 class="anim" style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.8rem);font-weight:900;color:#fff;line-height:1.15;max-width:18ch;">Culture isn't something we <em style="color:#a855f7;">have.</em></h2>
-        <h2 class="anim" style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.8rem);font-weight:900;color:#fff;line-height:1.15;max-width:18ch;margin-top:0.25rem;">It's something we <em style="color:#4ade80;">do.</em></h2>
-        <p class="anim" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(0.95rem,1.5vw,1.2rem);color:#888;margin-top:2rem;max-width:45ch;line-height:1.6;">and the frat feels best when we're doing it together, on the same timing.</p>
+        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:2rem;">THE THESIS</p>
+        <h2 class="anim" style="font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4.5vw,4rem);font-weight:900;color:#fff;line-height:1.15;max-width:16ch;">Culture isn't something we have.</h2>
+        <h2 class="anim" style="font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4.5vw,4rem);font-weight:900;color:#c5f08a;line-height:1.15;max-width:16ch;margin-top:0.2rem;">It's something we do.</h2>
+        <p class="anim" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(0.9rem,1.4vw,1.1rem);color:rgba(255,255,255,0.55);margin-top:2.5rem;max-width:42ch;line-height:1.65;">and the frat feels best when we're doing it together, on the same timing.</p>
       </div>
     </div>
 
     <!-- SLIDE 3: RETREAT -->
-    <div class="slide chaos" data-slide="2">
-      <div class="noise"></div>
-      <div class="accent-blob" style="width:350px;height:350px;background:#4ade80;top:-80px;left:-60px;"></div>
-      <div class="accent-blob" style="width:250px;height:250px;background:#a855f7;bottom:-60px;right:-40px;"></div>
-      <div class="sticker rotate-pos" style="top:8%;right:6%;">&#x1F3D5;&#xFE0F;</div>
-      <div class="sticker" style="bottom:10%;right:12%;">&#x1F3B2;</div>
-      <div class="sticker" style="top:35%;right:4%;">&#x1F94A;</div>
+    <div class="slide tint-deep" data-slide="2">
+      <div class="grain"></div>
+      <div class="sticker" style="top:8%;right:5%;transform:rotate(5deg);">&#x1F3D5;&#xFE0F;</div>
+      <div class="sticker" style="bottom:12%;right:10%;transform:rotate(-3deg);">&#x1F94A;</div>
 
       <div style="position:relative;z-index:1;">
         <div class="anim">
@@ -387,22 +365,19 @@
 
         <div class="dict-section anim">The fix:</div>
         <ul class="dict-bullets anim">
-          <li>Every retreat gets a <strong>theme</strong> (Gambling Night, Fight Night, Harry Potter &mdash; sorted into houses, inter-house competition all weekend)</li>
+          <li>Every retreat gets a <strong>theme</strong> (Gambling Night, Fight Night, Harry Potter &mdash; sorted into houses, inter-house competition)</li>
           <li>We will have <strong>Fight Night</strong> and make every retreat better from now on</li>
-          <li>Full agenda &mdash; games, competitions, meals, moshes, all on the same clock</li>
+          <li>Full agenda &mdash; games, competitions, meals, moshes, same clock</li>
           <li>Everyone moves together. Nobody drifts.</li>
-          <li>Mosh closes every night &mdash; <strong>I got the decks.</strong> &#x1F3A7;</li>
+          <li>Mosh closes every night &mdash; <strong>I got the decks.</strong></li>
         </ul>
       </div>
     </div>
 
     <!-- SLIDE 4: MIX -->
-    <div class="slide chaos" data-slide="3">
-      <div class="noise"></div>
-      <div class="accent-blob" style="width:400px;height:400px;background:#f472b6;bottom:-100px;right:-80px;"></div>
-      <div class="accent-blob" style="width:300px;height:300px;background:#4ade80;top:-60px;left:-40px;"></div>
-      <div class="sticker" style="top:10%;left:5%;">&#x1F378;</div>
-      <div class="sticker rotate-neg" style="top:8%;right:10%;">&#x1F389;</div>
+    <div class="slide" data-slide="3">
+      <div class="grain"></div>
+      <div class="sticker" style="top:9%;right:8%;transform:rotate(-4deg);">&#x1F378;</div>
 
       <div style="position:relative;z-index:1;">
         <div class="anim">
@@ -413,21 +388,18 @@
         <div class="dict-def anim">"to put the frat in a room with people who aren't us and let chemistry do its thing."</div>
 
         <ul class="dict-bullets anim" style="margin-top:0.5rem;">
-          <li><strong>1 mixer per month, minimum</strong> &mdash; committed &#x1F91D;</li>
+          <li><strong>1 mixer per month, minimum</strong> &mdash; committed</li>
           <li>More frats, more orgs, more people on the roster</li>
           <li>Beyond parties &mdash; <strong>activity mixers, day events, pregame collabs</strong></li>
-          <li>If our culture is worth having, it's worth <strong>exporting</strong> &#x1F30D;</li>
+          <li>If our culture is worth having, it's worth <strong>exporting</strong></li>
         </ul>
       </div>
     </div>
 
     <!-- SLIDE 5: SHOW UP -->
-    <div class="slide chaos" data-slide="4">
-      <div class="noise"></div>
-      <div class="accent-blob" style="width:350px;height:350px;background:#38bdf8;top:-60px;right:-40px;"></div>
-      <div class="accent-blob" style="width:250px;height:250px;background:#a855f7;bottom:-50px;left:-30px;"></div>
-      <div class="sticker" style="top:12%;right:8%;">&#x1F3AC;</div>
-      <div class="sticker rotate-pos" style="bottom:15%;left:5%;">&#x1F37B;</div>
+    <div class="slide tint-dark" data-slide="4">
+      <div class="grain"></div>
+      <div class="sticker" style="top:10%;right:7%;transform:rotate(3deg);">&#x1F37B;</div>
 
       <div style="position:relative;z-index:1;">
         <div class="anim">
@@ -438,74 +410,64 @@
         <div class="dict-def anim">"to be the default when anyone asks 'what are we doing tonight.'"</div>
 
         <ul class="dict-bullets anim" style="margin-top:0.5rem;">
-          <li><strong>Tuesday movie nights stay</strong> &#x1F3AC;</li>
+          <li><strong>Tuesday movie nights stay</strong></li>
           <li>Open-invite nights out &mdash; Dirty Laundry, Juquila's, whatever's moving</li>
           <li>Host pregames at the frat &mdash; <strong>together first, then out together</strong></li>
-          <li>Half of us already go out together. I'm making it <strong>official.</strong> &#x1F4CB;</li>
+          <li>Half of us already go out together. I'm making it <strong>official.</strong></li>
         </ul>
       </div>
     </div>
 
-    <!-- SLIDE 6: THE BONG (GREEN WEED THEME) -->
+    <!-- SLIDE 6: THE BONG -->
     <div class="slide bong-slide" data-slide="5">
       <div class="bong-glow"></div>
-      <div class="sticker" style="top:6%;left:8%;font-size:2.5rem;opacity:0.6;">&#x1F33F;</div>
-      <div class="sticker" style="top:10%;right:10%;font-size:2rem;opacity:0.5;">&#x1F33F;</div>
-      <div class="sticker" style="bottom:8%;left:12%;font-size:2.2rem;opacity:0.5;">&#x1F33F;</div>
-      <div class="sticker" style="bottom:12%;right:8%;font-size:2rem;opacity:0.4;">&#x1F33F;</div>
-      <div class="sticker rotate-neg" style="top:20%;left:3%;font-size:1.8rem;opacity:0.35;">&#x1F33F;</div>
-      <div class="sticker rotate-pos" style="top:18%;right:4%;font-size:1.5rem;opacity:0.3;">&#x1F33F;</div>
-      <div class="sticker" style="bottom:25%;left:5%;font-size:1.6rem;opacity:0.3;">&#x1F33F;</div>
-      <div class="sticker rotate-neg" style="bottom:22%;right:5%;font-size:1.8rem;opacity:0.35;">&#x1F33F;</div>
-      <div class="sticker" style="top:45%;left:2%;font-size:1.4rem;opacity:0.25;">&#x1F33F;</div>
-      <div class="sticker" style="top:50%;right:3%;font-size:1.4rem;opacity:0.25;">&#x1F33F;</div>
+      <div class="sticker" style="top:5%;left:6%;font-size:2.2rem;opacity:0.4;">&#x1F33F;</div>
+      <div class="sticker" style="top:8%;right:8%;font-size:1.6rem;opacity:0.3;">&#x1F33F;</div>
+      <div class="sticker" style="bottom:6%;left:10%;font-size:1.8rem;opacity:0.35;">&#x1F33F;</div>
+      <div class="sticker" style="bottom:10%;right:6%;font-size:1.5rem;opacity:0.25;">&#x1F33F;</div>
+      <div class="sticker" style="top:22%;left:3%;font-size:1.3rem;opacity:0.2;">&#x1F33F;</div>
+      <div class="sticker" style="top:20%;right:4%;font-size:1.2rem;opacity:0.2;">&#x1F33F;</div>
+      <div class="sticker" style="bottom:22%;left:4%;font-size:1.4rem;opacity:0.2;">&#x1F33F;</div>
+      <div class="sticker" style="bottom:20%;right:4%;font-size:1.3rem;opacity:0.2;">&#x1F33F;</div>
+      <div class="sticker" style="top:42%;left:2%;font-size:1.1rem;opacity:0.15;">&#x1F33F;</div>
+      <div class="sticker" style="top:48%;right:2%;font-size:1.1rem;opacity:0.15;">&#x1F33F;</div>
+      <div class="grain" style="opacity:0.06;"></div>
 
       <div style="position:relative;z-index:1;">
-        <div class="bong-emoji-row anim">&#x1F33F;&#x1F4A8;&#x1F33F;&#x1F4A8;&#x1F33F;</div>
-        <div class="bong-subtitle anim">THE &#x03A3;&#x0397;&#x03A0; BONG</div>
+        <div class="weed-row anim">&#x1F33F; &#x1F4A8; &#x1F33F; &#x1F4A8; &#x1F33F;</div>
+        <div class="bong-title anim">THE &#x03A3;&#x0397;&#x03A0; BONG</div>
 
-        <!-- SVG Bong with Greek Letters -->
-        <div class="sep-bong anim">
-          <svg width="160" height="200" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
-            <!-- Bong base -->
-            <ellipse cx="80" cy="185" rx="50" ry="12" fill="#166534" stroke="#22c55e" stroke-width="1.5"/>
-            <rect x="40" y="100" width="80" height="85" rx="20" fill="#0f3d1f" stroke="#22c55e" stroke-width="1.5"/>
-            <!-- Water line -->
-            <rect x="42" y="145" width="76" height="38" rx="18" fill="rgba(34,197,94,0.15)"/>
-            <!-- Neck -->
-            <rect x="65" y="25" width="30" height="80" rx="8" fill="#0f3d1f" stroke="#22c55e" stroke-width="1.5"/>
-            <!-- Mouthpiece -->
-            <ellipse cx="80" cy="25" rx="20" ry="6" fill="#0f3d1f" stroke="#22c55e" stroke-width="1.5"/>
-            <!-- Bowl -->
-            <line x1="38" y1="95" x2="18" y2="70" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="14" cy="65" r="10" fill="#0f3d1f" stroke="#22c55e" stroke-width="1.5"/>
-            <ellipse cx="14" cy="60" rx="7" ry="3" fill="#166534" stroke="#22c55e" stroke-width="1"/>
-            <!-- Smoke wisps -->
-            <path d="M75 18 Q72 5, 78 -5" stroke="#4ade80" stroke-width="1" fill="none" opacity="0.4"/>
-            <path d="M80 15 Q85 2, 80 -8" stroke="#4ade80" stroke-width="1" fill="none" opacity="0.3"/>
-            <path d="M85 18 Q88 5, 82 -5" stroke="#4ade80" stroke-width="1" fill="none" opacity="0.35"/>
-            <!-- Greek letters on body -->
-            <text x="80" y="140" text-anchor="middle" font-family="'Playfair Display', serif" font-size="28" font-weight="900" fill="#22c55e" opacity="0.9">&#x03A3;&#x0397;&#x03A0;</text>
-            <!-- Engraving lines -->
-            <line x1="50" y1="125" x2="110" y2="125" stroke="#22c55e" stroke-width="0.5" opacity="0.3"/>
-            <line x1="50" y1="150" x2="110" y2="150" stroke="#22c55e" stroke-width="0.5" opacity="0.3"/>
+        <div class="anim" style="margin:1rem auto;">
+          <svg width="140" height="180" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="80" cy="185" rx="45" ry="10" fill="#0a2e0a" stroke="#22c55e" stroke-width="1.2"/>
+            <rect x="42" y="105" width="76" height="78" rx="18" fill="#0a200a" stroke="#22c55e" stroke-width="1.2"/>
+            <rect x="44" y="148" width="72" height="33" rx="16" fill="rgba(34,197,94,0.1)"/>
+            <rect x="67" y="30" width="26" height="78" rx="7" fill="#0a200a" stroke="#22c55e" stroke-width="1.2"/>
+            <ellipse cx="80" cy="30" rx="17" ry="5" fill="#0a200a" stroke="#22c55e" stroke-width="1.2"/>
+            <line x1="40" y1="100" x2="22" y2="78" stroke="#22c55e" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="18" cy="73" r="9" fill="#0a200a" stroke="#22c55e" stroke-width="1.2"/>
+            <ellipse cx="18" cy="68" rx="6" ry="2.5" fill="#0a2e0a" stroke="#22c55e" stroke-width="0.8"/>
+            <path d="M75 23 Q72 10, 77 0" stroke="#4ade80" stroke-width="0.8" fill="none" opacity="0.35"/>
+            <path d="M80 20 Q84 8, 80 -3" stroke="#4ade80" stroke-width="0.8" fill="none" opacity="0.25"/>
+            <path d="M85 23 Q87 10, 83 0" stroke="#4ade80" stroke-width="0.8" fill="none" opacity="0.3"/>
+            <text x="80" y="142" text-anchor="middle" font-family="'Playfair Display',serif" font-size="24" font-weight="900" fill="#22c55e" opacity="0.8">&#x03A3;&#x0397;&#x03A0;</text>
+            <line x1="52" y1="128" x2="108" y2="128" stroke="#22c55e" stroke-width="0.4" opacity="0.25"/>
+            <line x1="52" y1="152" x2="108" y2="152" stroke="#22c55e" stroke-width="0.4" opacity="0.25"/>
           </svg>
         </div>
 
         <div class="bong-text anim">reviving the weed culture. deadass.</div>
-        <div class="bong-text anim">a frat heirloom. engraved. sacred.</div>
-        <div class="bong-text-sm anim">&#x1F33F; pass it around. build the culture. &#x1F33F;</div>
-        <div class="bong-emoji-row anim" style="margin-top:1rem;margin-bottom:0;">&#x1F4A8;&#x1F33F;&#x1F4A8;&#x1F33F;&#x1F4A8;</div>
+        <div class="bong-text anim" style="color:#2dd469;">a frat heirloom. engraved. sacred.</div>
+        <div class="bong-small anim">pass it around. build the culture.</div>
+        <div class="weed-row anim" style="margin-top:0.75rem;">&#x1F4A8; &#x1F33F; &#x1F4A8; &#x1F33F; &#x1F4A8;</div>
       </div>
     </div>
 
     <!-- SLIDE 7: COMPETE -->
-    <div class="slide chaos" data-slide="6">
-      <div class="noise"></div>
-      <div class="accent-blob" style="width:400px;height:400px;background:#facc15;bottom:-80px;left:-60px;"></div>
-      <div class="accent-blob" style="width:300px;height:300px;background:#4ade80;top:-60px;right:-40px;"></div>
-      <div class="sticker" style="top:10%;right:8%;">&#x26BD;</div>
-      <div class="sticker rotate-neg" style="top:12%;left:5%;">&#x1F3C6;</div>
+    <div class="slide tint-deep" data-slide="6">
+      <div class="grain"></div>
+      <div class="sticker" style="top:9%;right:7%;transform:rotate(-2deg);">&#x26BD;</div>
+      <div class="sticker" style="bottom:12%;left:5%;transform:rotate(4deg);">&#x1F3C6;</div>
 
       <div style="position:relative;z-index:1;">
         <div class="anim">
@@ -517,42 +479,33 @@
 
         <ul class="dict-bullets anim" style="margin-top:0.5rem;">
           <li>IM sports off the presidents' plate &mdash; <strong>I'm taking all of them</strong></li>
-          <li>Already ran <strong>soccer + futsal</strong> &#x26BD;</li>
+          <li>Already ran <strong>soccer + futsal</strong></li>
         </ul>
       </div>
     </div>
 
     <!-- SLIDE 8: WHY ME -->
-    <div class="slide chaos" data-slide="7">
-      <div class="noise"></div>
-      <div class="accent-blob" style="width:500px;height:500px;background:#a855f7;top:-150px;right:-100px;"></div>
-      <div class="accent-blob" style="width:300px;height:300px;background:#4ade80;bottom:-80px;left:-40px;"></div>
-      <div class="sticker" style="top:8%;left:8%;font-size:2.5rem;">&#x1F525;</div>
-      <div class="sticker rotate-pos" style="bottom:12%;right:6%;">&#x1F4AA;</div>
-
+    <div class="slide" data-slide="7">
+      <div class="grain"></div>
       <div style="position:relative;z-index:1;">
-        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#a855f7;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.75rem;">THE REAL QUESTION</p>
-        <h2 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(2.5rem,5vw,4.5rem);color:#fff;text-shadow:3px 3px 0 #a855f7;">WHY ME.</h2>
+        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.75rem;">THE REAL QUESTION</p>
+        <h2 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(2.5rem,5vw,4.5rem);color:#fff;">WHY ME.</h2>
 
-        <ul class="chaos-bullets anim" style="margin-top:1.5rem;">
-          <li>&#x1F3A4; Active in the social scene, <strong>deadass</strong></li>
-          <li>&#x26BD; Already ran soccer, futsal, and PFC</li>
-          <li>&#x1F4F1; Helped organize PFC &mdash; built a <strong>matching app</strong> so people could actually find their matches at the formal</li>
-          <li>&#x1F3A7; I DJ &mdash; <strong>mosh is guaranteed</strong> every night</li>
-          <li>&#x1F49C; Passionate about this frat more than is probably healthy</li>
+        <ul class="chaos-bullets anim" style="margin-top:1.25rem;">
+          <li>Active in the social scene, <strong>deadass</strong></li>
+          <li>Already ran soccer, futsal, and PFC</li>
+          <li>Helped organize PFC &mdash; built a <strong>matching app</strong> so people could actually find their matches at the formal</li>
+          <li>I DJ &mdash; <strong>mosh is guaranteed</strong> every night</li>
+          <li>Passionate about this frat more than is probably healthy</li>
         </ul>
       </div>
     </div>
 
     <!-- SLIDE 9: ENDORSEMENTS -->
-    <div class="slide chaos" data-slide="8">
-      <div class="noise"></div>
-      <div class="accent-blob" style="width:350px;height:350px;background:#38bdf8;top:-60px;left:-40px;"></div>
-      <div class="accent-blob" style="width:250px;height:250px;background:#a855f7;bottom:-50px;right:-30px;"></div>
-      <div class="sticker" style="top:6%;right:6%;">&#x1F4AC;</div>
-
+    <div class="slide tint-dark" data-slide="8">
+      <div class="grain"></div>
       <div style="position:relative;z-index:1;">
-        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#a855f7;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;">SOCIAL PROOF</p>
+        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.4);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.4rem;">SOCIAL PROOF</p>
         <h2 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(1.8rem,3.5vw,3rem);color:#fff;">THE ENDORSEMENTS.</h2>
 
         <div class="tweets-grid anim">
@@ -608,26 +561,18 @@
     </div>
 
     <!-- SLIDE 10: CLOSE -->
-    <div class="slide chaos" data-slide="9" style="text-align:center;align-items:center;">
-      <div class="noise"></div>
-      <div class="accent-blob" style="width:600px;height:600px;background:#a855f7;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
-      <div class="accent-blob" style="width:400px;height:400px;background:#4ade80;top:30%;left:30%;transform:translate(-50%,-50%);"></div>
-      <div class="sticker" style="top:10%;left:10%;font-size:2.5rem;">&#x1F525;</div>
-      <div class="sticker" style="top:12%;right:12%;font-size:2.5rem;">&#x1F525;</div>
-      <div class="sticker rotate-neg" style="bottom:20%;left:15%;">&#x26A1;</div>
-      <div class="sticker rotate-pos" style="bottom:18%;right:15%;">&#x26A1;</div>
-
+    <div class="slide" data-slide="9" style="text-align:center;align-items:center;">
+      <div class="grain"></div>
       <div style="position:relative;z-index:1;">
-        <h2 class="anim" style="font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.5rem);font-weight:700;color:#888;font-style:italic;">We don't <em>have</em> culture.</h2>
-        <h1 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(3rem,7vw,6rem);color:#fff;text-shadow:4px 4px 0 #a855f7;margin-top:0.25rem;">We DO culture.</h1>
-        <p class="anim" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(1.5rem,2.5vw,2.2rem);color:#4ade80;letter-spacing:0.15em;margin-top:1.5rem;">YASHAS FOR VPSA</p>
-        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#555;margin-top:3rem;">P.S. I'm bringing the decks either way. &#x1F3A7;</p>
+        <h2 class="anim" style="font-family:'Playfair Display',serif;font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;color:rgba(255,255,255,0.5);font-style:italic;">We don't have culture.</h2>
+        <h1 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(3.5rem,8vw,7rem);color:#fff;margin-top:0.2rem;">We DO culture.</h1>
+        <p class="anim" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(1.3rem,2.2vw,1.8rem);color:#c5f08a;letter-spacing:0.12em;margin-top:1.5rem;">YASHAS FOR VPSA</p>
+        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.25);margin-top:3rem;">P.S. I'm bringing the decks either way.</p>
       </div>
     </div>
 
   </div>
 
-  <!-- Navigation -->
   <div class="progress-dots" id="dots"></div>
   <div class="nav">
     <span class="slide-count" id="counter">1 / 10</span>
