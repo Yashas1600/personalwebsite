@@ -32,13 +32,11 @@
       transition: opacity 0.3s ease, transform 0.3s ease;
       pointer-events: none;
       overflow: hidden;
-      /* SEP gradient base */
       background: linear-gradient(135deg, #6ab04c 0%, #4a8b6e 35%, #2d7d7d 65%, #1a5c5c 100%);
     }
 
     .slide.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
-    /* Grain overlay for texture */
     .grain {
       position: absolute; inset: 0;
       opacity: 0.04;
@@ -47,7 +45,6 @@
       background-size: 200px;
     }
 
-    /* Dictionary entry styles */
     .dict-word {
       font-family: 'Permanent Marker', cursive;
       font-size: clamp(2.8rem, 5.5vw, 5rem);
@@ -122,7 +119,6 @@
 
     .dict-bullets li strong { color: #fff; }
 
-    /* Chaotic bullets */
     .chaos-bullets {
       list-style: none;
       display: flex;
@@ -145,45 +141,7 @@
 
     .chaos-bullets li strong { color: #fff; }
 
-    /* Tweet card */
-    .tweet {
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 12px;
-      padding: 0.9rem 1.1rem;
-      max-width: 360px;
-    }
-
-    .tweet-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .tweet-avatar {
-      width: 28px; height: 28px; border-radius: 50%;
-      background: rgba(255,255,255,0.1);
-      display: flex; align-items: center;
-      justify-content: center; font-size: 0.7rem;
-    }
-
-    .tweet-name { font-weight: 700; font-size: 0.95rem; color: #fff; }
-    .tweet-handle { font-size: 0.9rem; color: #c5f08a; }
-    .tweet-body { font-size: 1.05rem; color: #fff; line-height: 1.4; }
-    .tweet-footer { margin-top: 0.4rem; font-size: 0.85rem; color: #c5f08a; }
-
-    .tweets-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
-
-    @media (max-width: 768px) { .tweets-grid { grid-template-columns: 1fr; } }
-
-    /* ===== BONG SLIDE ===== */
+    /* Bong slide */
     .bong-slide {
       background: linear-gradient(135deg, #0d2b0d 0%, #0a1f0a 50%, #071507 100%);
       text-align: center;
@@ -231,7 +189,39 @@
       margin: 0.5rem 0;
     }
 
-    /* Title slide image */
+    /* Direction slide (serious/sincere) */
+    .direction-slide {
+      background: #111;
+      align-items: center;
+    }
+
+    .direction-slide .direction-content {
+      max-width: 600px;
+      text-align: left;
+    }
+
+    .direction-slide h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 2rem;
+    }
+
+    .direction-slide p {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1rem, 1.5vw, 1.15rem);
+      color: #ccc;
+      line-height: 1.75;
+      margin-bottom: 1.25rem;
+    }
+
+    .direction-slide p:last-child {
+      color: #fff;
+      font-weight: 600;
+      font-style: italic;
+    }
+
     .title-img {
       position: absolute;
       right: 6vw;
@@ -273,7 +263,6 @@
     }
     .dot.active { background: #fff; box-shadow: 0 0 6px rgba(255,255,255,0.5); }
 
-    /* Stickers */
     .sticker {
       position: absolute;
       font-size: 1.8rem;
@@ -282,7 +271,6 @@
       user-select: none;
     }
 
-    /* Animations */
     .slide.active .anim { animation: slideIn 0.4s ease forwards; opacity: 0; }
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(15px); }
@@ -304,7 +292,12 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* Alternate slide tints */
+    .direction-slide.active .anim { animation: fadeIn 0.6s ease forwards; opacity: 0; }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
     .slide.tint-dark {
       background: linear-gradient(135deg, #3d7a52 0%, #2d6b6b 40%, #1a4a4a 100%);
     }
@@ -324,7 +317,7 @@
         <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:#c5f08a;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:1.5rem;">&#x03A3;&#x0397;&#x03A0; &bull; ELECTIONS 2026</p>
         <h1 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(3.5rem,8vw,7.5rem);line-height:0.9;color:#fff;">CULTURE<br>IS A VERB</h1>
         <p class="anim" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(1.2rem,2.2vw,1.8rem);color:#c5f08a;letter-spacing:0.12em;margin-top:1.25rem;">YASHAS FOR VPSA</p>
-        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#fff;margin-top:2.5rem;">3 min &bull; 10 slides &bull; no cap</p>
+        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#fff;margin-top:2.5rem;">3 min &bull; 12 slides &bull; no cap</p>
       </div>
     </div>
 
@@ -343,7 +336,6 @@
     <div class="slide tint-deep" data-slide="2">
       <div class="grain"></div>
       <div class="sticker" style="top:8%;right:5%;transform:rotate(5deg);">&#x1F3D5;&#xFE0F;</div>
-      <div class="sticker" style="bottom:12%;right:10%;transform:rotate(-3deg);">&#x1F94A;</div>
 
       <div style="position:relative;z-index:1;">
         <div class="anim">
@@ -366,7 +358,6 @@
         <div class="dict-section anim">The fix:</div>
         <ul class="dict-bullets anim">
           <li>Every retreat gets a <strong>theme</strong> (Gambling Night, Among Us, Harry Potter &mdash; sorted into houses, inter-house competition)</li>
-          <li>We make every retreat better from now on</li>
           <li>Full agenda &mdash; games, competitions, meals, moshes, same clock</li>
           <li>Everyone moves together. Nobody drifts.</li>
           <li>Mosh closes every night &mdash; <strong>I got the decks.</strong></li>
@@ -389,6 +380,7 @@
 
         <ul class="dict-bullets anim" style="margin-top:0.5rem;">
           <li><strong>1 mixer per month, minimum</strong> &mdash; committed</li>
+          <li>Named targets: <strong>AKPsi, DSP, Theta Tau</strong></li>
           <li>Beyond parties &mdash; <strong>activity mixers, day events, pregame collabs</strong></li>
           <li>Start going to more <strong>festivals together</strong> &mdash; that's peak bonding</li>
           <li>If our culture is worth having, it's worth <strong>exporting</strong></li>
@@ -397,8 +389,31 @@
       </div>
     </div>
 
-    <!-- SLIDE 5: CONNECT -->
+    <!-- SLIDE 5: SHOW UP -->
     <div class="slide tint-dark" data-slide="4">
+      <div class="grain"></div>
+      <div class="sticker" style="top:10%;right:7%;transform:rotate(3deg);">&#x1F37B;</div>
+
+      <div style="position:relative;z-index:1;">
+        <div class="anim">
+          <div class="dict-word">show up</div>
+          <div class="dict-phonetic">/&#x0283;o&#x028A; &#x028C;p/</div>
+          <div class="dict-pos">verb.</div>
+        </div>
+        <div class="dict-def anim">"to be the default when anyone asks 'what are we doing tonight.'"</div>
+
+        <ul class="dict-bullets anim" style="margin-top:0.5rem;">
+          <li><strong>Tuesday movie nights stay</strong></li>
+          <li><strong>FIFA tournaments, game nights, Mafia nights</strong></li>
+          <li>Open-invite nights out &mdash; Dirty Laundry, Juquila's, whatever's moving</li>
+          <li>Host pregames wherever we land &mdash; <strong>make it SEP for the night</strong></li>
+          <li>Half of us already go out together. I'm making it <strong>official.</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: CONNECT -->
+    <div class="slide tint-deep" data-slide="5">
       <div class="grain"></div>
       <div class="sticker" style="top:9%;right:6%;transform:rotate(3deg);">&#x1F3C6;</div>
 
@@ -416,29 +431,8 @@
           <li><strong>SEP OLYMPICS</strong> &mdash; inter-chapter tournament vs. USC + UCSD. Soccer, basketball, whatever we want. Make it annual.</li>
           <li><strong>Joint retreat with USC SEP</strong> &mdash; combine a weekend, mix the chapters, run activities together</li>
           <li><strong>Beach day</strong> &mdash; low lift, high turnout. Good way to start building the relationship</li>
+          <li><strong>Quarterly cross-chapter event minimum</strong> &mdash; we keep the relationship alive</li>
           <li>The inter-chapter network is there, we just haven't used it. This changes that.</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- SLIDE 6: SHOW UP -->
-    <div class="slide tint-dark" data-slide="5">
-      <div class="grain"></div>
-      <div class="sticker" style="top:10%;right:7%;transform:rotate(3deg);">&#x1F37B;</div>
-
-      <div style="position:relative;z-index:1;">
-        <div class="anim">
-          <div class="dict-word">show up</div>
-          <div class="dict-phonetic">/&#x0283;o&#x028A; &#x028C;p/</div>
-          <div class="dict-pos">verb.</div>
-        </div>
-        <div class="dict-def anim">"to be the default when anyone asks 'what are we doing tonight.'"</div>
-
-        <ul class="dict-bullets anim" style="margin-top:0.5rem;">
-          <li><strong>Tuesday movie nights stay</strong></li>
-          <li>Open-invite nights out &mdash; Dirty Laundry, Juquila's, whatever's moving</li>
-          <li>Host pregames at the frat &mdash; <strong>together first, then out together</strong></li>
-          <li>Half of us already go out together. I'm making it <strong>official.</strong></li>
         </ul>
       </div>
     </div>
@@ -489,7 +483,7 @@
     </div>
 
     <!-- SLIDE 8: COMPETE -->
-    <div class="slide tint-deep" data-slide="7">
+    <div class="slide tint-dark" data-slide="7">
       <div class="grain"></div>
       <div class="sticker" style="top:9%;right:7%;transform:rotate(-2deg);">&#x26BD;</div>
       <div class="sticker" style="bottom:12%;left:5%;transform:rotate(4deg);">&#x1F3C6;</div>
@@ -505,12 +499,45 @@
         <ul class="dict-bullets anim" style="margin-top:0.5rem;">
           <li>IM sports off the presidents' plate &mdash; <strong>I'm taking all of them</strong></li>
           <li>Already ran <strong>soccer + futsal</strong></li>
+          <li>Expanding to <strong>basketball, flag football, spikeball</strong></li>
+          <li><strong>PLEDGE OLYMPICS</strong> &mdash; making it a real recurring tradition. Real stakes. Real trophy. Documented history.</li>
         </ul>
       </div>
     </div>
 
-    <!-- SLIDE 9: WHY ME -->
+    <!-- SLIDE 9: INCENTIVES -->
     <div class="slide" data-slide="8">
+      <div class="grain"></div>
+
+      <div style="position:relative;z-index:1;">
+        <div class="anim">
+          <div class="dict-word">incentives</div>
+          <div class="dict-phonetic">/&#x026A;n&#x2C8;s&#x025B;nt&#x026A;vz/</div>
+          <div class="dict-pos">noun.</div>
+        </div>
+        <div class="dict-def anim">"We reward showing up. We don't punish not showing up."</div>
+
+        <ul class="dict-bullets anim" style="margin-top:0.5rem;">
+          <li>Setting aside a <strong>budget for top social performers</strong> each quarter</li>
+          <li>SEP merch, hoodies, prizes &mdash; <strong>earned, not given</strong></li>
+          <li>Example: bring 3 people to rush &rarr; earn the hoodie</li>
+          <li>Positive reinforcement > inactive threats. Every time.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: THE DIRECTION (serious, breaks the bit) -->
+    <div class="slide direction-slide" data-slide="9">
+      <div style="position:relative;z-index:1;" class="direction-content">
+        <h2 class="anim">Where this is all going.</h2>
+        <p class="anim">SEP is an entrepreneurial co-ed frat. We don't have a house. We don't have built-in traditions. Everything we have, we built ourselves. That's the point.</p>
+        <p class="anim">I want SEP to be the frat people fight to get into &mdash; not because of what we have, but because of how it feels to be in it. Real friendships. Real nights. Real culture.</p>
+        <p class="anim">Culture is a verb. Let's do it like we mean it.</p>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: WHY ME -->
+    <div class="slide tint-deep" data-slide="10">
       <div class="grain"></div>
       <img src="ydw.png" alt="" style="position:absolute;right:5vw;top:50%;transform:translateY(-50%) rotate(2deg);width:clamp(180px,20vw,280px);border-radius:10px;box-shadow:6px 10px 30px rgba(0,0,0,0.4);z-index:2;" onerror="this.style.display='none'">
       <div style="position:relative;z-index:1;max-width:55%;">
@@ -526,8 +553,8 @@
       </div>
     </div>
 
-    <!-- SLIDE 10: CLOSE -->
-    <div class="slide" data-slide="9" style="text-align:center;align-items:center;">
+    <!-- SLIDE 12: CLOSE -->
+    <div class="slide" data-slide="11" style="text-align:center;align-items:center;">
       <div class="grain"></div>
       <div style="position:relative;z-index:1;">
         <h2 class="anim" style="font-family:'Playfair Display',serif;font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:700;color:#fff;font-style:italic;">We don't have culture.</h2>
@@ -541,7 +568,7 @@
 
   <div class="progress-dots" id="dots"></div>
   <div class="nav">
-    <span class="slide-count" id="counter">1 / 10</span>
+    <span class="slide-count" id="counter">1 / 12</span>
     <button class="nav-btn" id="prev" disabled>&#x2190;</button>
     <button class="nav-btn" id="next">&#x2192;</button>
   </div>
@@ -574,7 +601,6 @@
       document.getElementById('next').disabled = current === total - 1;
       document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
 
-      // Play Levels on last slide, starting at 8 seconds
       if (current === total - 1) {
         levelsAudio.currentTime = 7;
         levelsAudio.play();
