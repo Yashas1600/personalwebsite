@@ -581,10 +581,13 @@
     <button class="nav-btn" id="next">&#x2192;</button>
   </div>
 
+  <audio id="levels" src="[Sid Vangala] Levels - Avicii.mp3" preload="auto"></audio>
+
   <script>
     const slides = document.querySelectorAll('.slide');
     const total = slides.length;
     let current = 0;
+    const levelsAudio = document.getElementById('levels');
 
     const dotsContainer = document.getElementById('dots');
     for (let i = 0; i < total; i++) {
@@ -605,6 +608,14 @@
       document.getElementById('prev').disabled = current === 0;
       document.getElementById('next').disabled = current === total - 1;
       document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+
+      // Play Levels on last slide, starting at 8 seconds
+      if (current === total - 1) {
+        levelsAudio.currentTime = 8;
+        levelsAudio.play();
+      } else {
+        levelsAudio.pause();
+      }
     }
 
     document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
