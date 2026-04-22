@@ -51,7 +51,7 @@
       position: absolute;
       border-radius: 50%;
       filter: blur(80px);
-      opacity: 0.12;
+      opacity: 0.15;
       pointer-events: none;
     }
 
@@ -89,7 +89,7 @@
       margin-bottom: 1.5rem;
       max-width: 55ch;
       line-height: 1.5;
-      border-left: 3px solid #e63946;
+      border-left: 3px solid #a855f7;
       padding-left: 1rem;
     }
 
@@ -99,7 +99,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.15em;
-      color: #e63946;
+      color: #a855f7;
       margin-bottom: 0.5rem;
       margin-top: 1rem;
     }
@@ -124,7 +124,7 @@
       content: '>';
       position: absolute;
       left: 0;
-      color: #e63946;
+      color: #a855f7;
       font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
     }
@@ -151,10 +151,11 @@
       border-left: 3px solid;
     }
 
-    .chaos-bullets li:nth-child(1) { border-color: #e63946; }
-    .chaos-bullets li:nth-child(2) { border-color: #f4a261; }
-    .chaos-bullets li:nth-child(3) { border-color: #e9c46a; }
-    .chaos-bullets li:nth-child(4) { border-color: #2a9d8f; }
+    .chaos-bullets li:nth-child(1) { border-color: #4ade80; }
+    .chaos-bullets li:nth-child(2) { border-color: #a855f7; }
+    .chaos-bullets li:nth-child(3) { border-color: #38bdf8; }
+    .chaos-bullets li:nth-child(4) { border-color: #facc15; }
+    .chaos-bullets li:nth-child(5) { border-color: #f472b6; }
 
     /* Tweet card */
     .tweet {
@@ -192,35 +193,69 @@
 
     @media (max-width: 768px) { .tweets-grid { grid-template-columns: 1fr; } }
 
-    /* ===== DEADPAN SLIDE 6 ===== */
-    .deadpan {
-      background: #000;
+    /* ===== BONG SLIDE (green weed theme) ===== */
+    .bong-slide {
+      background: #001a00;
       text-align: center;
       align-items: center;
     }
 
-    .deadpan h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3rem, 7vw, 6rem);
-      font-weight: 900;
-      letter-spacing: 0.05em;
-      color: #fff;
-      margin-bottom: 1.5rem;
+    .bong-slide .bong-glow {
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: #22c55e;
+      filter: blur(120px);
+      opacity: 0.08;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
     }
 
-    .deadpan p {
+    .bong-letters {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      font-weight: 900;
+      color: #22c55e;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 40px rgba(34,197,94,0.4), 0 0 80px rgba(34,197,94,0.15);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .bong-subtitle {
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .bong-text {
       font-family: 'Inter', sans-serif;
       font-weight: 300;
-      color: #999;
-      max-width: 35ch;
+      color: #4ade80;
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+      margin-bottom: 0.5rem;
     }
 
-    .deadpan .sub { font-size: clamp(1rem, 1.8vw, 1.3rem); margin-bottom: 0.75rem; }
-    .deadpan .sub-italic {
-      font-style: italic;
-      font-size: clamp(0.85rem, 1.3vw, 1rem);
-      color: #666;
-      margin-top: 0.5rem;
+    .bong-text-sm {
+      font-family: 'JetBrains Mono', monospace;
+      color: #166534;
+      font-size: clamp(0.75rem, 1.1vw, 0.9rem);
+      margin-top: 0.75rem;
+    }
+
+    .bong-emoji-row {
+      font-size: 2.5rem;
+      letter-spacing: 0.3em;
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+
+    /* SEP Bong SVG */
+    .sep-bong {
+      margin: 1.5rem auto;
+      position: relative;
     }
 
     /* Navigation */
@@ -234,7 +269,7 @@
       color: #fff; display: flex; align-items: center;
       justify-content: center; cursor: pointer; font-size: 1rem; transition: all 0.2s;
     }
-    .nav-btn:hover { border-color: #e63946; background: rgba(230,57,70,0.1); }
+    .nav-btn:hover { border-color: #a855f7; background: rgba(168,85,247,0.1); }
     .nav-btn:disabled { opacity: 0.2; cursor: default; }
     .slide-count { font-size: 0.75rem; color: #555; font-variant-numeric: tabular-nums; }
 
@@ -246,7 +281,7 @@
       width: 7px; height: 7px; border-radius: 50%;
       background: #333; transition: all 0.3s; cursor: pointer;
     }
-    .dot.active { background: #e63946; box-shadow: 0 0 8px #e63946; }
+    .dot.active { background: #a855f7; box-shadow: 0 0 8px #a855f7; }
 
     /* Animations */
     .slide.active .anim { animation: chaosIn 0.5s ease forwards; opacity: 0; }
@@ -262,14 +297,15 @@
     .anim:nth-child(6) { animation-delay: 0.40s; }
     .anim:nth-child(7) { animation-delay: 0.47s; }
     .anim:nth-child(8) { animation-delay: 0.54s; }
+    .anim:nth-child(9) { animation-delay: 0.61s; }
 
-    /* Deadpan animation override */
-    .deadpan.active .anim {
-      animation: fadeIn 0.8s ease forwards;
+    /* Bong slide animation */
+    .bong-slide.active .anim {
+      animation: weedFade 0.6s ease forwards;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    @keyframes weedFade {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     /* Stickers / emoji floats */
@@ -283,7 +319,6 @@
 
     .rotate-neg { transform: rotate(-8deg); }
     .rotate-pos { transform: rotate(6deg); }
-    .rotate-big { transform: rotate(-15deg); }
   </style>
 </head>
 <body>
@@ -292,18 +327,18 @@
     <!-- SLIDE 1: TITLE -->
     <div class="slide chaos active" data-slide="0">
       <div class="noise"></div>
-      <div class="accent-blob" style="width:400px;height:400px;background:#e63946;top:-100px;right:-50px;"></div>
-      <div class="accent-blob" style="width:300px;height:300px;background:#f4a261;bottom:-80px;left:-60px;"></div>
+      <div class="accent-blob" style="width:400px;height:400px;background:#a855f7;top:-100px;right:-50px;"></div>
+      <div class="accent-blob" style="width:300px;height:300px;background:#4ade80;bottom:-80px;left:-60px;"></div>
       <div class="sticker" style="top:8%;right:12%;">&#x1F525;</div>
       <div class="sticker" style="top:15%;left:5%;">&#x1F3B6;</div>
       <div class="sticker" style="bottom:20%;right:8%;">&#x1F3B0;</div>
       <div class="sticker" style="bottom:12%;left:15%;">&#x26A1;</div>
-      <div class="sticker" style="top:40%;right:5%;font-size:3rem;">&#x1F3DB;&#xFE0F;</div>
+      <div class="sticker" style="top:40%;right:5%;font-size:3rem;">&#x1F680;</div>
 
       <div style="position:relative;z-index:1;">
-        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#e63946;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:1rem;">SEP ELECTIONS 2026</p>
-        <h1 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(3rem,8vw,7rem);line-height:0.95;color:#fff;text-shadow:4px 4px 0 #e63946, 8px 8px 0 rgba(230,57,70,0.3);">CULTURE<br>IS A VERB</h1>
-        <p class="anim" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(1.3rem,2.5vw,2rem);color:#f4a261;letter-spacing:0.15em;margin-top:1rem;">YASHAS FOR VPSA</p>
+        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#a855f7;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:1rem;">&#x03A3;&#x0397;&#x03A0; ELECTIONS 2026</p>
+        <h1 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(3rem,8vw,7rem);line-height:0.95;color:#fff;text-shadow:4px 4px 0 #a855f7, 8px 8px 0 rgba(168,85,247,0.3);">CULTURE<br>IS A VERB</h1>
+        <p class="anim" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(1.3rem,2.5vw,2rem);color:#4ade80;letter-spacing:0.15em;margin-top:1rem;">YASHAS FOR VPSA</p>
         <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#555;margin-top:2rem;">&#x1F4AC; 3 minutes &bull; 10 slides &bull; no cap</p>
       </div>
     </div>
@@ -311,24 +346,26 @@
     <!-- SLIDE 2: THESIS -->
     <div class="slide chaos" data-slide="1">
       <div class="noise"></div>
-      <div class="accent-blob" style="width:500px;height:500px;background:#e63946;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+      <div class="accent-blob" style="width:500px;height:500px;background:#a855f7;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
       <div class="sticker" style="top:10%;right:10%;">&#x1F4AF;</div>
       <div class="sticker rotate-neg" style="bottom:15%;left:8%;">&#x1F91D;</div>
 
       <div style="position:relative;z-index:1;">
-        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#e63946;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:1.5rem;">THE THESIS</p>
-        <h2 class="anim" style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.8rem);font-weight:900;color:#fff;line-height:1.15;max-width:18ch;">Culture isn't something we <em style="color:#e63946;">have.</em></h2>
-        <h2 class="anim" style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.8rem);font-weight:900;color:#fff;line-height:1.15;max-width:18ch;margin-top:0.25rem;">It's something we <em style="color:#f4a261;">do.</em></h2>
-        <p class="anim" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(0.95rem,1.5vw,1.2rem);color:#888;margin-top:2rem;max-width:45ch;line-height:1.6;">and the house feels best when we're doing it together, on the same timing.</p>
+        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#a855f7;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:1.5rem;">THE THESIS</p>
+        <h2 class="anim" style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.8rem);font-weight:900;color:#fff;line-height:1.15;max-width:18ch;">Culture isn't something we <em style="color:#a855f7;">have.</em></h2>
+        <h2 class="anim" style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.8rem);font-weight:900;color:#fff;line-height:1.15;max-width:18ch;margin-top:0.25rem;">It's something we <em style="color:#4ade80;">do.</em></h2>
+        <p class="anim" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(0.95rem,1.5vw,1.2rem);color:#888;margin-top:2rem;max-width:45ch;line-height:1.6;">and the frat feels best when we're doing it together, on the same timing.</p>
       </div>
     </div>
 
     <!-- SLIDE 3: RETREAT -->
     <div class="slide chaos" data-slide="2">
       <div class="noise"></div>
-      <div class="accent-blob" style="width:350px;height:350px;background:#e63946;top:-80px;left:-60px;"></div>
+      <div class="accent-blob" style="width:350px;height:350px;background:#4ade80;top:-80px;left:-60px;"></div>
+      <div class="accent-blob" style="width:250px;height:250px;background:#a855f7;bottom:-60px;right:-40px;"></div>
       <div class="sticker rotate-pos" style="top:8%;right:6%;">&#x1F3D5;&#xFE0F;</div>
       <div class="sticker" style="bottom:10%;right:12%;">&#x1F3B2;</div>
+      <div class="sticker" style="top:35%;right:4%;">&#x1F94A;</div>
 
       <div style="position:relative;z-index:1;">
         <div class="anim">
@@ -336,7 +373,7 @@
           <div class="dict-phonetic">/r&#x0259;&#x2C8;tri&#x2D0;t/</div>
           <div class="dict-pos">verb.</div>
         </div>
-        <div class="dict-def anim">"to go somewhere as a house and come back tighter than we left."</div>
+        <div class="dict-def anim">"to go somewhere as a frat and come back tighter than we left."</div>
 
         <div class="dict-section anim">The problem:</div>
         <ul class="dict-bullets anim">
@@ -350,7 +387,8 @@
 
         <div class="dict-section anim">The fix:</div>
         <ul class="dict-bullets anim">
-          <li>Every retreat gets a <strong>theme</strong> (Gambling Night, Y2K, Harry Potter &mdash; sorted into houses, inter-house competition all weekend)</li>
+          <li>Every retreat gets a <strong>theme</strong> (Gambling Night, Fight Night, Harry Potter &mdash; sorted into houses, inter-house competition all weekend)</li>
+          <li>We will have <strong>Fight Night</strong> and make every retreat better from now on</li>
           <li>Full agenda &mdash; games, competitions, meals, moshes, all on the same clock</li>
           <li>Everyone moves together. Nobody drifts.</li>
           <li>Mosh closes every night &mdash; <strong>I got the decks.</strong> &#x1F3A7;</li>
@@ -361,9 +399,10 @@
     <!-- SLIDE 4: MIX -->
     <div class="slide chaos" data-slide="3">
       <div class="noise"></div>
-      <div class="accent-blob" style="width:400px;height:400px;background:#f4a261;bottom:-100px;right:-80px;"></div>
+      <div class="accent-blob" style="width:400px;height:400px;background:#f472b6;bottom:-100px;right:-80px;"></div>
+      <div class="accent-blob" style="width:300px;height:300px;background:#4ade80;top:-60px;left:-40px;"></div>
       <div class="sticker" style="top:10%;left:5%;">&#x1F378;</div>
-      <div class="sticker rotate-neg" style="top:8%;right:10%;">&#x1F46F;</div>
+      <div class="sticker rotate-neg" style="top:8%;right:10%;">&#x1F389;</div>
 
       <div style="position:relative;z-index:1;">
         <div class="anim">
@@ -371,12 +410,12 @@
           <div class="dict-phonetic">/m&#x026A;ks/</div>
           <div class="dict-pos">verb.</div>
         </div>
-        <div class="dict-def anim">"to put the house in a room with people who aren't us and let chemistry do its thing."</div>
+        <div class="dict-def anim">"to put the frat in a room with people who aren't us and let chemistry do its thing."</div>
 
         <ul class="dict-bullets anim" style="margin-top:0.5rem;">
           <li><strong>1 mixer per month, minimum</strong> &mdash; committed &#x1F91D;</li>
-          <li>More frats, more sororities, more orgs on the roster</li>
-          <li>Beyond house parties &mdash; <strong>activity mixers, day events, pregame collabs</strong></li>
+          <li>More frats, more orgs, more people on the roster</li>
+          <li>Beyond parties &mdash; <strong>activity mixers, day events, pregame collabs</strong></li>
           <li>If our culture is worth having, it's worth <strong>exporting</strong> &#x1F30D;</li>
         </ul>
       </div>
@@ -385,7 +424,8 @@
     <!-- SLIDE 5: SHOW UP -->
     <div class="slide chaos" data-slide="4">
       <div class="noise"></div>
-      <div class="accent-blob" style="width:350px;height:350px;background:#2a9d8f;top:-60px;right:-40px;"></div>
+      <div class="accent-blob" style="width:350px;height:350px;background:#38bdf8;top:-60px;right:-40px;"></div>
+      <div class="accent-blob" style="width:250px;height:250px;background:#a855f7;bottom:-50px;left:-30px;"></div>
       <div class="sticker" style="top:12%;right:8%;">&#x1F3AC;</div>
       <div class="sticker rotate-pos" style="bottom:15%;left:5%;">&#x1F37B;</div>
 
@@ -398,25 +438,72 @@
         <div class="dict-def anim">"to be the default when anyone asks 'what are we doing tonight.'"</div>
 
         <ul class="dict-bullets anim" style="margin-top:0.5rem;">
-          <li><strong>Tuesday movie nights stay</strong> &mdash; sacred &#x1F3AC;</li>
+          <li><strong>Tuesday movie nights stay</strong> &#x1F3AC;</li>
           <li>Open-invite nights out &mdash; Dirty Laundry, Juquila's, whatever's moving</li>
-          <li>Host pregames at the house &mdash; <strong>together first, then out together</strong></li>
+          <li>Host pregames at the frat &mdash; <strong>together first, then out together</strong></li>
           <li>Half of us already go out together. I'm making it <strong>official.</strong> &#x1F4CB;</li>
         </ul>
       </div>
     </div>
 
-    <!-- SLIDE 6: THE BONG (DEADPAN) -->
-    <div class="slide deadpan" data-slide="5">
-      <h2 class="anim">THE BONG.</h2>
-      <p class="sub anim">reviving the weed culture. deadass.</p>
-      <p class="sub-italic anim">a house heirloom. engraved. sacred.</p>
+    <!-- SLIDE 6: THE BONG (GREEN WEED THEME) -->
+    <div class="slide bong-slide" data-slide="5">
+      <div class="bong-glow"></div>
+      <div class="sticker" style="top:6%;left:8%;font-size:2.5rem;opacity:0.6;">&#x1F33F;</div>
+      <div class="sticker" style="top:10%;right:10%;font-size:2rem;opacity:0.5;">&#x1F33F;</div>
+      <div class="sticker" style="bottom:8%;left:12%;font-size:2.2rem;opacity:0.5;">&#x1F33F;</div>
+      <div class="sticker" style="bottom:12%;right:8%;font-size:2rem;opacity:0.4;">&#x1F33F;</div>
+      <div class="sticker rotate-neg" style="top:20%;left:3%;font-size:1.8rem;opacity:0.35;">&#x1F33F;</div>
+      <div class="sticker rotate-pos" style="top:18%;right:4%;font-size:1.5rem;opacity:0.3;">&#x1F33F;</div>
+      <div class="sticker" style="bottom:25%;left:5%;font-size:1.6rem;opacity:0.3;">&#x1F33F;</div>
+      <div class="sticker rotate-neg" style="bottom:22%;right:5%;font-size:1.8rem;opacity:0.35;">&#x1F33F;</div>
+      <div class="sticker" style="top:45%;left:2%;font-size:1.4rem;opacity:0.25;">&#x1F33F;</div>
+      <div class="sticker" style="top:50%;right:3%;font-size:1.4rem;opacity:0.25;">&#x1F33F;</div>
+
+      <div style="position:relative;z-index:1;">
+        <div class="bong-emoji-row anim">&#x1F33F;&#x1F4A8;&#x1F33F;&#x1F4A8;&#x1F33F;</div>
+        <div class="bong-subtitle anim">THE &#x03A3;&#x0397;&#x03A0; BONG</div>
+
+        <!-- SVG Bong with Greek Letters -->
+        <div class="sep-bong anim">
+          <svg width="160" height="200" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Bong base -->
+            <ellipse cx="80" cy="185" rx="50" ry="12" fill="#166534" stroke="#22c55e" stroke-width="1.5"/>
+            <rect x="40" y="100" width="80" height="85" rx="20" fill="#0f3d1f" stroke="#22c55e" stroke-width="1.5"/>
+            <!-- Water line -->
+            <rect x="42" y="145" width="76" height="38" rx="18" fill="rgba(34,197,94,0.15)"/>
+            <!-- Neck -->
+            <rect x="65" y="25" width="30" height="80" rx="8" fill="#0f3d1f" stroke="#22c55e" stroke-width="1.5"/>
+            <!-- Mouthpiece -->
+            <ellipse cx="80" cy="25" rx="20" ry="6" fill="#0f3d1f" stroke="#22c55e" stroke-width="1.5"/>
+            <!-- Bowl -->
+            <line x1="38" y1="95" x2="18" y2="70" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="14" cy="65" r="10" fill="#0f3d1f" stroke="#22c55e" stroke-width="1.5"/>
+            <ellipse cx="14" cy="60" rx="7" ry="3" fill="#166534" stroke="#22c55e" stroke-width="1"/>
+            <!-- Smoke wisps -->
+            <path d="M75 18 Q72 5, 78 -5" stroke="#4ade80" stroke-width="1" fill="none" opacity="0.4"/>
+            <path d="M80 15 Q85 2, 80 -8" stroke="#4ade80" stroke-width="1" fill="none" opacity="0.3"/>
+            <path d="M85 18 Q88 5, 82 -5" stroke="#4ade80" stroke-width="1" fill="none" opacity="0.35"/>
+            <!-- Greek letters on body -->
+            <text x="80" y="140" text-anchor="middle" font-family="'Playfair Display', serif" font-size="28" font-weight="900" fill="#22c55e" opacity="0.9">&#x03A3;&#x0397;&#x03A0;</text>
+            <!-- Engraving lines -->
+            <line x1="50" y1="125" x2="110" y2="125" stroke="#22c55e" stroke-width="0.5" opacity="0.3"/>
+            <line x1="50" y1="150" x2="110" y2="150" stroke="#22c55e" stroke-width="0.5" opacity="0.3"/>
+          </svg>
+        </div>
+
+        <div class="bong-text anim">reviving the weed culture. deadass.</div>
+        <div class="bong-text anim">a frat heirloom. engraved. sacred.</div>
+        <div class="bong-text-sm anim">&#x1F33F; pass it around. build the culture. &#x1F33F;</div>
+        <div class="bong-emoji-row anim" style="margin-top:1rem;margin-bottom:0;">&#x1F4A8;&#x1F33F;&#x1F4A8;&#x1F33F;&#x1F4A8;</div>
+      </div>
     </div>
 
     <!-- SLIDE 7: COMPETE -->
     <div class="slide chaos" data-slide="6">
       <div class="noise"></div>
-      <div class="accent-blob" style="width:400px;height:400px;background:#e9c46a;bottom:-80px;left:-60px;"></div>
+      <div class="accent-blob" style="width:400px;height:400px;background:#facc15;bottom:-80px;left:-60px;"></div>
+      <div class="accent-blob" style="width:300px;height:300px;background:#4ade80;top:-60px;right:-40px;"></div>
       <div class="sticker" style="top:10%;right:8%;">&#x26BD;</div>
       <div class="sticker rotate-neg" style="top:12%;left:5%;">&#x1F3C6;</div>
 
@@ -431,7 +518,6 @@
         <ul class="dict-bullets anim" style="margin-top:0.5rem;">
           <li>IM sports off the presidents' plate &mdash; <strong>I'm taking all of them</strong></li>
           <li>Already ran <strong>soccer + futsal</strong> &#x26BD;</li>
-          <li>Helped organize PFC &mdash; built a <strong>matching app</strong> so people could actually find their matches at the formal &#x1F4F1;</li>
         </ul>
       </div>
     </div>
@@ -439,20 +525,21 @@
     <!-- SLIDE 8: WHY ME -->
     <div class="slide chaos" data-slide="7">
       <div class="noise"></div>
-      <div class="accent-blob" style="width:500px;height:500px;background:#e63946;top:-150px;right:-100px;"></div>
-      <div class="accent-blob" style="width:300px;height:300px;background:#f4a261;bottom:-80px;left:-40px;"></div>
+      <div class="accent-blob" style="width:500px;height:500px;background:#a855f7;top:-150px;right:-100px;"></div>
+      <div class="accent-blob" style="width:300px;height:300px;background:#4ade80;bottom:-80px;left:-40px;"></div>
       <div class="sticker" style="top:8%;left:8%;font-size:2.5rem;">&#x1F525;</div>
       <div class="sticker rotate-pos" style="bottom:12%;right:6%;">&#x1F4AA;</div>
 
       <div style="position:relative;z-index:1;">
-        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#e63946;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.75rem;">THE REAL QUESTION</p>
-        <h2 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(2.5rem,5vw,4.5rem);color:#fff;text-shadow:3px 3px 0 #e63946;">WHY ME.</h2>
+        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#a855f7;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.75rem;">THE REAL QUESTION</p>
+        <h2 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(2.5rem,5vw,4.5rem);color:#fff;text-shadow:3px 3px 0 #a855f7;">WHY ME.</h2>
 
         <ul class="chaos-bullets anim" style="margin-top:1.5rem;">
           <li>&#x1F3A4; Active in the social scene, <strong>deadass</strong></li>
           <li>&#x26BD; Already ran soccer, futsal, and PFC</li>
+          <li>&#x1F4F1; Helped organize PFC &mdash; built a <strong>matching app</strong> so people could actually find their matches at the formal</li>
           <li>&#x1F3A7; I DJ &mdash; <strong>mosh is guaranteed</strong> every night</li>
-          <li>&#x2764;&#xFE0F; Passionate about this house more than is probably healthy</li>
+          <li>&#x1F49C; Passionate about this frat more than is probably healthy</li>
         </ul>
       </div>
     </div>
@@ -460,11 +547,12 @@
     <!-- SLIDE 9: ENDORSEMENTS -->
     <div class="slide chaos" data-slide="8">
       <div class="noise"></div>
-      <div class="accent-blob" style="width:350px;height:350px;background:#2a9d8f;top:-60px;left:-40px;"></div>
+      <div class="accent-blob" style="width:350px;height:350px;background:#38bdf8;top:-60px;left:-40px;"></div>
+      <div class="accent-blob" style="width:250px;height:250px;background:#a855f7;bottom:-50px;right:-30px;"></div>
       <div class="sticker" style="top:6%;right:6%;">&#x1F4AC;</div>
 
       <div style="position:relative;z-index:1;">
-        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#e63946;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;">SOCIAL PROOF</p>
+        <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#a855f7;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;">SOCIAL PROOF</p>
         <h2 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(1.8rem,3.5vw,3rem);color:#fff;">THE ENDORSEMENTS.</h2>
 
         <div class="tweets-grid anim">
@@ -494,7 +582,7 @@
 
           <div class="tweet">
             <div class="tweet-header">
-              <div class="tweet-avatar">&#x1F32C;&#xFE0F;</div>
+              <div class="tweet-avatar">&#x1F33F;</div>
               <div>
                 <div class="tweet-name">me, just now</div>
                 <div class="tweet-handle">@yashas</div>
@@ -508,7 +596,7 @@
             <div class="tweet-header">
               <div class="tweet-avatar">&#x1F632;</div>
               <div>
-                <div class="tweet-name">the entire house</div>
+                <div class="tweet-name">the entire frat</div>
                 <div class="tweet-handle">@sep_groupchat</div>
               </div>
             </div>
@@ -522,7 +610,8 @@
     <!-- SLIDE 10: CLOSE -->
     <div class="slide chaos" data-slide="9" style="text-align:center;align-items:center;">
       <div class="noise"></div>
-      <div class="accent-blob" style="width:600px;height:600px;background:#e63946;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+      <div class="accent-blob" style="width:600px;height:600px;background:#a855f7;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+      <div class="accent-blob" style="width:400px;height:400px;background:#4ade80;top:30%;left:30%;transform:translate(-50%,-50%);"></div>
       <div class="sticker" style="top:10%;left:10%;font-size:2.5rem;">&#x1F525;</div>
       <div class="sticker" style="top:12%;right:12%;font-size:2.5rem;">&#x1F525;</div>
       <div class="sticker rotate-neg" style="bottom:20%;left:15%;">&#x26A1;</div>
@@ -530,8 +619,8 @@
 
       <div style="position:relative;z-index:1;">
         <h2 class="anim" style="font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.5rem);font-weight:700;color:#888;font-style:italic;">We don't <em>have</em> culture.</h2>
-        <h1 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(3rem,7vw,6rem);color:#fff;text-shadow:4px 4px 0 #e63946;margin-top:0.25rem;">We DO culture.</h1>
-        <p class="anim" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(1.5rem,2.5vw,2.2rem);color:#f4a261;letter-spacing:0.15em;margin-top:1.5rem;">YASHAS FOR VPSA</p>
+        <h1 class="anim" style="font-family:'Permanent Marker',cursive;font-size:clamp(3rem,7vw,6rem);color:#fff;text-shadow:4px 4px 0 #a855f7;margin-top:0.25rem;">We DO culture.</h1>
+        <p class="anim" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(1.5rem,2.5vw,2.2rem);color:#4ade80;letter-spacing:0.15em;margin-top:1.5rem;">YASHAS FOR VPSA</p>
         <p class="anim" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#555;margin-top:3rem;">P.S. I'm bringing the decks either way. &#x1F3A7;</p>
       </div>
     </div>
