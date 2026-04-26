@@ -3,574 +3,733 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VLA-Flight | Weekly Update</title>
+  <title>unfollow-manager</title>
+  <meta name="description" content="Find and remove Instagram accounts that don't follow you back. Free, open source, runs locally.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    :root {
+      --black: #0a0a0a;
+      --coal: #111111;
+      --slab: #181818;
+      --edge: #222222;
+      --mute: #555;
+      --dim: #777;
+      --off: #999;
+      --text: #e0e0e0;
+      --white: #f5f5f5;
+      --cyan: #00e5ff;
+      --lime: #b6f542;
+      --pink: #ff4f9a;
+      --amber: #ffb300;
+      --red: #ff3b3b;
+    }
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    :root {
-      --bg: #0a0a0f;
-      --surface: #12121a;
-      --surface-2: #1a1a26;
-      --border: #2a2a3a;
-      --text: #e4e4ed;
-      --text-dim: #8888a0;
-      --accent: #6c8cff;
-      --accent-glow: rgba(108, 140, 255, 0.15);
-      --green: #4ade80;
-      --yellow: #facc15;
-      --red: #f87171;
-      --orange: #fb923c;
-    }
-
     body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background: var(--bg);
+      font-family: 'IBM Plex Mono', monospace;
+      background: var(--black);
       color: var(--text);
-      overflow: hidden;
-      height: 100vh;
-      width: 100vw;
+      min-height: 100vh;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .deck { width: 100vw; height: 100vh; position: relative; }
+    /* ═══ LAYOUT ═══════════════════════════════════════ */
 
-    .slide {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 6vh 10vw;
+    .page {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    section {
+      padding: 60px 0;
+      border-bottom: 1px solid var(--edge);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    /* ═══ ANIMATIONS ═══════════════════════════════════ */
+
+    .reveal {
       opacity: 0;
-      transform: translateX(40px);
+      transform: translateY(12px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* stagger children */
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(10px);
       transition: opacity 0.4s ease, transform 0.4s ease;
-      pointer-events: none;
     }
 
-    .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
-    .slide.exiting { opacity: 0; transform: translateX(-40px); }
+    .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.07s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.14s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.21s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.28s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.35s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(7) { transition-delay: 0.42s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(8) { transition-delay: 0.49s; opacity: 1; transform: translateY(0); }
 
-    .slide-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1rem;
-    }
+    /* ═══ NAV ══════════════════════════════════════════ */
 
-    h1 { font-size: clamp(2.2rem, 4.5vw, 3.5rem); font-weight: 700; line-height: 1.15; margin-bottom: 1rem; }
-    h2 { font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 600; line-height: 1.2; margin-bottom: 1rem; }
-
-    .subtitle {
-      font-size: clamp(1rem, 1.6vw, 1.2rem);
-      color: var(--text-dim);
-      line-height: 1.7;
-      max-width: 55ch;
-    }
-
-    .big-text {
-      font-size: clamp(1.1rem, 1.8vw, 1.35rem);
-      color: var(--text);
-      line-height: 1.7;
-      max-width: 50ch;
-      margin-top: 0.5rem;
-    }
-
-    /* Cards */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
-      transition: border-color 0.2s;
-    }
-
-    .card:hover { border-color: var(--accent); }
-    .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
-    .card p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.55; }
-
-    /* Status badges */
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.72rem;
-      font-weight: 500;
-      padding: 0.2rem 0.65rem;
-      border-radius: 100px;
-      margin-top: 0.6rem;
-    }
-    .status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
-    .status.done { background: rgba(74, 222, 128, 0.1); color: var(--green); }
-    .status.done::before { background: var(--green); }
-    .status.progress { background: rgba(250, 204, 21, 0.1); color: var(--yellow); }
-    .status.progress::before { background: var(--yellow); }
-    .status.blocked { background: rgba(248, 113, 113, 0.1); color: var(--red); }
-    .status.blocked::before { background: var(--red); }
-
-    /* Code block */
-    .code-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.25rem 1.5rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      line-height: 1.8;
-      overflow-x: auto;
-      margin-top: 1.25rem;
-    }
-
-    .code-block .comment { color: #5a5a7a; }
-    .code-block .key { color: var(--accent); }
-    .code-block .old { color: var(--red); text-decoration: line-through; opacity: 0.6; }
-    .code-block .new { color: var(--green); }
-
-    /* Table */
-    .topic-table { width: 100%; border-collapse: collapse; margin-top: 1.25rem; font-size: 0.88rem; }
-    .topic-table th {
-      text-align: left; font-weight: 600; font-size: 0.75rem;
-      text-transform: uppercase; letter-spacing: 0.08em;
-      color: var(--text-dim); padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
-    }
-    .topic-table td {
-      padding: 0.65rem 1rem; border-bottom: 1px solid var(--border);
-      font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
-    }
-    .topic-table tr:last-child td { border-bottom: none; }
-    .topic-table .from { color: var(--red); }
-    .topic-table .to { color: var(--green); }
-
-    /* Bullet list */
-    .bullet-list {
-      list-style: none;
+    nav {
       display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      margin-top: 1.25rem;
-    }
-
-    .bullet-list li {
-      font-size: 1rem;
-      color: var(--text-dim);
-      line-height: 1.6;
-      padding-left: 1.3rem;
-      position: relative;
-    }
-
-    .bullet-list li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0.6rem;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-
-    .bullet-list li strong { color: var(--text); }
-
-    /* Callout box */
-    .callout {
-      background: var(--surface);
-      border-left: 3px solid var(--accent);
-      border-radius: 0 8px 8px 0;
-      padding: 1rem 1.25rem;
-      margin-top: 1.25rem;
-      font-size: 0.9rem;
-      color: var(--text-dim);
-      line-height: 1.6;
-    }
-    .callout strong { color: var(--text); }
-    .callout.warn { border-left-color: var(--yellow); }
-    .callout.error { border-left-color: var(--red); }
-
-    /* Comparison row */
-    .compare {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 1.5rem;
       align-items: center;
-      margin-top: 1.5rem;
+      gap: 10px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--edge);
     }
 
-    .compare-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
+    nav .badge {
+      font-weight: 700;
+      font-size: 11px;
+      color: var(--black);
+      background: var(--lime);
+      padding: 3px 7px;
+      letter-spacing: -0.5px;
+    }
+
+    nav .name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    nav .nav-links {
+      margin-left: auto;
+      display: flex;
+      gap: 16px;
+    }
+
+    nav .nav-links a {
+      font-size: 11px;
+      color: var(--mute);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: color 0.15s;
+    }
+
+    nav .nav-links a:hover {
+      color: var(--white);
+    }
+
+    /* ═══ HERO ═════════════════════════════════════════ */
+
+    .hero {
+      padding: 80px 0 60px;
+    }
+
+    .hero-label {
+      font-size: 10px;
+      color: var(--mute);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -1.5px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 .accent {
+      color: var(--lime);
+    }
+
+    .hero .tagline {
+      font-size: 14px;
+      color: var(--dim);
+      line-height: 1.7;
+      max-width: 440px;
+      margin-bottom: 32px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-download {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 12px 24px;
+      background: var(--lime);
+      color: var(--black);
+      text-decoration: none;
+      border: none;
+      transition: opacity 0.15s;
+    }
+
+    .btn-download:hover {
+      opacity: 0.85;
+    }
+
+    .btn-source {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 11px 24px;
+      background: transparent;
+      color: var(--dim);
+      text-decoration: none;
+      border: 1px solid var(--edge);
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .btn-source:hover {
+      color: var(--white);
+      border-color: var(--mute);
+    }
+
+    .hero-meta {
+      margin-top: 20px;
+      font-size: 10px;
+      color: var(--mute);
+      letter-spacing: 0.5px;
+    }
+
+    .hero-meta span {
+      margin-right: 16px;
+    }
+
+    .hero-meta .dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      background: var(--lime);
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    /* ═══ APP MOCKUP ═══════════════════════════════════ */
+
+    .mockup-section {
+      padding: 60px 0;
+    }
+
+    .section-label {
+      font-size: 10px;
+      color: var(--mute);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    .mockup {
+      background: var(--coal);
+      border: 1px solid var(--edge);
+      overflow: hidden;
+    }
+
+    .mockup-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      background: var(--slab);
+      border-bottom: 1px solid var(--edge);
+    }
+
+    .mockup-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--edge);
+    }
+
+    .mockup-dot.r { background: var(--red); }
+    .mockup-dot.y { background: var(--amber); }
+    .mockup-dot.g { background: var(--lime); }
+
+    .mockup-title {
+      font-size: 10px;
+      color: var(--mute);
+      margin-left: 8px;
+    }
+
+    .mockup-body {
+      padding: 16px;
+    }
+
+    /* steps */
+    .m-steps {
+      display: flex;
+      gap: 1px;
+      background: var(--edge);
+      margin-bottom: 16px;
+    }
+
+    .m-step {
+      flex: 1;
+      text-align: center;
+      padding: 6px 0;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--mute);
+      background: var(--coal);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .m-step.active {
+      background: var(--white);
+      color: var(--black);
+      font-weight: 700;
+    }
+
+    .m-step.done {
+      color: var(--lime);
+    }
+
+    /* stats */
+    .m-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+      background: var(--edge);
+      margin-bottom: 14px;
+    }
+
+    .m-stat {
+      background: var(--coal);
+      padding: 14px 8px;
       text-align: center;
     }
 
-    .compare-box .num {
-      font-size: clamp(2rem, 4vw, 3rem);
+    .m-stat-num {
+      font-size: 22px;
       font-weight: 700;
-      margin-bottom: 0.25rem;
+      letter-spacing: -2px;
+      line-height: 1;
     }
 
-    .compare-box .label {
-      font-size: 0.85rem;
-      color: var(--text-dim);
+    .m-stat-num.cyan { color: var(--cyan); }
+    .m-stat-num.amber { color: var(--amber); }
+    .m-stat-num.pink { color: var(--pink); }
+
+    .m-stat-label {
+      font-size: 7px;
+      color: var(--mute);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 5px;
     }
 
-    .compare-vs {
-      font-size: 1rem;
-      color: var(--text-dim);
-      font-weight: 600;
+    /* controls */
+    .m-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
     }
 
-    /* Navigation */
-    .nav {
-      position: fixed; bottom: 1.5rem; right: 2.5rem;
-      display: flex; align-items: center; gap: 0.75rem; z-index: 100;
-    }
-    .nav-btn {
-      width: 40px; height: 40px; border-radius: 50%;
-      border: 1px solid var(--border); background: var(--surface);
-      color: var(--text); display: flex; align-items: center;
-      justify-content: center; cursor: pointer; font-size: 1rem; transition: all 0.2s;
-    }
-    .nav-btn:hover { border-color: var(--accent); background: var(--accent-glow); }
-    .nav-btn:disabled { opacity: 0.3; cursor: default; }
-    .slide-count { font-size: 0.75rem; color: var(--text-dim); font-variant-numeric: tabular-nums; }
-
-    .progress-dots {
-      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 0.45rem; z-index: 100;
-    }
-    .dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--border); transition: all 0.3s; cursor: pointer;
-    }
-    .dot.active { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
-
-    .title-slide h1 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      background: linear-gradient(135deg, #e4e4ed 0%, #6c8cff 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    .m-controls span {
+      font-size: 9px;
+      color: var(--mute);
     }
 
-    .meta { display: flex; gap: 2rem; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-dim); }
-    .meta span { display: flex; align-items: center; gap: 0.4rem; }
+    .m-controls-btns {
+      display: flex;
+      gap: 2px;
+    }
 
-    .slide.active .animate-in { animation: fadeUp 0.45s ease forwards; opacity: 0; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-in:nth-child(1) { animation-delay: 0.08s; }
-    .animate-in:nth-child(2) { animation-delay: 0.16s; }
-    .animate-in:nth-child(3) { animation-delay: 0.24s; }
-    .animate-in:nth-child(4) { animation-delay: 0.32s; }
-    .animate-in:nth-child(5) { animation-delay: 0.40s; }
-    .animate-in:nth-child(6) { animation-delay: 0.48s; }
+    .m-controls-btns span {
+      font-size: 9px;
+      padding: 3px 8px;
+      background: var(--slab);
+      border: 1px solid var(--edge);
+      color: var(--dim);
+    }
+
+    /* user list */
+    .m-list {
+      border: 1px solid var(--edge);
+      background: var(--black);
+    }
+
+    .m-item {
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      gap: 8px;
+      border-bottom: 1px solid var(--edge);
+      font-size: 10px;
+    }
+
+    .m-item:last-child { border-bottom: none; }
+
+    .m-check {
+      width: 10px;
+      height: 10px;
+      border: 1px solid var(--edge);
+      flex-shrink: 0;
+    }
+
+    .m-check.checked {
+      background: var(--lime);
+      border-color: var(--lime);
+    }
+
+    .m-item .m-user {
+      flex: 1;
+      color: var(--dim);
+    }
+
+    .m-badge {
+      font-size: 7px;
+      padding: 1px 5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: 1px solid;
+    }
+
+    .m-badge.unfollowed {
+      color: var(--lime);
+      border-color: var(--lime);
+    }
+
+    .m-badge.skipped {
+      color: var(--amber);
+      border-color: var(--amber);
+    }
+
+    /* footer bar */
+    .m-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--edge);
+    }
+
+    .m-footer span {
+      font-size: 9px;
+      color: var(--mute);
+    }
+
+    .m-footer .m-btn-danger {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 5px 12px;
+      background: var(--red);
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      border: none;
+    }
+
+    /* ═══ HOW IT WORKS ═════════════════════════════════ */
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--edge);
+    }
+
+    .step-card {
+      background: var(--coal);
+      padding: 24px 20px;
+    }
+
+    .step-num {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--edge);
+      margin-bottom: 8px;
+      letter-spacing: -2px;
+    }
+
+    .step-card:nth-child(1) .step-num { color: var(--cyan); }
+    .step-card:nth-child(2) .step-num { color: var(--lime); }
+    .step-card:nth-child(3) .step-num { color: var(--amber); }
+    .step-card:nth-child(4) .step-num { color: var(--pink); }
+
+    .step-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .step-desc {
+      font-size: 11px;
+      color: var(--dim);
+      line-height: 1.6;
+    }
+
+    /* ═══ FEATURES ═════════════════════════════════════ */
+
+    .features-list {
+      list-style: none;
+    }
+
+    .features-list li {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--edge);
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .features-list li:last-child {
+      border-bottom: none;
+    }
+
+    .f-marker {
+      width: 6px;
+      height: 6px;
+      background: var(--lime);
+      flex-shrink: 0;
+    }
+
+    .f-dim {
+      color: var(--dim);
+      font-size: 11px;
+      margin-left: 4px;
+    }
+
+    /* ═══ FOOTER ═══════════════════════════════════════ */
+
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--edge);
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    footer a {
+      font-size: 11px;
+      color: var(--mute);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    footer a:hover {
+      color: var(--cyan);
+    }
+
+    .disclaimer {
+      font-size: 9px;
+      color: var(--mute);
+      line-height: 1.7;
+      max-width: 480px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ═══ RESPONSIVE ═══════════════════════════════════ */
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 24px; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .m-stat-num { font-size: 18px; }
+      .hero-meta span { display: block; margin-bottom: 4px; }
+      nav .nav-links { gap: 10px; }
+    }
   </style>
 </head>
 <body>
-  <div class="deck">
 
-    <!-- SLIDE 1: Title -->
-    <div class="slide title-slide active" data-slide="0">
-      <div class="slide-label animate-in">Weekly Update &mdash; April 16, 2026</div>
-      <h1 class="animate-in">VLA-Flight</h1>
-      <p class="subtitle animate-in">Instruction-Grounded Drone Navigation with Vision-Language-Action and Onboard IMU</p>
-      <div class="meta animate-in">
-        <span>Yashas Shashidhara</span>
-        <span>Week of Apr 7 &ndash; 16</span>
-      </div>
+<div class="page">
+
+  <!-- NAV -->
+  <nav>
+    <span class="badge">UF</span>
+    <span class="name">unfollow-manager</span>
+    <div class="nav-links">
+      <a href="https://github.com/Yashas1600/unfollow-manager/releases/download/v1.2.0/Unfollow.Manager-1.0.0-arm64.dmg">Download</a>
     </div>
+  </nav>
 
-    <!-- SLIDE 2: The Problem -->
-    <div class="slide" data-slide="1">
-      <div class="slide-label animate-in">Motivation</div>
-      <h2 class="animate-in">The Problem</h2>
-      <p class="big-text animate-in">We want drones that can follow natural language instructions like <em>"fly along the crop row and avoid the obstacle."</em></p>
-      <p class="subtitle animate-in" style="margin-top: 1rem;">Current approaches (OpenVLA, AerialVLA) use massive 7B+ parameter language models. They need server-grade GPUs and can't run on the drone itself.</p>
-      <div class="callout animate-in">
-        <strong>The goal:</strong> A model small enough to run onboard a drone in real time, while still understanding language instructions.
-      </div>
+  <!-- HERO -->
+  <section class="hero reveal">
+    <div class="hero-label">Instagram cleanup tool</div>
+    <h1>find who doesn't<br>follow you <span class="accent">back</span></h1>
+    <p class="tagline">Scan your account. See who's not following you back. Uncheck the ones you want to keep. Remove the rest. Takes about 30 seconds.</p>
+    <div class="hero-actions">
+      <a href="https://github.com/Yashas1600/unfollow-manager/releases/download/v1.2.0/Unfollow.Manager-1.0.0-arm64.dmg" class="btn-download">Download for Mac</a>
     </div>
-
-    <!-- SLIDE 3: Our Approach -->
-    <div class="slide" data-slide="2">
-      <div class="slide-label animate-in">Approach</div>
-      <h2 class="animate-in">VLA-Flight: What Makes It Different</h2>
-      <p class="subtitle animate-in">Replace the giant language model with a tiny, purpose-built architecture.</p>
-      <div class="compare animate-in">
-        <div class="compare-box">
-          <div class="num" style="color: var(--red);">7.5B</div>
-          <div class="label">OpenVLA / AerialVLA<br>Server GPU required</div>
-        </div>
-        <div class="compare-vs">vs.</div>
-        <div class="compare-box" style="border-color: var(--accent);">
-          <div class="num" style="color: var(--green);">~80M</div>
-          <div class="label">VLA-Flight<br>Runs on Jetson Orin NX at &gt;30Hz</div>
-        </div>
-      </div>
-      <div class="callout animate-in">
-        <strong>How?</strong> Swap the 7B LLM for a frozen MiniLM sentence encoder (22M) + a small cross-attention fusion decoder (5M). Use continuous action output instead of binned tokens. Result: 100x smaller, 10x faster.
-      </div>
+    <div class="hero-meta">
+      <span><span class="dot"></span>v1.2.0</span>
+      <span>macOS (Apple Silicon)</span>
+      <span>Free</span>
     </div>
+  </section>
 
-    <!-- SLIDE 4: Key Ideas -->
-    <div class="slide" data-slide="3">
-      <div class="slide-label animate-in">Key Ideas</div>
-      <h2 class="animate-in">Five Core Contributions</h2>
-      <div class="cards animate-in">
-        <div class="card">
-          <h3>Dual IMU Fusion</h3>
-          <p>Use IMU data two ways: raw sensor fusion for fine dynamics (wind, drift) + convert bearing to text hints ("forward-right") for coarse navigation intent.</p>
-        </div>
-        <div class="card">
-          <h3>Action Chunking + VAE</h3>
-          <p>Predict 10 future actions at once for smooth flight, but only execute 5 before replanning. A VAE prevents averaging when multiple good paths exist.</p>
-        </div>
-        <div class="card">
-          <h3>Edge Deployment</h3>
-          <p>~80M params total. Runs entirely onboard a Jetson Orin NX 16GB at &gt;30Hz. No server needed.</p>
-        </div>
-        <div class="card">
-          <h3>Safety Module</h3>
-          <p>Zero-parameter geometric correction: velocity clamping, altitude bounds, obstacle repulsion. Adds zero latency.</p>
-        </div>
-        <div class="card">
-          <h3>3-Stage Training</h3>
-          <p>Stage 1: learn to see (vision + IMU). Stage 2: learn to navigate (full model). Stage 3: specialize for agriculture.</p>
-        </div>
+  <!-- APP MOCKUP -->
+  <section class="mockup-section reveal">
+    <div class="section-label">Preview</div>
+    <div class="mockup">
+      <div class="mockup-titlebar">
+        <span class="mockup-dot r"></span>
+        <span class="mockup-dot y"></span>
+        <span class="mockup-dot g"></span>
+        <span class="mockup-title">unfollow-manager</span>
       </div>
-    </div>
+      <div class="mockup-body">
+        <div class="m-steps">
+          <div class="m-step done">Login</div>
+          <div class="m-step done">Scan</div>
+          <div class="m-step active">Review</div>
+          <div class="m-step">Unfollow</div>
+        </div>
 
-    <!-- SLIDE 5: Architecture -->
-    <div class="slide" data-slide="4">
-      <div class="slide-label animate-in">Architecture</div>
-      <h2 class="animate-in">How the Model Works</h2>
-      <p class="subtitle animate-in">Three inputs go in, safe flight commands come out.</p>
-      <div class="code-block animate-in" style="font-size: 0.78rem; line-height: 1.65; max-width: 600px;">
-<span class="comment">  Camera Image       IMU Sensors       "Fly along the crop row"</span>
-       |                 |                       |
-  <span class="key">EfficientViT</span>     <span class="key">IMU Encoder</span>         <span class="key">MiniLM</span> (frozen)
-    (15M)            (2M)                  (22M)
-       |                 |                       |
-       +---------+-------+-----------------------+
-                 |
-          <span class="key">Fusion Decoder</span> &mdash; cross-attention (5M)
-                 |
-           <span class="key">VAE Bottleneck</span>
-                 |
-          <span class="key">Action Chunking</span> &rarr; [vx, vy, vz, yaw] x 10 steps
-                 |
-          <span class="key">Safety Module</span> (0 params) &rarr; execute 5 safe steps
-      </div>
-    </div>
+        <div class="m-stats">
+          <div class="m-stat">
+            <div class="m-stat-num cyan">1,850</div>
+            <div class="m-stat-label">Followers</div>
+          </div>
+          <div class="m-stat">
+            <div class="m-stat-num amber">2,085</div>
+            <div class="m-stat-label">Following</div>
+          </div>
+          <div class="m-stat">
+            <div class="m-stat-num pink">647</div>
+            <div class="m-stat-label">Non-mutual</div>
+          </div>
+        </div>
 
-    <!-- SLIDE 6: This Week Overview -->
-    <div class="slide" data-slide="5">
-      <div class="slide-label animate-in">This Week</div>
-      <h2 class="animate-in">What I Worked On</h2>
-      <div class="cards animate-in">
-        <div class="card">
-          <h3>UZH-FPV Dataset</h3>
-          <p>Downloaded (~30-50GB), preprocessed, and ran training end-to-end.</p>
-          <span class="status done">Complete</span>
+        <div class="m-controls">
+          <span>647 / 647 selected</span>
+          <div class="m-controls-btns">
+            <span>All</span>
+            <span>None</span>
+          </div>
         </div>
-        <div class="card">
-          <h3>MUN-FRL Dataset</h3>
-          <p>Manually downloaded (batch script was broken). Fixed preprocessing pipeline.</p>
-          <span class="status done">Preprocessed</span>
+
+        <div class="m-list">
+          <div class="m-item">
+            <div class="m-check checked"></div>
+            <span class="m-user">@random.person_01</span>
+            <span class="m-badge unfollowed">Unfollowed</span>
+          </div>
+          <div class="m-item">
+            <div class="m-check checked"></div>
+            <span class="m-user">@not_following_u</span>
+            <span class="m-badge unfollowed">Unfollowed</span>
+          </div>
+          <div class="m-item">
+            <div class="m-check checked"></div>
+            <span class="m-user">@spam.account.xyz</span>
+            <span class="m-badge skipped">Skipped</span>
+          </div>
+          <div class="m-item">
+            <div class="m-check checked"></div>
+            <span class="m-user">@old_classmate_22</span>
+          </div>
+          <div class="m-item">
+            <div class="m-check"></div>
+            <span class="m-user">@your_fav_brand</span>
+          </div>
+          <div class="m-item">
+            <div class="m-check checked"></div>
+            <span class="m-user">@forgot.who.this.is</span>
+          </div>
         </div>
-        <div class="card">
-          <h3>NaN Training Bug</h3>
-          <p>Training kept crashing in Stage 2. Diagnosed and applied initial fix.</p>
-          <span class="status progress">Tuning</span>
-        </div>
-        <div class="card">
-          <h3>Blackbird Dataset</h3>
-          <p>MIT hosting is down. Can't download yet.</p>
-          <span class="status blocked">Blocked</span>
+
+        <div class="m-footer">
+          <span>5 / 6 selected</span>
+          <span class="m-btn-danger">Unfollow</span>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- SLIDE 7: Download Issue -->
-    <div class="slide" data-slide="6">
-      <div class="slide-label animate-in">Issue #1</div>
-      <h2 class="animate-in">MUN-FRL: Download Script Was Broken</h2>
-      <ul class="bullet-list animate-in">
-        <li>The batch download script (<strong>download_datasets.sh</strong>) ran without errors</li>
-        <li>But every downloaded .bag file was <strong>empty</strong> &mdash; it saved the HTTP header instead of the actual file</li>
-        <li>Files were KB instead of GB &mdash; no real sensor data inside</li>
-      </ul>
-      <div class="callout animate-in">
-        <strong>Fix:</strong> Manually downloaded each ROS bag file from the MUN-FRL docs site. Verified each file with <code>rosbag info</code> before processing.
+  <!-- HOW IT WORKS -->
+  <section class="reveal">
+    <div class="section-label">How it works</div>
+    <div class="steps-grid reveal-stagger">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-name">Login</div>
+        <div class="step-desc">Opens a browser. You log into Instagram manually. Your credentials are never stored or transmitted.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-name">Scan</div>
+        <div class="step-desc">Auto-detects your account and fetches your followers and following lists via Instagram's API.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-name">Review</div>
+        <div class="step-desc">See everyone who doesn't follow you back. Uncheck influencers, brands, or anyone you want to keep.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-name">Unfollow</div>
+        <div class="step-desc">Removes selected accounts with built-in rate limiting to avoid Instagram action blocks.</div>
       </div>
     </div>
+  </section>
 
-    <!-- SLIDE 8: Topic Mismatch -->
-    <div class="slide" data-slide="7">
-      <div class="slide-label animate-in">Issue #2</div>
-      <h2 class="animate-in">Preprocessing Script: Wrong ROS Topics</h2>
-      <p class="subtitle animate-in">The script had UZH-FPV topic names hardcoded. MUN-FRL uses completely different names, so the script silently found nothing.</p>
+  <!-- FEATURES -->
+  <section class="reveal">
+    <div class="section-label">Features</div>
+    <ul class="features-list reveal-stagger">
+      <li><span class="f-marker"></span>Completely free <span class="f-dim">— no sign-up, no subscription</span></li>
+      <li><span class="f-marker"></span>Runs entirely on your machine <span class="f-dim">— nothing is sent to any server</span></li>
+      <li><span class="f-marker"></span>Signed &amp; notarized by Apple <span class="f-dim">— install and run, no workarounds</span></li>
+      <li><span class="f-marker"></span>Fast scanning <span class="f-dim">— fetches thousands of accounts in seconds</span></li>
+      <li><span class="f-marker"></span>Smart rate limiting <span class="f-dim">— avoids Instagram action blocks automatically</span></li>
+    </ul>
+  </section>
 
-      <table class="topic-table animate-in">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Script Expected</th>
-            <th>MUN-FRL Actual</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="color: var(--text); font-family: Inter, sans-serif;">Camera</td>
-            <td class="from">/cam0/image_raw</td>
-            <td class="to">/camera_forward/image_raw</td>
-          </tr>
-          <tr>
-            <td style="color: var(--text); font-family: Inter, sans-serif;">IMU</td>
-            <td class="from">/imu</td>
-            <td class="to">/xsens/imu/data</td>
-          </tr>
-          <tr>
-            <td style="color: var(--text); font-family: Inter, sans-serif;">Actions</td>
-            <td class="from">/control/command</td>
-            <td class="to">Derived from PPK/GNSS</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <!-- FOOTER -->
+  <footer>
+    <p class="disclaimer">Not affiliated with Instagram or Meta.</p>
+  </footer>
 
-    <!-- SLIDE 9: More Topic Issues -->
-    <div class="slide" data-slide="8">
-      <div class="slide-label animate-in">Issue #2 (continued)</div>
-      <h2 class="animate-in">Also Fixed: Message Types + Sync</h2>
-      <ul class="bullet-list animate-in">
-        <li><strong>Wrong message type:</strong> Script expected <code>CompressedImage</code>, but MUN-FRL uses raw <code>sensor_msgs/Image</code>. The script would hang forever waiting for messages that were flying right past it.</li>
-        <li><strong>Wrong image format:</strong> Script assumed BGR8 color, but MUN-FRL is Mono8 (grayscale). Had to add manual conversion.</li>
-        <li><strong>IMU-to-Image sync:</strong> Images come at 20Hz, IMU at 400Hz. Added <code>ApproximateTimeSynchronizer</code> to align them.</li>
-        <li><strong>No action labels:</strong> MUN-FRL doesn't have control commands in the bag. Derived velocity actions from ground truth positions: <strong>v = (pos[t+1] - pos[t]) / dt</strong></li>
-      </ul>
-    </div>
+</div>
 
-    <!-- SLIDE 10: NaN Problem -->
-    <div class="slide" data-slide="9">
-      <div class="slide-label animate-in">Issue #3</div>
-      <h2 class="animate-in">Training Crashes with NaN in Stage 2</h2>
-      <p class="subtitle animate-in">Stage 1 (perception pretraining) works fine. But ~10 epochs into Stage 2, the loss becomes NaN and training dies.</p>
-      <ul class="bullet-list animate-in">
-        <li><strong>Stage 2 unfreezes the Fusion Decoder</strong> &mdash; this is where vision and IMU signals get combined via cross-attention</li>
-        <li>The learning rate (1&times;10<sup>-3</sup>) was <strong>too high</strong> for this sensitive layer. Attention scores exploded.</li>
-        <li>We train in <strong>fp16</strong> (half-precision) because the Jetson needs it for speed. But fp16 maxes out at ~65,000 &mdash; the exploding values overflow to infinity, then NaN.</li>
-      </ul>
-    </div>
-
-    <!-- SLIDE 11: NaN Fix -->
-    <div class="slide" data-slide="10">
-      <div class="slide-label animate-in">Issue #3 (Fix)</div>
-      <h2 class="animate-in">Fix: Lower the Learning Rate</h2>
-      <p class="subtitle animate-in">Smaller learning rate = smaller weight updates = numbers stay within fp16 range.</p>
-      <div class="code-block animate-in">
-<span class="comment"># Stage 2: Fusion decoder unfrozen</span>
-<span class="key">stage2_lr:</span> <span class="old">1.0e-3</span>  <span class="new">&rarr; 2.0e-4</span>
-
-<span class="comment"># Stage 3: Agricultural domain refinement</span>
-<span class="key">stage3_lr:</span> <span class="old">1.0e-3</span>  <span class="new">&rarr; 3.0e-4</span>
-      </div>
-      <div class="callout animate-in">
-        <strong>Result:</strong> Training no longer crashes. Loss decreases smoothly through Stage 2. But the optimal LR is still unknown &mdash; need to sweep to find the sweet spot.
-      </div>
-    </div>
-
-    <!-- SLIDE 12: Next Steps -->
-    <div class="slide" data-slide="11">
-      <div class="slide-label animate-in">Next Week</div>
-      <h2 class="animate-in">Next Steps</h2>
-      <div class="cards animate-in">
-        <div class="card">
-          <h3>Learning Rate Sweep</h3>
-          <p>Try LRs from 1&times;10<sup>-4</sup> to 5&times;10<sup>-4</sup> to find the best value that trains fast without crashing.</p>
-        </div>
-        <div class="card">
-          <h3>Diversify Instructions</h3>
-          <p>Right now every episode has the same instruction text. The model ignores language if it's always identical. Need unique descriptions per trajectory.</p>
-        </div>
-        <div class="card">
-          <h3>Train on MUN-FRL</h3>
-          <p>Now that preprocessing works, run training on this outdoor dataset for agricultural domain generalization.</p>
-        </div>
-        <div class="card">
-          <h3>Blackbird Dataset</h3>
-          <p>Monitor MIT hosting. Download and preprocess once the site is back up.</p>
-        </div>
-        <div class="card">
-          <h3>Evaluate Checkpoints</h3>
-          <p>Run evaluation on UZH-FPV trained models. Compare trajectory metrics against baselines.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 13: Questions -->
-    <div class="slide title-slide" data-slide="12">
-      <div class="slide-label animate-in">End</div>
-      <h1 class="animate-in">Questions?</h1>
-      <p class="subtitle animate-in">VLA-Flight &mdash; ~80M params, &gt;30Hz on Jetson Orin NX 16GB</p>
-      <div class="meta animate-in">
-        <span>Yashas Shashidhara</span>
-        <span>github.com/Yashas1600</span>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Navigation -->
-  <div class="progress-dots" id="dots"></div>
-  <div class="nav">
-    <span class="slide-count" id="counter">1 / 13</span>
-    <button class="nav-btn" id="prev" disabled>&larr;</button>
-    <button class="nav-btn" id="next">&rarr;</button>
-  </div>
-
-  <script>
-    const slides = document.querySelectorAll('.slide');
-    const total = slides.length;
-    let current = 0;
-
-    const dotsContainer = document.getElementById('dots');
-    for (let i = 0; i < total; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'dot' + (i === 0 ? ' active' : '');
-      dot.addEventListener('click', () => goTo(i));
-      dotsContainer.appendChild(dot);
-    }
-
-    function goTo(n) {
-      if (n < 0 || n >= total || n === current) return;
-      const prev = current;
-      slides[current].classList.remove('active');
-      slides[current].classList.add('exiting');
-      current = n;
-      slides[current].classList.add('active');
-      setTimeout(() => slides[prev].classList.remove('exiting'), 400);
-
-      document.getElementById('counter').textContent = `${current + 1} / ${total}`;
-      document.getElementById('prev').disabled = current === 0;
-      document.getElementById('next').disabled = current === total - 1;
-      document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
-    }
-
-    document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
-    document.getElementById('next').addEventListener('click', () => goTo(current + 1));
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+<script>
+  // Scroll reveal
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
     });
-  </script>
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => obs.observe(el));
+</script>
+
 </body>
 </html>
