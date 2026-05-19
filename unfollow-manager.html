@@ -207,6 +207,19 @@
       border-color: var(--mute);
     }
 
+    .download-counter {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dim);
+      letter-spacing: 0.5px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .download-counter.loaded {
+      opacity: 1;
+    }
+
     .hero-meta {
       margin-top: 20px;
       font-size: 10px;
@@ -585,12 +598,12 @@
     <p class="tagline">Scan your account. See who's not following you back. Uncheck the ones you want to keep. Remove the rest. Takes about 30 seconds.</p>
     <div class="hero-actions">
       <a href="https://github.com/Yashas1600/unfollow-manager/releases/latest/download/Unfollow.Manager.dmg" class="btn-download">Download for Mac</a>
+      <span class="download-counter" id="download-count"></span>
     </div>
     <div class="hero-meta">
       <span><span class="dot"></span>v1.4.0</span>
       <span>macOS (Apple Silicon)</span>
       <span>Free</span>
-      <span id="download-count"></span>
     </div>
   </section>
 
@@ -741,6 +754,7 @@
       totalDownloads = releases.reduce((sum, rel) =>
         sum + rel.assets.reduce((a, asset) => a + asset.download_count, 0), 0);
       countEl.textContent = totalDownloads.toLocaleString() + ' downloads';
+      countEl.classList.add('loaded');
     })
     .catch(() => {
       countEl.style.display = 'none';
