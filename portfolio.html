@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yashas</title>
+  <meta name="description" content="Yashas — builder.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Unbounded', sans-serif;
+      background: #050505;
+      color: #f5f5f5;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 48px 80px;
+    }
+
+    .hero-name {
+      font-size: clamp(80px, 18vw, 200px);
+      font-weight: 900;
+      letter-spacing: -6px;
+      line-height: 0.85;
+      color: #fff;
+      mix-blend-mode: difference;
+    }
+
+    .hero-row {
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    .hero-rule {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, #333, transparent);
+    }
+
+    .hero-tag {
+      font-size: 11px;
+      font-weight: 300;
+      color: #555;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* Projects */
+    .projects {
+      padding: 160px 48px;
+    }
+
+    .projects-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 64px;
+    }
+
+    .projects-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #6f5aff;
+      box-shadow: 0 0 20px #6f5aff88;
+      animation: glow 2s ease infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 10px #6f5aff44; }
+      to { box-shadow: 0 0 30px #6f5affaa; }
+    }
+
+    .projects-label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #444;
+    }
+
+    .project-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      padding: 48px 40px;
+      border: 1px solid #1a1a1a;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #0c0c0c, #111);
+      overflow: hidden;
+      transition: border-color 0.4s, transform 0.3s;
+    }
+
+    .project-card:hover {
+      border-color: #6f5aff55;
+      transform: translateY(-4px);
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), #6f5aff10, transparent 60%);
+      pointer-events: none;
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+
+    .project-card:hover::before {
+      opacity: 1;
+    }
+
+    .project-eyebrow {
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #6f5aff;
+      margin-bottom: 16px;
+    }
+
+    .project-title {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      letter-spacing: -2px;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .project-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: #666;
+      line-height: 1.8;
+      max-width: 500px;
+      margin-bottom: 32px;
+    }
+
+    .project-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #888;
+      transition: color 0.3s, gap 0.3s;
+    }
+
+    .project-card:hover .project-cta {
+      color: #fff;
+      gap: 16px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #111;
+    }
+
+    footer a {
+      font-size: 11px;
+      font-weight: 300;
+      color: #333;
+      text-decoration: none;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: #6f5aff;
+    }
+
+    .footer-copy {
+      font-size: 10px;
+      font-weight: 300;
+      color: #1a1a1a;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 700px) {
+      .hero { padding: 0 24px 60px; }
+      .hero-name { letter-spacing: -3px; }
+      .projects { padding: 100px 24px; }
+      .project-card { padding: 32px 24px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 16px; align-items: flex-start; }
+      .hero-row { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="content">
+
+  <section class="hero">
+    <h1 class="hero-name">Yashas</h1>
+    <div class="hero-row">
+      <div class="hero-rule"></div>
+      <span class="hero-tag">Builder / Maker</span>
+    </div>
+  </section>
+
+  <section class="projects">
+    <div class="projects-header">
+      <div class="projects-dot"></div>
+      <span class="projects-label">Projects</span>
+    </div>
+
+    <a class="project-card" href="/unfollow-manager" id="pcard">
+      <div class="project-eyebrow">Featured</div>
+      <div class="project-title">unfollow-manager</div>
+      <p class="project-desc">Find who doesn't follow you back on Instagram. Unfollow them in one click. Runs locally, free, nothing leaves your machine.</p>
+      <span class="project-cta">View Project &rarr;</span>
+    </a>
+  </section>
+
+  <footer>
+    <a href="https://github.com/Yashas1600" target="_blank">Github</a>
+    <span class="footer-copy">&copy; 2024</span>
+  </footer>
+
+</div>
+
+<script>
+// Particle mesh background
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let mouse = { x: -1000, y: -1000 };
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+document.addEventListener('mousemove', e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+class Particle {
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.size = Math.random() * 1.5 + 0.5;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+    // mouse repulsion
+    const dx = this.x - mouse.x;
+    const dy = this.y - mouse.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 120) {
+      const force = (120 - dist) / 120;
+      this.vx += (dx / dist) * force * 0.2;
+      this.vy += (dy / dist) * force * 0.2;
+    }
+
+    // damping
+    this.vx *= 0.99;
+    this.vy *= 0.99;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(111, 90, 255, 0.4)';
+    ctx.fill();
+  }
+}
+
+const count = Math.min(80, Math.floor(window.innerWidth * 0.06));
+for (let i = 0; i < count; i++) particles.push(new Particle());
+
+function drawLines() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 150) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(111, 90, 255, ${(1 - dist / 150) * 0.12})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawLines();
+  requestAnimationFrame(animate);
+}
+animate();
+
+// Card radial hover
+const card = document.getElementById('pcard');
+card.addEventListener('mousemove', e => {
+  const rect = card.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width) * 100;
+  const y = ((e.clientY - rect.top) / rect.height) * 100;
+  card.style.setProperty('--mx', x + '%');
+  card.style.setProperty('--my', y + '%');
+});
+</script>
+
+</body>
+</html>

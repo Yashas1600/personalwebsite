@@ -3,732 +3,725 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>unfollow-manager</title>
-  <meta name="description" content="Find and remove Instagram accounts that don't follow you back. Free, open source, runs locally.">
+  <title>yashas</title>
+  <meta name="description" content="yashas — builder / maker">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --black: #0a0a0a;
-      --coal: #111111;
-      --slab: #181818;
-      --edge: #222222;
-      --mute: #555;
-      --dim: #777;
-      --off: #999;
-      --text: #e0e0e0;
-      --white: #f5f5f5;
-      --cyan: #00e5ff;
-      --lime: #b6f542;
-      --pink: #ff4f9a;
-      --amber: #ffb300;
-      --red: #ff3b3b;
-    }
-
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'IBM Plex Mono', monospace;
-      background: var(--black);
-      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      background: #060608;
+      color: #e8e0d4;
       min-height: 100vh;
-      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 20px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       -webkit-font-smoothing: antialiased;
-    }
-
-    /* ═══ LAYOUT ═══════════════════════════════════════ */
-
-    .page {
-      max-width: 620px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    section {
-      padding: 60px 0;
-      border-bottom: 1px solid var(--edge);
-    }
-
-    section:last-of-type {
-      border-bottom: none;
-    }
-
-    /* ═══ ANIMATIONS ═══════════════════════════════════ */
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* stagger children */
-    .reveal-stagger > * {
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-
-    .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.07s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.14s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.21s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.28s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.35s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(7) { transition-delay: 0.42s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(8) { transition-delay: 0.49s; opacity: 1; transform: translateY(0); }
-
-    /* ═══ NAV ══════════════════════════════════════════ */
-
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--edge);
-    }
-
-    nav .badge {
-      font-weight: 700;
-      font-size: 11px;
-      color: var(--black);
-      background: var(--lime);
-      padding: 3px 7px;
-      letter-spacing: -0.5px;
-    }
-
-    nav .name {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--white);
-    }
-
-    nav .nav-links {
-      margin-left: auto;
-      display: flex;
-      gap: 16px;
-    }
-
-    nav .nav-links a {
-      font-size: 11px;
-      color: var(--mute);
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: color 0.15s;
-    }
-
-    nav .nav-links a:hover {
-      color: var(--white);
-    }
-
-    /* ═══ HERO ═════════════════════════════════════════ */
-
-    .hero {
-      padding: 80px 0 60px;
-    }
-
-    .hero-label {
-      font-size: 10px;
-      color: var(--mute);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 16px;
-    }
-
-    .hero h1 {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: -1.5px;
-      line-height: 1.15;
-      margin-bottom: 16px;
-    }
-
-    .hero h1 .accent {
-      color: var(--lime);
-    }
-
-    .hero .tagline {
-      font-size: 14px;
-      color: var(--dim);
-      line-height: 1.7;
-      max-width: 440px;
-      margin-bottom: 32px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .btn-download {
-      display: inline-block;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 12px 24px;
-      background: var(--lime);
-      color: var(--black);
-      text-decoration: none;
-      border: none;
-      transition: opacity 0.15s;
-    }
-
-    .btn-download:hover {
-      opacity: 0.85;
-    }
-
-    .btn-source {
-      display: inline-block;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 11px 24px;
-      background: transparent;
-      color: var(--dim);
-      text-decoration: none;
-      border: 1px solid var(--edge);
-      transition: color 0.15s, border-color 0.15s;
-    }
-
-    .btn-source:hover {
-      color: var(--white);
-      border-color: var(--mute);
-    }
-
-    .hero-meta {
-      margin-top: 20px;
-      font-size: 10px;
-      color: var(--mute);
-      letter-spacing: 0.5px;
-    }
-
-    .hero-meta span {
-      margin-right: 16px;
-    }
-
-    .hero-meta .dot {
-      display: inline-block;
-      width: 5px;
-      height: 5px;
-      background: var(--lime);
-      margin-right: 5px;
-      vertical-align: middle;
-    }
-
-    /* ═══ APP MOCKUP ═══════════════════════════════════ */
-
-    .mockup-section {
-      padding: 60px 0;
-    }
-
-    .section-label {
-      font-size: 10px;
-      color: var(--mute);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 20px;
-    }
-
-    .mockup {
-      background: var(--coal);
-      border: 1px solid var(--edge);
       overflow: hidden;
     }
 
-    .mockup-titlebar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 10px 14px;
-      background: var(--slab);
-      border-bottom: 1px solid var(--edge);
-    }
-
-    .mockup-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--edge);
-    }
-
-    .mockup-dot.r { background: var(--red); }
-    .mockup-dot.y { background: var(--amber); }
-    .mockup-dot.g { background: var(--lime); }
-
-    .mockup-title {
-      font-size: 10px;
-      color: var(--mute);
-      margin-left: 8px;
-    }
-
-    .mockup-body {
-      padding: 16px;
-    }
-
-    /* steps */
-    .m-steps {
-      display: flex;
-      gap: 1px;
-      background: var(--edge);
-      margin-bottom: 16px;
-    }
-
-    .m-step {
-      flex: 1;
+    .container {
       text-align: center;
-      padding: 6px 0;
-      font-size: 9px;
-      font-weight: 500;
-      color: var(--mute);
-      background: var(--coal);
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      padding: 40px 24px;
+      opacity: 0;
+      animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    .m-step.active {
-      background: var(--white);
-      color: var(--black);
-      font-weight: 700;
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .m-step.done {
-      color: var(--lime);
-    }
-
-    /* stats */
-    .m-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 1px;
-      background: var(--edge);
-      margin-bottom: 14px;
-    }
-
-    .m-stat {
-      background: var(--coal);
-      padding: 14px 8px;
-      text-align: center;
-    }
-
-    .m-stat-num {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -2px;
+    .name {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: clamp(64px, 14vw, 140px);
+      font-weight: 400;
+      color: #e8e0d4;
       line-height: 1;
-    }
-
-    .m-stat-num.cyan { color: var(--cyan); }
-    .m-stat-num.amber { color: var(--amber); }
-    .m-stat-num.pink { color: var(--pink); }
-
-    .m-stat-label {
-      font-size: 7px;
-      color: var(--mute);
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-top: 5px;
-    }
-
-    /* controls */
-    .m-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-
-    .m-controls span {
-      font-size: 9px;
-      color: var(--mute);
-    }
-
-    .m-controls-btns {
-      display: flex;
-      gap: 2px;
-    }
-
-    .m-controls-btns span {
-      font-size: 9px;
-      padding: 3px 8px;
-      background: var(--slab);
-      border: 1px solid var(--edge);
-      color: var(--dim);
-    }
-
-    /* user list */
-    .m-list {
-      border: 1px solid var(--edge);
-      background: var(--black);
-    }
-
-    .m-item {
-      display: flex;
-      align-items: center;
-      padding: 5px 10px;
-      gap: 8px;
-      border-bottom: 1px solid var(--edge);
-      font-size: 10px;
-    }
-
-    .m-item:last-child { border-bottom: none; }
-
-    .m-check {
-      width: 10px;
-      height: 10px;
-      border: 1px solid var(--edge);
-      flex-shrink: 0;
-    }
-
-    .m-check.checked {
-      background: var(--lime);
-      border-color: var(--lime);
-    }
-
-    .m-item .m-user {
-      flex: 1;
-      color: var(--cyan);
-    }
-
-    .m-badge {
-      font-size: 7px;
-      padding: 1px 5px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      border: 1px solid;
-    }
-
-    .m-badge.unfollowed {
-      color: var(--lime);
-      border-color: var(--lime);
-    }
-
-    .m-badge.skipped {
-      color: var(--amber);
-      border-color: var(--amber);
-    }
-
-    /* footer bar */
-    .m-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--edge);
-    }
-
-    .m-footer span {
-      font-size: 9px;
-      color: var(--mute);
-    }
-
-    .m-footer .m-btn-danger {
-      font-size: 9px;
-      font-weight: 700;
-      padding: 5px 12px;
-      background: var(--red);
-      color: var(--white);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      border: none;
-    }
-
-    /* ═══ HOW IT WORKS ═════════════════════════════════ */
-
-    .steps-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: var(--edge);
-    }
-
-    .step-card {
-      background: var(--coal);
-      padding: 24px 20px;
-    }
-
-    .step-num {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--edge);
-      margin-bottom: 8px;
       letter-spacing: -2px;
-    }
-
-    .step-card:nth-child(1) .step-num { color: var(--cyan); }
-    .step-card:nth-child(2) .step-num { color: var(--lime); }
-    .step-card:nth-child(3) .step-num { color: var(--amber); }
-    .step-card:nth-child(4) .step-num { color: var(--pink); }
-
-    .step-name {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--white);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-    }
-
-    .step-desc {
-      font-size: 11px;
-      color: var(--dim);
-      line-height: 1.6;
-    }
-
-    /* ═══ FEATURES ═════════════════════════════════════ */
-
-    .features-list {
-      list-style: none;
-    }
-
-    .features-list li {
-      padding: 14px 0;
-      border-bottom: 1px solid var(--edge);
-      font-size: 13px;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .features-list li:last-child {
-      border-bottom: none;
-    }
-
-    .f-marker {
-      width: 6px;
-      height: 6px;
-      background: var(--lime);
-      flex-shrink: 0;
-    }
-
-    .f-dim {
-      color: var(--dim);
-      font-size: 11px;
-      margin-left: 4px;
-    }
-
-    /* ═══ FOOTER ═══════════════════════════════════════ */
-
-    footer {
-      padding: 40px 0;
-      border-top: 1px solid var(--edge);
-    }
-
-    .footer-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       margin-bottom: 16px;
+      cursor: default;
     }
 
-    footer a {
-      font-size: 11px;
-      color: var(--mute);
+    .tagline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 400;
+      color: #5a5549;
+      letter-spacing: 0.08em;
+      margin-bottom: 56px;
+      min-height: 20px;
+    }
+
+    .tagline .cursor {
+      display: inline-block;
+      width: 1px;
+      height: 14px;
+      background: #5a5549;
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink 0.8s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .link {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 400;
+      color: #6b6359;
       text-decoration: none;
-      transition: color 0.15s;
+      padding: 14px 0;
+      position: relative;
+      transition: color 0.3s ease;
+      letter-spacing: 0.02em;
     }
 
-    footer a:hover {
-      color: var(--cyan);
+    .link:hover { color: #c8b88a; }
+
+    .link::after {
+      content: '';
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      width: 0;
+      height: 1px;
+      background: #c8b88a;
+      transition: width 0.3s ease, left 0.3s ease;
     }
 
-    .disclaimer {
-      font-size: 9px;
-      color: var(--mute);
-      line-height: 1.7;
-      max-width: 480px;
-      letter-spacing: 0.3px;
+    .link:hover::after {
+      width: 100%;
+      left: 0;
     }
 
-    /* ═══ RESPONSIVE ═══════════════════════════════════ */
+    .link:nth-child(1) { animation: fadeUp 0.6s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    .link:nth-child(2) { animation: fadeUp 0.6s 0.42s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
-    @media (max-width: 600px) {
-      .hero h1 { font-size: 24px; }
-      .hero-actions { flex-direction: column; align-items: flex-start; }
-      .steps-grid { grid-template-columns: 1fr; }
-      .m-stat-num { font-size: 18px; }
-      .hero-meta span { display: block; margin-bottom: 4px; }
-      nav .nav-links { gap: 10px; }
+    .footer {
+      position: fixed;
+      bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .footer a {
+      color: #3a3731;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .footer a:hover { color: #c8b88a; }
+    .footer a svg { fill: currentColor; }
+    .cave-text { color: #1a1916; }
+
+    /* gauntlet */
+    .gauntlet {
+      position: fixed;
+      bottom: 20px;
+      right: 24px;
+      cursor: pointer;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+      transition: transform 0.2s ease, filter 0.2s ease;
+      user-select: none;
+    }
+
+    .gauntlet:hover {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 8px rgba(200, 184, 138, 0.4));
+    }
+
+    .gauntlet:active { transform: scale(0.95); }
+
+    /* snap overlay */
+    .snap-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* arc reactor */
+    .arc-reactor {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      opacity: 0;
+      z-index: 1001;
+      pointer-events: none;
+    }
+
+    /* dust canvas */
+    #dust-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    @media (max-width: 500px) {
+      .name { letter-spacing: -1px; }
+      .tagline { margin-bottom: 40px; }
     }
   </style>
 </head>
 <body>
 
-<div class="page">
+<canvas id="dust-canvas"></canvas>
 
-  <!-- NAV -->
-  <nav>
-    <span class="badge">UF</span>
-    <span class="name">unfollow-manager</span>
-    <div class="nav-links">
-      <a href="https://github.com/Yashas1600/unfollow-manager/releases/latest/download/Unfollow.Manager-1.3.0-arm64.dmg">Download</a>
-    </div>
+<div class="container" id="main-content">
+  <h1 class="name">yashas</h1>
+  <p class="tagline"><span id="typed"></span><span class="cursor"></span></p>
+
+  <nav class="links">
+    <a href="/unfollow-manager" class="link">unfollow manager</a>
+    <a href="https://github.com/Yashas1600" target="_blank" class="link">github</a>
   </nav>
+</div>
 
-  <!-- HERO -->
-  <section class="hero reveal">
-    <div class="hero-label">Instagram cleanup tool</div>
-    <h1>find who doesn't follow you back.<br><span class="accent">unfollow in one click.</span></h1>
-    <p class="tagline">Scan your account. See who's not following you back. Uncheck the ones you want to keep. Remove the rest. Takes about 30 seconds.</p>
-    <div class="hero-actions">
-      <a href="https://github.com/Yashas1600/unfollow-manager/releases/latest/download/Unfollow.Manager-1.3.0-arm64.dmg" class="btn-download">Download for Mac</a>
-    </div>
-    <div class="hero-meta">
-      <span><span class="dot"></span>v1.3.0</span>
-      <span>macOS (Apple Silicon)</span>
-      <span>Free</span>
-    </div>
-  </section>
+<div class="footer" id="footer-el">
+  <a href="https://x.com/YashasShashi" target="_blank" aria-label="X (Twitter)">
+    <svg width="16" height="16" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+  </a>
+  <span class="cave-text">// built in a cave with a box of scraps</span>
+</div>
 
-  <!-- APP MOCKUP -->
-  <section class="mockup-section reveal">
-    <div class="section-label">Preview</div>
-    <div class="mockup">
-      <div class="mockup-titlebar">
-        <span class="mockup-dot r"></span>
-        <span class="mockup-dot y"></span>
-        <span class="mockup-dot g"></span>
-        <span class="mockup-title">unfollow-manager</span>
-      </div>
-      <div class="mockup-body">
-        <div class="m-steps">
-          <div class="m-step done">Login</div>
-          <div class="m-step done">Scan</div>
-          <div class="m-step active">Review</div>
-          <div class="m-step">Unfollow</div>
-        </div>
+<div class="arc-reactor" id="arc-reactor"></div>
 
-        <div class="m-stats">
-          <div class="m-stat">
-            <div class="m-stat-num cyan">1,850</div>
-            <div class="m-stat-label">Followers</div>
-          </div>
-          <div class="m-stat">
-            <div class="m-stat-num amber">2,085</div>
-            <div class="m-stat-label">Following</div>
-          </div>
-          <div class="m-stat">
-            <div class="m-stat-num pink">647</div>
-            <div class="m-stat-label">Non-mutual</div>
-          </div>
-        </div>
-
-        <div class="m-controls">
-          <span>647 / 647 selected</span>
-          <div class="m-controls-btns">
-            <span>All</span>
-            <span>None</span>
-          </div>
-        </div>
-
-        <div class="m-list">
-          <div class="m-item">
-            <div class="m-check checked"></div>
-            <span class="m-user">@random.person_01</span>
-            <span class="m-badge unfollowed">Unfollowed</span>
-          </div>
-          <div class="m-item">
-            <div class="m-check checked"></div>
-            <span class="m-user">@not_following_u</span>
-            <span class="m-badge unfollowed">Unfollowed</span>
-          </div>
-          <div class="m-item">
-            <div class="m-check checked"></div>
-            <span class="m-user">@spam.account.xyz</span>
-            <span class="m-badge skipped">Skipped</span>
-          </div>
-          <div class="m-item">
-            <div class="m-check checked"></div>
-            <span class="m-user">@old_classmate_22</span>
-          </div>
-          <div class="m-item">
-            <div class="m-check"></div>
-            <span class="m-user">@your_fav_brand</span>
-          </div>
-          <div class="m-item">
-            <div class="m-check checked"></div>
-            <span class="m-user">@forgot.who.this.is</span>
-          </div>
-        </div>
-
-        <div class="m-footer">
-          <span>5 / 6 selected</span>
-          <span class="m-btn-danger">Unfollow</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="reveal">
-    <div class="section-label">How it works</div>
-    <div class="steps-grid reveal-stagger">
-      <div class="step-card">
-        <div class="step-num">01</div>
-        <div class="step-name">Login</div>
-        <div class="step-desc">Opens a browser. You log into Instagram manually. Your credentials are never stored or transmitted.</div>
-      </div>
-      <div class="step-card">
-        <div class="step-num">02</div>
-        <div class="step-name">Scan</div>
-        <div class="step-desc">Auto-detects your account and fetches your followers and following lists via Instagram's API.</div>
-      </div>
-      <div class="step-card">
-        <div class="step-num">03</div>
-        <div class="step-name">Review</div>
-        <div class="step-desc">See everyone who doesn't follow you back. Uncheck influencers, brands, or anyone you want to keep.</div>
-      </div>
-      <div class="step-card">
-        <div class="step-num">04</div>
-        <div class="step-name">Unfollow</div>
-        <div class="step-desc">Removes selected accounts with built-in rate limiting to avoid Instagram action blocks.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section class="reveal">
-    <div class="section-label">Features</div>
-    <ul class="features-list reveal-stagger">
-      <li><span class="f-marker"></span>Completely free <span class="f-dim">— no sign-up, no subscription</span></li>
-      <li><span class="f-marker"></span>Runs entirely on your machine <span class="f-dim">— nothing is sent to any server</span></li>
-      <li><span class="f-marker"></span>Signed &amp; notarized by Apple <span class="f-dim">— install and run, no workarounds</span></li>
-      <li><span class="f-marker"></span>Fast scanning <span class="f-dim">— fetches thousands of accounts in seconds</span></li>
-      <li><span class="f-marker"></span>Smart rate limiting <span class="f-dim">— avoids Instagram action blocks automatically</span></li>
-    </ul>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p class="disclaimer">Not affiliated with Instagram or Meta.</p>
-  </footer>
-
+<!-- infinity gauntlet SVG -->
+<div class="gauntlet" id="gauntlet" title="snap.">
+  <svg width="36" height="52" viewBox="0 0 36 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- fingers -->
+    <rect x="4" y="0" width="4" height="10" rx="2" fill="#c8a84e"/>
+    <rect x="10" y="0" width="4" height="12" rx="2" fill="#d4b85c"/>
+    <rect x="16" y="0" width="4" height="11" rx="2" fill="#c8a84e"/>
+    <rect x="22" y="0" width="4" height="10" rx="2" fill="#d4b85c"/>
+    <!-- thumb -->
+    <rect x="0" y="14" width="4" height="9" rx="2" fill="#c8a84e" transform="rotate(-15 0 14)"/>
+    <!-- palm -->
+    <rect x="3" y="10" width="24" height="18" rx="4" fill="#c8a84e"/>
+    <rect x="3" y="10" width="24" height="18" rx="4" fill="url(#palm-shade)"/>
+    <!-- knuckle lines -->
+    <line x1="8" y1="10" x2="8" y2="13" stroke="#a08030" stroke-width="0.7" opacity="0.5"/>
+    <line x1="14" y1="10" x2="14" y2="13" stroke="#a08030" stroke-width="0.7" opacity="0.5"/>
+    <line x1="20" y1="10" x2="20" y2="13" stroke="#a08030" stroke-width="0.7" opacity="0.5"/>
+    <!-- wrist -->
+    <rect x="5" y="28" width="20" height="14" rx="3" fill="#b89840"/>
+    <rect x="7" y="30" width="16" height="10" rx="2" fill="#a08030"/>
+    <!-- wrist ridges -->
+    <line x1="7" y1="33" x2="23" y2="33" stroke="#c8a84e" stroke-width="0.8" opacity="0.4"/>
+    <line x1="7" y1="36" x2="23" y2="36" stroke="#c8a84e" stroke-width="0.8" opacity="0.4"/>
+    <!-- forearm plate -->
+    <rect x="7" y="42" width="16" height="8" rx="2" fill="#b89840"/>
+    <line x1="9" y1="45" x2="21" y2="45" stroke="#c8a84e" stroke-width="0.6" opacity="0.3"/>
+    <!-- INFINITY STONES -->
+    <!-- mind (forehead/palm center) - yellow -->
+    <circle cx="15" cy="19" r="2.5" fill="#eab308">
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <!-- space - blue (index knuckle) -->
+    <circle cx="12" cy="13" r="1.8" fill="#3b82f6">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="2.3s" repeatCount="indefinite"/>
+    </circle>
+    <!-- reality - red (middle knuckle) -->
+    <circle cx="18" cy="13" r="1.8" fill="#ef4444">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="1.8s" repeatCount="indefinite"/>
+    </circle>
+    <!-- power - purple (ring finger) -->
+    <circle cx="8" cy="14" r="1.5" fill="#a855f7">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <!-- soul - orange (pinky area) -->
+    <circle cx="22" cy="14" r="1.5" fill="#f97316">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="2.1s" repeatCount="indefinite"/>
+    </circle>
+    <!-- time - green (thumb) -->
+    <circle cx="5" cy="16" r="1.5" fill="#22c55e">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="1.9s" repeatCount="indefinite"/>
+    </circle>
+    <!-- stone glows -->
+    <circle cx="15" cy="19" r="4" fill="#eab308" opacity="0.15">
+      <animate attributeName="r" values="4;5;4" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <defs>
+      <linearGradient id="palm-shade" x1="3" y1="10" x2="3" y2="28">
+        <stop offset="0" stop-color="transparent"/>
+        <stop offset="1" stop-color="rgba(0,0,0,0.2)"/>
+      </linearGradient>
+    </defs>
+  </svg>
 </div>
 
 <script>
-  // Scroll reveal
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.15 });
+// ─── TYPEWRITER ───
+const typed = document.getElementById('typed');
+const typeSpeed = 60;
+const deleteSpeed = 30;
 
-  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => obs.observe(el));
+const sequence = [
+  { action: 'type', text: 'genius, billionaire' },
+  { action: 'pause', ms: 800 },
+  { action: 'delete', chars: 'billionaire'.length },
+  { action: 'pause', ms: 400 },
+  { action: 'type', text: 'broke' },
+  { action: 'type', text: ', playboy, philanthropist' },
+  { action: 'pause', ms: 3000 },
+  { action: 'clear' },
+  { action: 'pause', ms: 600 },
+];
+
+let current = '';
+let stepIndex = 0;
+
+function runStep() {
+  if (stepIndex >= sequence.length) stepIndex = 0;
+  const step = sequence[stepIndex++];
+
+  if (step.action === 'type') {
+    let i = 0;
+    const iv = setInterval(() => {
+      current += step.text[i++];
+      typed.textContent = current;
+      if (i >= step.text.length) { clearInterval(iv); runStep(); }
+    }, typeSpeed);
+  } else if (step.action === 'delete') {
+    let rem = step.chars;
+    const iv = setInterval(() => {
+      current = current.slice(0, -1);
+      typed.textContent = current;
+      if (--rem <= 0) { clearInterval(iv); runStep(); }
+    }, deleteSpeed);
+  } else if (step.action === 'pause') {
+    setTimeout(runStep, step.ms);
+  } else if (step.action === 'clear') {
+    const iv = setInterval(() => {
+      current = current.slice(0, -1);
+      typed.textContent = current;
+      if (!current.length) { clearInterval(iv); runStep(); }
+    }, deleteSpeed);
+  }
+}
+
+setTimeout(runStep, 800);
+
+// ─── SOUND ENGINE (Web Audio API) ───
+let audioCtx;
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playSnap() {
+  const ctx = getAudio();
+  // sharp transient click
+  const buf = ctx.createBuffer(1, ctx.sampleRate * 0.08, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) {
+    const t = i / ctx.sampleRate;
+    data[i] = (Math.random() * 2 - 1) * Math.exp(-t * 80) * 0.7;
+  }
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  const gain = ctx.createGain();
+  gain.gain.value = 0.5;
+  src.connect(gain).connect(ctx.destination);
+  src.start();
+}
+
+function playWhoosh() {
+  const ctx = getAudio();
+  const duration = 0.8;
+  const buf = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) {
+    const t = i / ctx.sampleRate;
+    const env = Math.sin(t / duration * Math.PI) * 0.3;
+    data[i] = (Math.random() * 2 - 1) * env;
+  }
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  // bandpass to make it swooshy
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.setValueAtTime(800, ctx.currentTime);
+  filter.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + duration);
+  filter.Q.value = 1.5;
+  const gain = ctx.createGain();
+  gain.gain.value = 0.4;
+  src.connect(filter).connect(gain).connect(ctx.destination);
+  src.start();
+}
+
+function playDissolve() {
+  const ctx = getAudio();
+  const duration = 1.5;
+  const buf = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) {
+    const t = i / ctx.sampleRate;
+    // crackling dust sound
+    const crackle = Math.random() > 0.97 ? (Math.random() * 2 - 1) * 0.4 : 0;
+    const hiss = (Math.random() * 2 - 1) * 0.08 * Math.exp(-t * 2);
+    data[i] = (crackle + hiss) * (1 - t / duration);
+  }
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'highpass';
+  filter.frequency.value = 2000;
+  const gain = ctx.createGain();
+  gain.gain.value = 0.6;
+  src.connect(filter).connect(gain).connect(ctx.destination);
+  src.start();
+}
+
+function playReactorHum() {
+  const ctx = getAudio();
+  // low pulsing hum
+  const osc = ctx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.value = 90;
+  const osc2 = ctx.createOscillator();
+  osc2.type = 'sine';
+  osc2.frequency.value = 135;
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.8);
+  gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 2.5);
+  gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 3.5);
+  const gain2 = ctx.createGain();
+  gain2.gain.value = 0.06;
+  osc.connect(gain).connect(ctx.destination);
+  osc2.connect(gain2).connect(gain);
+  osc.start();
+  osc2.start();
+  osc.stop(ctx.currentTime + 3.5);
+  osc2.stop(ctx.currentTime + 3.5);
+}
+
+function playIronManTone() {
+  const ctx = getAudio();
+  // cinematic low tone + shimmer
+  const osc = ctx.createOscillator();
+  osc.type = 'triangle';
+  osc.frequency.value = 65;
+  const osc2 = ctx.createOscillator();
+  osc2.type = 'sine';
+  osc2.frequency.value = 196; // G3 - heroic
+  const osc3 = ctx.createOscillator();
+  osc3.type = 'sine';
+  osc3.frequency.value = 262; // C4
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.1, ctx.currentTime + 0.3);
+  gain.gain.linearRampToValueAtTime(0.07, ctx.currentTime + 1.5);
+  gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 2.8);
+  const gain2 = ctx.createGain();
+  gain2.gain.setValueAtTime(0, ctx.currentTime);
+  gain2.gain.linearRampToValueAtTime(0.05, ctx.currentTime + 0.5);
+  gain2.gain.linearRampToValueAtTime(0, ctx.currentTime + 2.8);
+  osc.connect(gain).connect(ctx.destination);
+  osc2.connect(gain2).connect(ctx.destination);
+  osc3.connect(gain2);
+  osc.start(); osc2.start(); osc3.start();
+  osc.stop(ctx.currentTime + 3); osc2.stop(ctx.currentTime + 3); osc3.stop(ctx.currentTime + 3);
+}
+
+function playReassemble() {
+  const ctx = getAudio();
+  // rising shimmer
+  const osc = ctx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(200, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.6);
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.08, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.7);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.8);
+}
+
+// ─── SNAP EFFECT ───
+const dustCanvas = document.getElementById('dust-canvas');
+const dctx = dustCanvas.getContext('2d');
+let particles = [];
+let snapping = false;
+
+function resizeCanvas() {
+  dustCanvas.width = window.innerWidth;
+  dustCanvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+  constructor(x, y, color) {
+    this.x = x;
+    this.y = y;
+    this.ox = x;
+    this.oy = y;
+    this.color = color;
+    this.size = Math.random() * 3 + 1;
+    this.vx = (Math.random() - 0.5) * 4;
+    this.vy = (Math.random() - 0.7) * 3;
+    this.life = 1;
+    this.decay = Math.random() * 0.008 + 0.005;
+    this.gravity = Math.random() * 0.02 + 0.01;
+    this.wind = (Math.random() - 0.5) * 0.3;
+  }
+  update() {
+    this.vy += this.gravity;
+    this.vx += this.wind * 0.01;
+    this.vx *= 0.99;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.life -= this.decay;
+  }
+  draw(ctx) {
+    ctx.globalAlpha = Math.max(0, this.life);
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x, this.y, this.size, this.size);
+  }
+}
+
+function spawnDust(x, y, count, colors) {
+  for (let i = 0; i < count; i++) {
+    const px = x + (Math.random() - 0.5) * 100;
+    const py = y + (Math.random() - 0.5) * 60;
+    particles.push(new Particle(px, py, colors[Math.floor(Math.random() * colors.length)]));
+  }
+}
+
+let animating = false;
+function animateDust() {
+  if (!animating) return;
+  dctx.clearRect(0, 0, dustCanvas.width, dustCanvas.height);
+  particles = particles.filter(p => p.life > 0);
+  particles.forEach(p => { p.update(); p.draw(dctx); });
+  dctx.globalAlpha = 1;
+  if (particles.length > 0) {
+    requestAnimationFrame(animateDust);
+  } else {
+    animating = false;
+    dctx.clearRect(0, 0, dustCanvas.width, dustCanvas.height);
+  }
+}
+
+// arc reactor draw
+function drawArcReactor() {
+  const el = document.getElementById('arc-reactor');
+  const size = 120;
+  const c = document.createElement('canvas');
+  c.width = size; c.height = size;
+  const ctx = c.getContext('2d');
+  const cx = size / 2, cy = size / 2;
+
+  // outer ring
+  ctx.strokeStyle = '#5edfff';
+  ctx.lineWidth = 3;
+  ctx.shadowColor = '#5edfff';
+  ctx.shadowBlur = 15;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 50, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // inner ring
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 35, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // core glow
+  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 25);
+  grad.addColorStop(0, 'rgba(94, 223, 255, 0.9)');
+  grad.addColorStop(0.5, 'rgba(94, 223, 255, 0.3)');
+  grad.addColorStop(1, 'transparent');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 25, 0, Math.PI * 2);
+  ctx.fill();
+
+  // center dot
+  ctx.shadowBlur = 20;
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // triangle segments
+  ctx.shadowBlur = 8;
+  ctx.strokeStyle = '#5edfff';
+  ctx.lineWidth = 2;
+  for (let i = 0; i < 10; i++) {
+    const angle = (i / 10) * Math.PI * 2 - Math.PI / 2;
+    const innerR = 28;
+    const outerR = 42;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(angle - 0.12) * innerR, cy + Math.sin(angle - 0.12) * innerR);
+    ctx.lineTo(cx + Math.cos(angle) * outerR, cy + Math.sin(angle) * outerR);
+    ctx.lineTo(cx + Math.cos(angle + 0.12) * innerR, cy + Math.sin(angle + 0.12) * innerR);
+    ctx.stroke();
+  }
+
+  el.style.background = `url(${c.toDataURL()}) center/contain no-repeat`;
+}
+
+drawArcReactor();
+
+// snap sequence
+document.getElementById('gauntlet').addEventListener('click', () => {
+  if (snapping) return;
+  snapping = true;
+
+  const mainContent = document.getElementById('main-content');
+  const footer = document.getElementById('footer-el');
+  const reactor = document.getElementById('arc-reactor');
+
+  // phase 1: golden power surge from gauntlet (0ms)
+  const stoneColors = ['#eab308', '#3b82f6', '#ef4444', '#a855f7', '#f97316', '#22c55e'];
+  const gauntletRect = document.getElementById('gauntlet').getBoundingClientRect();
+  const gx = gauntletRect.left + gauntletRect.width / 2;
+  const gy = gauntletRect.top + gauntletRect.height / 2;
+
+  playSnap();
+  animating = true;
+  spawnDust(gx, gy, 80, stoneColors);
+  animateDust();
+
+  // phase 2: screen flash + shockwave (300ms)
+  setTimeout(() => {
+    playWhoosh();
+    // golden flash
+    const flash = document.createElement('div');
+    flash.style.cssText = 'position:fixed;inset:0;background:radial-gradient(circle at ' + gx + 'px ' + gy + 'px, rgba(234,179,8,0.5), rgba(200,168,78,0.2), transparent 70%);z-index:998;pointer-events:none;';
+    document.body.appendChild(flash);
+    flash.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 800, easing: 'ease-out' }).onfinish = () => flash.remove();
+
+    // shockwave ring
+    const ring = document.createElement('div');
+    ring.style.cssText = `position:fixed;left:${gx}px;top:${gy}px;width:0;height:0;border-radius:50%;border:2px solid rgba(234,179,8,0.6);z-index:998;pointer-events:none;transform:translate(-50%,-50%);`;
+    document.body.appendChild(ring);
+    ring.animate([
+      { width: '0px', height: '0px', opacity: 1, borderWidth: '3px' },
+      { width: '200vmax', height: '200vmax', opacity: 0, borderWidth: '1px' }
+    ], { duration: 1000, easing: 'ease-out' }).onfinish = () => ring.remove();
+  }, 300);
+
+  // phase 3: everything dissolves into dust (600ms)
+  setTimeout(() => {
+    playDissolve();
+    const rect = mainContent.getBoundingClientRect();
+    spawnDust(rect.left + rect.width / 2, rect.top + rect.height / 2, 200, ['#e8e0d4', '#c8b88a', '#5a5549', '#eab308']);
+
+    mainContent.style.transition = 'opacity 1.2s ease, filter 1.2s ease, transform 1.2s ease';
+    mainContent.style.opacity = '0';
+    mainContent.style.filter = 'blur(8px)';
+    mainContent.style.transform = 'translateY(-30px) scale(0.97)';
+
+    footer.style.transition = 'opacity 0.8s ease';
+    footer.style.opacity = '0';
+  }, 600);
+
+  // phase 4: screen goes dark, then arc reactor fades in (2000ms)
+  setTimeout(() => {
+    playReactorHum();
+    // darken
+    document.body.style.transition = 'background 0.8s ease';
+    document.body.style.background = '#020204';
+
+    // arc reactor appears — force start state, then animate in next frame
+    reactor.style.transition = 'none';
+    reactor.style.opacity = '0';
+    reactor.style.transform = 'translate(-50%, -50%) scale(0)';
+    requestAnimationFrame(() => {
+      reactor.style.transition = 'opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1)';
+      reactor.style.opacity = '1';
+      reactor.style.transform = 'translate(-50%, -50%) scale(1)';
+    });
+
+    // reactor glow pulse
+    reactor.animate([
+      { filter: 'drop-shadow(0 0 20px rgba(94, 223, 255, 0.4))' },
+      { filter: 'drop-shadow(0 0 60px rgba(94, 223, 255, 0.8))' },
+      { filter: 'drop-shadow(0 0 30px rgba(94, 223, 255, 0.5))' },
+    ], { duration: 1500, easing: 'ease-in-out' });
+  }, 2000);
+
+  // phase 5: reactor pulses brighter (3500ms)
+  setTimeout(() => {
+    playIronManTone();
+    // reactor grows and intensifies
+    reactor.animate([
+      { transform: 'translate(-50%, -50%) scale(1)', filter: 'drop-shadow(0 0 30px rgba(94, 223, 255, 0.5))' },
+      { transform: 'translate(-50%, -50%) scale(1.3)', filter: 'drop-shadow(0 0 80px rgba(94, 223, 255, 1))' },
+      { transform: 'translate(-50%, -50%) scale(1.5)', filter: 'drop-shadow(0 0 120px rgba(94, 223, 255, 1))' },
+    ], { duration: 1500, easing: 'ease-in', fill: 'forwards' });
+  }, 3500);
+
+  // phase 6: blue blast — reactor explodes outward, page reassembles from the light (5200ms)
+  setTimeout(() => {
+    // blue flash that fills the screen from center
+    const blast = document.createElement('div');
+    blast.style.cssText = 'position:fixed;inset:0;z-index:1003;pointer-events:none;background:radial-gradient(circle at 50% 50%, rgba(94,223,255,0.9), rgba(94,223,255,0.4) 40%, transparent 70%);';
+    document.body.appendChild(blast);
+
+    playReassemble();
+
+    // hide reactor instantly behind the blast
+    reactor.style.transition = 'none';
+    reactor.style.opacity = '0';
+    reactor.style.transform = 'translate(-50%, -50%) scale(0)';
+
+    // blast fades as content comes back
+    blast.animate([
+      { opacity: 1 },
+      { opacity: 0.6 },
+      { opacity: 0 }
+    ], { duration: 1000, easing: 'ease-out' }).onfinish = () => blast.remove();
+
+    // restore background
+    document.body.style.transition = 'background 0.6s ease';
+    document.body.style.background = '#060608';
+
+    // content reassembles out of the blue light
+    mainContent.style.transition = 'opacity 0.8s ease 0.15s, filter 0.8s ease 0.15s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s';
+    mainContent.style.opacity = '1';
+    mainContent.style.filter = 'none';
+    mainContent.style.transform = 'translateY(0) scale(1)';
+
+    footer.style.transition = 'opacity 0.6s ease 0.3s';
+    footer.style.opacity = '1';
+
+    setTimeout(() => { snapping = false; }, 1200);
+  }, 5200);
+});
 </script>
 
 </body>

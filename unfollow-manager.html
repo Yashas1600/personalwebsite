@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>unfollow-manager</title>
+  <meta name="description" content="Find and remove Instagram accounts that don't follow you back. Free, open source, runs locally.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --coal: #111111;
+      --slab: #181818;
+      --edge: #222222;
+      --mute: #555;
+      --dim: #777;
+      --off: #999;
+      --text: #e0e0e0;
+      --white: #f5f5f5;
+      --cyan: #00e5ff;
+      --lime: #b6f542;
+      --pink: #ff4f9a;
+      --amber: #ffb300;
+      --red: #ff3b3b;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      background: var(--black);
+      color: var(--text);
+      min-height: 100vh;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ═══ LAYOUT ═══════════════════════════════════════ */
+
+    .page {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    section {
+      padding: 60px 0;
+      border-bottom: 1px solid var(--edge);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    /* ═══ ANIMATIONS ═══════════════════════════════════ */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* stagger children */
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.07s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.14s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.21s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.28s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.35s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(7) { transition-delay: 0.42s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(8) { transition-delay: 0.49s; opacity: 1; transform: translateY(0); }
+
+    /* ═══ NAV ══════════════════════════════════════════ */
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--edge);
+    }
+
+    nav .badge {
+      font-weight: 700;
+      font-size: 11px;
+      color: var(--black);
+      background: var(--lime);
+      padding: 3px 7px;
+      letter-spacing: -0.5px;
+    }
+
+    nav .name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    nav .nav-links {
+      margin-left: auto;
+      display: flex;
+      gap: 16px;
+    }
+
+    nav .nav-links a {
+      font-size: 11px;
+      color: var(--mute);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: color 0.15s;
+    }
+
+    nav .nav-links a:hover {
+      color: var(--white);
+    }
+
+    /* ═══ HERO ═════════════════════════════════════════ */
+
+    .hero {
+      padding: 80px 0 60px;
+    }
+
+    .hero-label {
+      font-size: 10px;
+      color: var(--mute);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -1.5px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 .accent {
+      color: var(--lime);
+    }
+
+    .hero .tagline {
+      font-size: 14px;
+      color: var(--dim);
+      line-height: 1.7;
+      max-width: 440px;
+      margin-bottom: 32px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-download {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 12px 24px;
+      background: var(--lime);
+      color: var(--black);
+      text-decoration: none;
+      border: none;
+      transition: opacity 0.15s;
+    }
+
+    .btn-download:hover {
+      opacity: 0.85;
+    }
+
+    .btn-source {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 11px 24px;
+      background: transparent;
+      color: var(--dim);
+      text-decoration: none;
+      border: 1px solid var(--edge);
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .btn-source:hover {
+      color: var(--white);
+      border-color: var(--mute);
+    }
+
+    .hero-meta {
+      margin-top: 20px;
+      font-size: 10px;
+      color: var(--mute);
+      letter-spacing: 0.5px;
+    }
+
+    .hero-meta span {
+      margin-right: 16px;
+    }
+
+    .hero-meta .dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      background: var(--lime);
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    /* ═══ APP MOCKUP ═══════════════════════════════════ */
+
+    .mockup-section {
+      padding: 60px 0;
+    }
+
+    .section-label {
+      font-size: 10px;
+      color: var(--mute);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    .mockup {
+      background: var(--coal);
+      border: 1px solid var(--edge);
+      overflow: hidden;
+    }
+
+    .mockup-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      background: var(--slab);
+      border-bottom: 1px solid var(--edge);
+    }
+
+    .mockup-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--edge);
+    }
+
+    .mockup-dot.r { background: var(--red); }
+    .mockup-dot.y { background: var(--amber); }
+    .mockup-dot.g { background: var(--lime); }
+
+    .mockup-title {
+      font-size: 10px;
+      color: var(--mute);
+      margin-left: 8px;
+    }
+
+    .mockup-body {
+      padding: 16px;
+    }
+
+    /* steps */
+    .m-steps {
+      display: flex;
+      gap: 1px;
+      background: var(--edge);
+      margin-bottom: 16px;
+    }
+
+    .m-step {
+      flex: 1;
+      text-align: center;
+      padding: 6px 0;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--mute);
+      background: var(--coal);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .m-step.active {
+      background: var(--white);
+      color: var(--black);
+      font-weight: 700;
+    }
+
+    .m-step.done {
+      color: var(--lime);
+    }
+
+    /* stats */
+    .m-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+      background: var(--edge);
+      margin-bottom: 14px;
+    }
+
+    .m-stat {
+      background: var(--coal);
+      padding: 14px 8px;
+      text-align: center;
+    }
+
+    .m-stat-num {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    .m-stat-num.cyan { color: var(--cyan); }
+    .m-stat-num.amber { color: var(--amber); }
+    .m-stat-num.pink { color: var(--pink); }
+
+    .m-stat-label {
+      font-size: 7px;
+      color: var(--mute);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 5px;
+    }
+
+    /* controls */
+    .m-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .m-controls span {
+      font-size: 9px;
+      color: var(--mute);
+    }
+
+    .m-controls-btns {
+      display: flex;
+      gap: 2px;
+    }
+
+    .m-controls-btns span {
+      font-size: 9px;
+      padding: 3px 8px;
+      background: var(--slab);
+      border: 1px solid var(--edge);
+      color: var(--dim);
+    }
+
+    /* user list */
+    .m-list {
+      border: 1px solid var(--edge);
+      background: var(--black);
+    }
+
+    .m-item {
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      gap: 8px;
+      border-bottom: 1px solid var(--edge);
+      font-size: 10px;
+    }
+
+    .m-item:last-child { border-bottom: none; }
+
+    .m-check {
+      width: 10px;
+      height: 10px;
+      border: 1px solid var(--edge);
+      flex-shrink: 0;
+    }
+
+    .m-check.checked {
+      background: var(--lime);
+      border-color: var(--lime);
+    }
+
+    .m-item .m-user {
+      flex: 1;
+      color: var(--cyan);
+    }
+
+    .m-badge {
+      font-size: 7px;
+      padding: 1px 5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: 1px solid;
+    }
+
+    .m-badge.unfollowed {
+      color: var(--lime);
+      border-color: var(--lime);
+    }
+
+    .m-badge.skipped {
+      color: var(--amber);
+      border-color: var(--amber);
+    }
+
+    /* footer bar */
+    .m-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--edge);
+    }
+
+    .m-footer span {
+      font-size: 9px;
+      color: var(--mute);
+    }
+
+    .m-footer .m-btn-danger {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 5px 12px;
+      background: var(--red);
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      border: none;
+    }
+
+    /* ═══ HOW IT WORKS ═════════════════════════════════ */
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--edge);
+    }
+
+    .step-card {
+      background: var(--coal);
+      padding: 24px 20px;
+    }
+
+    .step-num {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--edge);
+      margin-bottom: 8px;
+      letter-spacing: -2px;
+    }
+
+    .step-card:nth-child(1) .step-num { color: var(--cyan); }
+    .step-card:nth-child(2) .step-num { color: var(--lime); }
+    .step-card:nth-child(3) .step-num { color: var(--amber); }
+    .step-card:nth-child(4) .step-num { color: var(--pink); }
+
+    .step-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .step-desc {
+      font-size: 11px;
+      color: var(--dim);
+      line-height: 1.6;
+    }
+
+    /* ═══ FEATURES ═════════════════════════════════════ */
+
+    .features-list {
+      list-style: none;
+    }
+
+    .features-list li {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--edge);
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .features-list li:last-child {
+      border-bottom: none;
+    }
+
+    .f-marker {
+      width: 6px;
+      height: 6px;
+      background: var(--lime);
+      flex-shrink: 0;
+    }
+
+    .f-dim {
+      color: var(--dim);
+      font-size: 11px;
+      margin-left: 4px;
+    }
+
+    /* ═══ FOOTER ═══════════════════════════════════════ */
+
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--edge);
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    footer a {
+      font-size: 11px;
+      color: var(--mute);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    footer a:hover {
+      color: var(--cyan);
+    }
+
+    .disclaimer {
+      font-size: 9px;
+      color: var(--mute);
+      line-height: 1.7;
+      max-width: 480px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ═══ RESPONSIVE ═══════════════════════════════════ */
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 24px; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .m-stat-num { font-size: 18px; }
+      .hero-meta span { display: block; margin-bottom: 4px; }
+      nav .nav-links { gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- NAV -->
+  <nav>
+    <span class="badge">UF</span>
+    <span class="name">unfollow-manager</span>
+    <div class="nav-links">
+      <a href="https://github.com/Yashas1600/unfollow-manager/releases/latest/download/Unfollow.Manager.dmg">Download</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero reveal">
+    <div class="hero-label">Instagram cleanup tool</div>
+    <h1>find who doesn't follow you back.<br><span class="accent">unfollow in one click.</span></h1>
+    <p class="tagline">Scan your account. See who's not following you back. Uncheck the ones you want to keep. Remove the rest. Takes about 30 seconds.</p>
+    <div class="hero-actions">
+      <a href="https://github.com/Yashas1600/unfollow-manager/releases/latest/download/Unfollow.Manager.dmg" class="btn-download">Download for Mac</a>
+    </div>
+    <div class="hero-meta">
+      <span><span class="dot"></span>v1.4.0</span>
+      <span>macOS (Apple Silicon)</span>
+      <span>Free</span>
+    </div>
+  </section>
+
+  <!-- APP MOCKUP -->
+  <section class="mockup-section reveal">
+    <div class="section-label">Preview</div>
+    <div class="mockup">
+      <div class="mockup-titlebar">
+        <span class="mockup-dot r"></span>
+        <span class="mockup-dot y"></span>
+        <span class="mockup-dot g"></span>
+        <span class="mockup-title">unfollow-manager</span>
+      </div>
+      <div class="mockup-body">
+        <div class="m-steps">
+          <div class="m-step done">Login</div>
+          <div class="m-step done">Scan</div>
+          <div class="m-step active">Review</div>
+          <div class="m-step">Unfollow</div>
+        </div>
+
+        <div class="m-stats">
+          <div class="m-stat">
+            <div class="m-stat-num cyan">1,850</div>
+            <div class="m-stat-label">Followers</div>
+          </div>
+          <div class="m-stat">
+            <div class="m-stat-num amber">2,085</div>
+            <div class="m-stat-label">Following</div>
+          </div>
+          <div class="m-stat">
+            <div class="m-stat-num pink">647</div>
+            <div class="m-stat-label">Non-mutual</div>
+          </div>
+        </div>
+
+        <div class="m-controls">
+          <span>647 / 647 selected</span>
+          <div class="m-controls-btns">
+            <span>All</span>
+            <span>None</span>
+          </div>
+        </div>
+
+        <div class="m-list">
+          <div class="m-item">
+            <div class="m-check checked"></div>
+            <span class="m-user">@random.person_01</span>
+            <span class="m-badge unfollowed">Unfollowed</span>
+          </div>
+          <div class="m-item">
+            <div class="m-check checked"></div>
+            <span class="m-user">@not_following_u</span>
+            <span class="m-badge unfollowed">Unfollowed</span>
+          </div>
+          <div class="m-item">
+            <div class="m-check checked"></div>
+            <span class="m-user">@spam.account.xyz</span>
+            <span class="m-badge skipped">Skipped</span>
+          </div>
+          <div class="m-item">
+            <div class="m-check checked"></div>
+            <span class="m-user">@old_classmate_22</span>
+          </div>
+          <div class="m-item">
+            <div class="m-check"></div>
+            <span class="m-user">@your_fav_brand</span>
+          </div>
+          <div class="m-item">
+            <div class="m-check checked"></div>
+            <span class="m-user">@forgot.who.this.is</span>
+          </div>
+        </div>
+
+        <div class="m-footer">
+          <span>5 / 6 selected</span>
+          <span class="m-btn-danger">Unfollow</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="reveal">
+    <div class="section-label">How it works</div>
+    <div class="steps-grid reveal-stagger">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-name">Login</div>
+        <div class="step-desc">Opens a browser. You log into Instagram manually. Your credentials are never stored or transmitted.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-name">Scan</div>
+        <div class="step-desc">Auto-detects your account and fetches your followers and following lists via Instagram's API.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-name">Review</div>
+        <div class="step-desc">See everyone who doesn't follow you back. Uncheck influencers, brands, or anyone you want to keep.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-name">Unfollow</div>
+        <div class="step-desc">Removes selected accounts with built-in rate limiting to avoid Instagram action blocks.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="reveal">
+    <div class="section-label">Features</div>
+    <ul class="features-list reveal-stagger">
+      <li><span class="f-marker"></span>Completely free <span class="f-dim">— no sign-up, no subscription</span></li>
+      <li><span class="f-marker"></span>Runs entirely on your machine <span class="f-dim">— nothing is sent to any server</span></li>
+      <li><span class="f-marker"></span>Signed &amp; notarized by Apple <span class="f-dim">— install and run, no workarounds</span></li>
+      <li><span class="f-marker"></span>Fast scanning <span class="f-dim">— fetches thousands of accounts in seconds</span></li>
+      <li><span class="f-marker"></span>Smart rate limiting <span class="f-dim">— avoids Instagram action blocks automatically</span></li>
+    </ul>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="disclaimer">Not affiliated with Instagram or Meta.</p>
+  </footer>
+
+</div>
+
+<script>
+  // Scroll reveal
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
