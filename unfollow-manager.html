@@ -590,6 +590,7 @@
       <span><span class="dot"></span>v1.4.0</span>
       <span>macOS (Apple Silicon)</span>
       <span>Free</span>
+      <span id="download-count"></span>
     </div>
   </section>
 
@@ -729,6 +730,28 @@
   }, { threshold: 0.15 });
 
   document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => obs.observe(el));
+
+  // Download counter
+  const countEl = document.getElementById('download-count');
+  let totalDownloads = 0;
+
+  fetch('https://api.github.com/repos/Yashas1600/unfollow-manager/releases')
+    .then(r => r.json())
+    .then(releases => {
+      totalDownloads = releases.reduce((sum, rel) =>
+        sum + rel.assets.reduce((a, asset) => a + asset.download_count, 0), 0);
+      countEl.textContent = totalDownloads.toLocaleString() + ' downloads';
+    })
+    .catch(() => {
+      countEl.style.display = 'none';
+    });
+
+  document.querySelectorAll('.btn-download').forEach(btn => {
+    btn.addEventListener('click', () => {
+      totalDownloads++;
+      countEl.textContent = totalDownloads.toLocaleString() + ' downloads';
+    });
+  });
 </script>
 
 </body>
