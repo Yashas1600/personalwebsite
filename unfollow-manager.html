@@ -746,19 +746,26 @@
 
   // Download counter
   const countEl = document.getElementById('download-count');
-  let totalDownloads = 0;
 
-  fetch('https://api.github.com/repos/Yashas1600/unfollow-manager/releases')
+  fetch('/api/downloads')
     .then(r => r.json())
-    .then(releases => {
-      totalDownloads = releases.reduce((sum, rel) =>
-        sum + rel.assets.reduce((a, asset) => a + asset.download_count, 0), 0);
-      countEl.textContent = totalDownloads.toLocaleString() + ' downloads';
+    .then(data => {
+      countEl.textContent = data.count.toLocaleString() + ' downloads';
       countEl.classList.add('loaded');
     })
     .catch(() => {
       countEl.style.display = 'none';
     });
+
+  document.querySelectorAll('.btn-download').forEach(btn => {
+    btn.addEventListener('click', () => {
+      fetch('/api/downloads', { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+          countEl.textContent = data.count.toLocaleString() + ' downloads';
+        });
+    });
+  });
 
 </script>
 
